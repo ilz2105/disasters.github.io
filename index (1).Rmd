@@ -12,13 +12,19 @@ output:
 ![](http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif)
 
 # Motivation
+According to the United States Geological Survey, scientists predict that increasing global surface temperatures will increase the frequency of droughts and intensity of storms globally. Recent studies examining sea-level rise patterns and projections (Hauer, 2017; Kulp & Strauss, 2019) have suggested that sea-level rise could induce large-scale migration in the United States away from unprotected coastlines and towards inland areas, redistributing population density across the country. The potential impacts of climate change are far-reaching, ranging from human migration and displacement to increased pressure on inland areas and land disturbance. We are interested in examining if there is an association between indicators of climate change and the frequency of natural disasters in the United States since 1953.
+
+# Related Work
+NOAA, Cows, Al Gore, Trump pulling out of climate change agreement, Greta, etc.
+
+# Initial Questions
+We first want to know if the total count of natural disasters are increasing every five years between 1953-2018 in the United States. We also want to know if average, minimum, and maximum land temperatures are increasing with certain natural disasters over time, examining the states where the frequency of natural disasters does significantly increase with temperature in greater detail. We will fit a multivariable regression model to address our question of whether the United States overall is seeing more natural disasters over time, then create multiple data visualizations to assess state-by-state differences.
 
 # Data
 
-# Methods
+# Exploratory Analysis
 
-# Results
-
-# Analysis 
+# Additional Analysis 
+Cows!!
 
 # Discussion
