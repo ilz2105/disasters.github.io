@@ -4,9 +4,11 @@ navbar:
   title: "Home"
   right:
     - text: "About"
-      href: index.html
-    - text: "Overview"
       href: about.html
+    - text: "Data Analysis"
+      href: data_analysis.html
+    - text: "Discussion"
+      href: Discussion.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
