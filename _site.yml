@@ -4,7 +4,9 @@ navbar:
   title: "Home"
   right:
     - text: "About"
-      href: index--1.html
+      href: index.html
+    - text: "Overview"
+      href: about.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
