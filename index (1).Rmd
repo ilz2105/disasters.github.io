@@ -1,0 +1,23 @@
+---
+title: "Climate change is real and here is proof!!"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+
+# Final Project 
+
+![](http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif)
+# Motivation
+
+# Data
+
+# Methods
+
+# Results
+
+# Analysis 
+
+# Discussion

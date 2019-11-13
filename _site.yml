@@ -1,0 +1,14 @@
+name: "Disasters!"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "About"
+      href: index(1).html
+    - icon: fa-envelope fa-lg
+      href: mailto:<you@youremail.com>
+    - icon: fa-github fa-lg
+      href: http://github.com/<ilz2105>/
+output:
+  html_document:
+    theme: flatly
