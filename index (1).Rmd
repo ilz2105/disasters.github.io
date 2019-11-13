@@ -7,7 +7,6 @@ output:
     theme: flatly
 ---
 
-# Final Project 
 
 ![](http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif)
 
