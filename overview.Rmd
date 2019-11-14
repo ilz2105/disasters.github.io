@@ -13,6 +13,12 @@ Overview of the project
 We first want to know if the total count of natural disasters are increasing every five years between 1953-2018 in the United States. We also want to know if average, minimum, and maximum land temperatures are increasing with certain natural disasters over time, examining the states where the frequency of natural disasters does significantly increase with temperature in greater detail. We will fit a multivariable regression model to address our question of whether the United States overall is seeing more natural disasters over time, then create multiple data visualizations to assess state-by-state differences.
 
 # Data
+Our team will use a publicly available dataset called the "Disaster Declarations Summary" (Version 2) from the Federal 
+Emergency Management Agency (FEMA). This dataset encompasses declaration summaries from the first disaster declaration 
+in 1953 to March 15, 2019 and includes all three types of disaster declarations: major disaster, emergency, and fire 
+management assistance. 
+
+(For Holly) We will use another dataset looking at climate change indicators.
 
 # Exploratory Analysis
 
