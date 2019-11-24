@@ -6,7 +6,11 @@ navbar:
     - text: "Overview"
       href: overview.html
     - text: "Data Analysis"
-      href: data_analysis.html
+      menu:
+      - text: Statistical Analyses
+        href: data_analysis.html
+      - text: Shiny Dashboard
+        href: shiny_dashboard.html
     - text: "Discussion"
       href: Discussion.html
 output:

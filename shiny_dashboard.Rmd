@@ -1,20 +1,37 @@
 ---
-title: "Data Analysis"
+title: "Shiny Dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
 ---
 
-This is our analysis of the data!!
-
-![](new-climate-statement-infographic_2018_0.png) 
-
-
-```{r loadtidydata}
+```{r setup, include=FALSE}
+library(flexdashboard)
 library(tidyverse)
+library(viridis)
+library(plotly)
 library(rvest)
 
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+
+```{r loadtidydata, echo = FALSE, results = 'hide', message = FALSE}
 # clean and pull average temperature by state and month. 
 # 1) pulled data from online
 # 2) created year and month fields
@@ -102,22 +119,78 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   rename(
      year = fy_declared, 
      disaster = incident_type) %>% 
-  select(fips_state_code, year, disaster) 
+  select(fips_state_code, year, disaster)
 
 # joined data from 5 data sets
 final_data = 
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
   inner_join(tmax, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
   inner_join(tmin, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code"))
+  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  rename(state = location)
 ```
 
-```{r disasterscount}
-disasters_count =
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r echo = FALSE}
+state_name = 
+  final_data %>% 
+  filter(state != "NA") %>% 
+  distinct(state) %>% 
+  pull(state)
+
+selectInput(
+  "state_choice", 
+  label = h3("Select State"),
+  choices = state_name, selected = "Alabama")
+
+
+
+disaster_name = 
   final_data %>% 
   filter(disaster != "NA") %>% 
-  count(location, disaster) %>% 
-  rename("disaster_count" = "n")
+  distinct(disaster)
+
+selectInput(
+  "disaster_choice", 
+  label = h3("Select Disaster Type"),
+  choices = disaster_name, selected = "Coastal Storm")
 ```
 
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Number of Disasters Over Time
+
+```{r, echo = FALSE}
+renderPlotly({
+  final_data %>% 
+    filter(
+      state == input[["state_choice"]], 
+      disaster == input[["disaster_choice"]]) %>%
+    count(state, disaster) %>% 
+    mutate(disaster = fct_reorder(disaster, n)) %>% 
+    rename(
+      "Total Number of Disaster Events" = "n",
+      "Year" = "year") %>% 
+    plot_ly(x = ~Year, y = ~`Total Number of Disaster Events`, color = ~disaster, type = "bar")
+})
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r, echo = FALSE}
+
+```
+
+### Chart C
+
+```{r, echo = FALSE}
+
+```
 
