@@ -9,3 +9,107 @@ output:
 This is our analysis of the data!!
 
 ![](new-climate-statement-infographic_2018_0.png) 
+
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+# clean and pull average temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took average temperature across state by year
+# 5) selected variables of interest and distinct rows
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    mean_temp = mean(value)) %>% 
+  select(fips_state_code, location, year, mean_temp) %>% 
+  distinct()
+
+# clean and pull precipitation by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) summed total precipitation across state by year
+# 5) selected variables of interest and distinct rows
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    total_precip = sum(value)) %>% 
+  select(fips_state_code, location, year, total_precip) %>% 
+  distinct()
+
+# clean and pull maximum temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took maximum temperature across state by year
+# 5) selected variables of interest and distinct rows
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    max_temp = max(value)) %>% 
+  select(fips_state_code, location, year, max_temp) %>% 
+  distinct()
+
+# clean and pull minimum temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took minimum temperature across state by year
+# 5) selected variables of interest and distinct rows
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    min_temp = min(value)) %>% 
+  select(fips_state_code, location, year, min_temp) %>% 
+  distinct()
+
+# clean and pull natural disasters by state and year
+# 1) imported downloaded data
+# 2) updated variable types and names
+# 3) selected variables of interest 
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(incident_type = factor(incident_type), 
+       fips_state_code = fips_state_code*100) %>% 
+  rename(
+     year = fy_declared, 
+     disaster = incident_type) %>% 
+  select(fips_state_code, year, disaster) 
+
+# joined data from 5 data sets
+final_data = 
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code"))
+  
+```
+
