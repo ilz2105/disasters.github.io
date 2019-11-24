@@ -10,7 +10,7 @@ navbar:
       - text: Statistical Analyses
         href: data_analysis.html
       - text: Shiny Dashboard
-        href: shiny_dashboard.html
+        href: shiny_dashboard
     - text: "Discussion"
       href: Discussion.html
 output:
