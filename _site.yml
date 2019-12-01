@@ -11,6 +11,8 @@ navbar:
         href: data_analysis.html
       - text: Shiny Dashboard
         href: shiny_dashboard
+      - text: Interactive Map
+        href: interactive_map
     - text: "Discussion"
       href: Discussion.html
 output:
