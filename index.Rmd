@@ -49,7 +49,7 @@ For the climate change indicators, we will use publicly available data from the 
   + **Average Temperature** The average temperature by state across all 12 months per year was summarized. 
   + **Minimum Temperature**: The minimum temperature by state across all 12 months per year was summarized. 
   + **Maximum Temperature**: The maximum temperature by state across all 12 months per year was summarized. 
-  + **Total Precipitation**: The total precipationa by state across all 12 months per year was totaled. 
+  + **Total Precipitation**: The total precipation by state across all 12 months per year was totaled. 
   
 ## Final Data Set
 Data on climate change indicators across 4 data sets were inner joined by `Location`, `Year`, and `FIPS State Code`. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year from 1853-2018. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State. Last a count of natural disasters was taken by year. The resulting data set had `INSERT INLINE CODE ONCE DATA SET IS LOADED`

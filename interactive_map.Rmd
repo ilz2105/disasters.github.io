@@ -13,8 +13,9 @@ library(flexdashboard)
 library(shiny)
 library(plotly)
 library(tidyverse)
+library(rvest)
 
-# read merged data
+# read in data
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -103,16 +104,16 @@ Column {.sidebar}
 
 ```{r for_sidebar}
 
-# entries to select from
+# entries to select from -- Matt Note: type_variable may have to be created. I think it is a new variable to describe things like "temp variable" or "disaster variable".
 type_variable <- (disasters_count %>% distinct(type_variable) %>% pull())
 year <- c(1953:2019)
 
-# year select box 
+# year select box -- Matt Note: may have to make variable name year_1 using our final data and mutating further in a previous step. Slightly unclear.  
 selectInput("year_1", label = h3("Choose year"),
 						choices = as.list(year),
 						selected = 2019)
 
-# variable select box
+# variable select box -- Matt Note: Same as above for variable type. 
 selectInput("variable_type", label = h3("Choose variable"),
 						choices = type_variable, selected = "disaster")
 ```
@@ -127,13 +128,13 @@ Column {.tabset}
 ### US MAP
 
 ```{r us_map}
-# for convert state abbreviations to state names
+# for convert state abbreviations to state names -- Might need a slight tweak depending on our variable names for states.
 state_abb <- state.name
 names(state_abb) <- state.abb
 
 # plot_geo
 renderPlotly({
-	# map plot setting
+	# map plot setting -- This should be good to go. Maybe the scope is different but I think this wll work.
 	geo1 <- list(
 	scope = "usa",
 	projection = list(type = "state"),
@@ -141,7 +142,7 @@ renderPlotly({
 	lakecolor = toRGB("white")
 	)
 	
-	# display value using color intensity
+	# display value using color intensity -- This should also be good to go if previous code chunk works.
 	disasters_count %>% 
 	filter(type_variable == input$variable_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
@@ -155,7 +156,7 @@ renderPlotly({
 		) %>%
 	layout(
 		geo = geo1,
-		title = "US Map - State Statistics",
+		title = "US Map - State Disaster Statistics",
 		legend = list(x = 100, y = 0.5)
 	)
 })
@@ -163,3 +164,13 @@ renderPlotly({
 ```
 
 ### Description
+
+The Disaster Count map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize state differences across the country. The map includes of the following variables:
+
+* **Disaster Declarations**: Darker areas mean higher counts of disasters, hovering over each state will display the counts.
+
+* **Climate Indicators**:
+  + **Average Temperature**: Darker areas mean a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature.
+  + **Minimum Temperature**: Darker areas mean a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature.
+  + **Maximum Temperature**: Darker areas mean a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature.
+  + **Total Precipitation**: Darker areas mean a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation.
