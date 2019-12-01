@@ -1,0 +1,163 @@
+---
+title: "Interactive Map"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(plotly)
+library(tidyverse)
+
+# read merged data
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    mean_temp = mean(value)) %>% 
+  select(fips_state_code, location, year, mean_temp) %>% 
+  distinct()
+
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    total_precip = sum(value)) %>% 
+  select(fips_state_code, location, year, total_precip) %>% 
+  distinct()
+
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    max_temp = max(value)) %>% 
+  select(fips_state_code, location, year, max_temp) %>% 
+  distinct()
+
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    fips_state_code = as.numeric(location_id)) %>% 
+  filter(year >= 1953 & year != 2019) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    min_temp = min(value)) %>% 
+  select(fips_state_code, location, year, min_temp) %>% 
+  distinct()
+
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(incident_type = factor(incident_type), 
+       fips_state_code = fips_state_code*100) %>% 
+  rename(
+     year = fy_declared, 
+     disaster = incident_type) %>% 
+  select(fips_state_code, year, disaster)
+
+# joined data from 5 data sets
+final_data = 
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code")) %>% 
+  rename(state = location)
+
+# count of disasters
+disasters_count =
+  final_data %>% 
+  filter(disaster != "NA") %>% 
+  count(location, disaster) %>% 
+  rename("disaster_count" = "n")
+
+```
+
+Disaster Counts Map
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+```{r for_sidebar}
+
+# entries to select from
+type_variable <- (disasters_count %>% distinct(type_variable) %>% pull())
+year <- c(1953:2019)
+
+# year select box 
+selectInput("year_1", label = h3("Choose year"),
+						choices = as.list(year),
+						selected = 2019)
+
+# variable select box
+selectInput("variable_type", label = h3("Choose variable"),
+						choices = type_variable, selected = "disaster")
+```
+
+
+
+(See description page for more information.)
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### US MAP
+
+```{r us_map}
+# for convert state abbreviations to state names
+state_abb <- state.name
+names(state_abb) <- state.abb
+
+# plot_geo
+renderPlotly({
+	# map plot setting
+	geo1 <- list(
+	scope = "usa",
+	projection = list(type = "state"),
+	showlakes = TRUE,
+	lakecolor = toRGB("white")
+	)
+	
+	# display value using color intensity
+	disasters_count %>% 
+	filter(type_variable == input$variable_type, year == input$year_1) %>% 
+	plot_geo(locationmode = "USA-states") %>% 
+	add_trace(
+		z = ~Statistics,
+		locations = ~state,
+		color = ~Statistics,
+		colors = "Reds",
+		# add text
+		text = ~paste(type_variable, state_abb[state], sep = "")
+		) %>%
+	layout(
+		geo = geo1,
+		title = "US Map - State Statistics",
+		legend = list(x = 100, y = 0.5)
+	)
+})
+
+```
+
