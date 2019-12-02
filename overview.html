@@ -24,6 +24,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -248,6 +249,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -375,6 +379,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Project Report</h1>
@@ -402,23 +414,23 @@ div.tocify {
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
 <ul>
-<li><p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on <code>State FIP Codes</code>, <code>Disaster Year</code> and <code>Disaster Type</code>. Overall, there were 49066 disasters delared to FEMA from 1953 to 2018.</p></li>
-<li><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into “Month” and “Year”. Next, data were grouped by state and year and summarized as described below:
+<li><p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on <code>State</code>, <code>Disaster Year</code> and <code>Disaster Type</code>. Then, we counted disasters by year, state, and type. Overall, there were 2491 disasters delared to FEMA.</p></li>
+<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into “Month” and “Year”. Next, data were grouped by state and year and summarized as described below:</p>
 <ul>
-<li><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</li>
-<li><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</li>
-<li><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</li>
-<li><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</li>
+<li><p><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</p></li>
 </ul></li>
 </ul>
 </div>
 <div id="final-data-set" class="section level2">
 <h2>Final Data Set</h2>
-<p>Data on climate change indicators across 4 data sets were inner joined by <code>Location</code>, <code>Year</code>, and <code>FIPS State Code</code>. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year from 1853-2018. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State. Last a count of natural disasters was taken by year. The resulting data set had <code>INSERT INLINE CODE ONCE DATA SET IS LOADED</code></p>
+<p>Data on climate change indicators across 4 data sets were inner joined by <code>State</code> and <code>Year</code>. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year from 1853-2018. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State.</p>
 </div>
 <div id="data-challenges" class="section level2">
 <h2>Data Challenges</h2>
-<p>Overall the data we pulled was easily cleaned and imported. However, we did have a major issue with data availability. From 11/25/2019-11/29/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for 5 days. While this created some last minute stress, it did not ultimately affect our work product.</p>
+<p>There were a couple data challenges along the way. First, our climate data had full state names (“New York”) while our disaster data had FIP code and state abbreviations (“NY”). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/2/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for 5 days. While this created some last minute stress, it did not ultimately affect our work product.</p>
 </div>
 </div>
 <div id="exploratory-analysis" class="section level1">
@@ -468,6 +480,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {

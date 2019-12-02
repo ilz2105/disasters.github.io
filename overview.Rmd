@@ -5,20 +5,12 @@ output:
     toc: true
     toc_float: true
     theme: flatly
+    code_folding: hide
 ---
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE}
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
-
-disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
-  janitor::clean_names() %>% 
-  mutate(incident_type = factor(incident_type), 
-       fips_state_code = fips_state_code*100) %>% 
-  rename(
-     year = fy_declared, 
-     disaster = incident_type) %>% 
-  filter(year <= 2018) %>% 
-  select(fips_state_code, year, disaster) 
+library(rvest)
 ```
 
 # Motivation
@@ -39,20 +31,140 @@ management assistance.
 For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature and total precipitation by month by state from 1895. These values came from [NOAA's Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data.
 
 ## Data Cleaning
-* **Disaster Declarations Summary**: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on `State FIP Codes`, `Disaster Year` and `Disaster Type`. Overall, there were `r disasters %>% nrow()` disasters delared to FEMA from `r disasters %>% summarize(min = min(year)) %>% pull(min)` to `r disasters %>% summarize(max = max(year)) %>% pull(max)`. 
+```{r disasters, echo = FALSE, warning = FALSE, message = FALSE}
+# clean and pull natural disasters by state and year
+# 1) imported downloaded data
+# 2) updated variable types and names
+# 3) selected variables of interest 
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(disaster = factor(incident_type)) %>% 
+  rename(
+     year = fy_declared) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  count(state, year, disaster) %>%
+  group_by(year, state) %>% 
+  mutate(
+    n_state = sum(n)
+  ) %>% 
+  group_by(year) %>% 
+  mutate(
+    n_total = sum(n)
+  ) %>% 
+  group_by(year, disaster) %>% 
+  mutate(
+    n_type = sum(n)
+  ) %>% 
+  rename("n_disaster_state" = "n") 
+```
+* **Disaster Declarations Summary**: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on `State`, `Disaster Year` and `Disaster Type`. Then, we counted disasters by year, state, and type. Overall, there were `r disasters %>% nrow()` disasters delared to FEMA. 
 
-* **Climate Indicators**: These data sets were downloaded from NOAA's website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into "Month" and "Year". Next, data were grouped by state and year and summarized as described below: 
+* **Climate Indicators**: These data sets were downloaded from NOAA's website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into "Month" and "Year". Next, data were grouped by state and year and summarized as described below:
+
+```{r ave_temp, echo = FALSE, warning = FALSE, message = FALSE}
+# clean and pull average temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took average temperature across state by year
+# 5) selected variables of interest and distinct rows
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    mean_temp = mean(value)) %>% 
+  select(state_code, location, year, mean_temp) %>% 
+  distinct()
+```
   + **Average Temperature** The average temperature by state across all 12 months per year was summarized. 
-  + **Minimum Temperature**: The minimum temperature by state across all 12 months per year was summarized. 
-  + **Maximum Temperature**: The maximum temperature by state across all 12 months per year was summarized. 
-  + **Total Precipitation**: The total precipation by state across all 12 months per year was totaled. 
   
+
+```{r tmin, echo = FALSE, warning = FALSE, message = FALSE}
+# clean and pull minimum temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took minimum temperature across state by year
+# 5) selected variables of interest and distinct rows
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    min_temp = min(value)) %>% 
+  select(state_code, location, year, min_temp) %>% 
+  distinct()
+```
+  + **Minimum Temperature**: The minimum temperature by state across all 12 months per year was summarized. 
+  
+```{r tmax, echo = FALSE, warning = FALSE, message = FALSE}
+# clean and pull maximum temperature by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) took maximum temperature across state by year
+# 5) selected variables of interest and distinct rows
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    max_temp = max(value)) %>% 
+  select(state_code, location, year, max_temp) %>% 
+  distinct()
+```
+  + **Maximum Temperature**: The maximum temperature by state across all 12 months per year was summarized. 
+  
+```{r precip, echo = FALSE, warning = FALSE, message = FALSE}
+# clean and pull precipitation by state and month. 
+# 1) pulled data from online
+# 2) created year and month fields
+# 3) grouped by state and year
+# 4) summed total precipitation across state by year
+# 5) selected variables of interest and distinct rows
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    total_precip = sum(value)) %>% 
+  select(state_code, location, year, total_precip) %>% 
+  distinct()
+```
+  + **Total Precipitation**: The total precipation by state across all 12 months per year was totaled. 
+
+
 ## Final Data Set
-Data on climate change indicators across 4 data sets were inner joined by `Location`, `Year`, and `FIPS State Code`. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year from 1853-2018. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State. Last a count of natural disasters was taken by year. The resulting data set had `INSERT INLINE CODE ONCE DATA SET IS LOADED`
+```{r joined, echo = FALSE, warning = FALSE, message = FALSE}
+# joined data from 5 data sets
+final_data = 
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "state_code" = "state"))
+```
+Data on climate change indicators across 4 data sets were inner joined by `State` and `Year`. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year from 1853-2018. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State. 
 
 
 ## Data Challenges
-Overall the data we pulled was easily cleaned and imported. However, we did have a major issue with data availability. From 11/25/2019-11/29/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for 5 days. While this created some last minute stress, it did not ultimately affect our work product.  
+There were a couple data challenges along the way. First, our climate data had full state names ("New York") while our disaster data had FIP code and state abbreviations ("NY"). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/2/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for 5 days. While this created some last minute stress, it did not ultimately affect our work product.  
 
 # Exploratory Analysis
 
