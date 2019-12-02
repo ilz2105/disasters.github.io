@@ -95,6 +95,16 @@ disasters_count =
 
 ```
 
+### I have no idea if this will be needed, but I have included it here if it is. Run without it first and then go from there. I think it was just used to fill in missing years before, so it shouldn't be needed for us. Left out the r on purpose in the code chunk to make sure not to run it.
+``` {}
+map_data = disasters_count %>%
+	filter(year >= 1953, year =< 2019) %>%
+	mutate(year = paste("year", year, sep = "_")) %>%
+	spread(key = year, value = Statistics) %>%
+	gather(key = year, value = Statistics, year_1953:year_2019) %>%
+	mutate(year = as.numeric(str_extract(year, "[0-9]{4}")))
+```
+
 Disaster Count Map
 ===================================== 
 
@@ -128,13 +138,13 @@ Column {.tabset}
 ### US MAP
 
 ```{r us_map}
-# for convert state abbreviations to state names -- Might need a slight tweak depending on our variable names for states.
+# convert state abbreviations to state names -- Might need a slight tweak depending on our variable names for states.
 state_abb <- state.name
 names(state_abb) <- state.abb
 
 # plot_geo
 renderPlotly({
-	# map plot setting -- This should be good to go. Maybe the scope is different but I think this wll work.
+	# map plot settings -- This should be good to go. Maybe the scope is different but I think this wll work.
 	geo1 <- list(
 	scope = "usa",
 	projection = list(type = "state"),
@@ -142,7 +152,7 @@ renderPlotly({
 	lakecolor = toRGB("white")
 	)
 	
-	# display value using color intensity -- This should also be good to go if previous code chunk works.
+	# display values using color intensity -- This should also be good to go if previous code chunk works.
 	disasters_count %>% 
 	filter(type_variable == input$variable_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
