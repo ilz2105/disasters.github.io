@@ -27,6 +27,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -349,28 +351,25 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="overview.html">Project Report</a>
+  <a href="project_report.html">Project Report</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Data Analysis
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="data_analysis.html">Statistical Analyses</a>
-    </li>
-    <li>
-      <a href="shiny_dashboard">Shiny Dashboard</a>
-    </li>
-    <li>
-      <a href="interactive_map">Interactive Map</a>
-    </li>
-  </ul>
+<li>
+  <a href="data_analysis.html">Statistical Analysis</a>
+</li>
+<li>
+  <a href="shiny_dashboard.html">Natural Disasters</a>
+</li>
+<li>
+  <a href="interactive_map.html">Interactive Map</a>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="https://github.com/ilz2105/disasters.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -396,12 +395,15 @@ div.tocify {
 
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>
-<p>According to the United States Geological Survey, scientists predict that increasing global surface temperatures will increase the frequency of droughts and intensity of storms globally. Recent studies examining sea-level rise patterns and projections (Hauer, 2017; Kulp &amp; Strauss, 2019) have suggested that sea-level rise could induce large-scale migration in the United States away from unprotected coastlines and towards inland areas, redistributing population density across the country. The potential impacts of climate change are far-reaching, ranging from human migration and displacement to increased pressure on inland areas and land disturbance. We are interested in examining if there is an association between indicators of climate change (temperature and precipitation) and the frequency of natural disasters in the United States since 1953.</p>
+<p>According to the United States Geological Survey, scientists predict that increasing global surface temperatures will increase the frequency of droughts and intensity of storms globally. Recent studies examining sea-level rise patterns and projections (<a href="https://www.nature.com/articles/nclimate3271">“Hauer, 2017”</a>; <a href="https://www.nature.com/articles/s41467-019-12808-z">“Kulp &amp; Strauss, 2019”</a> have suggested that sea-level rise could induce large-scale migration in the United States away from unprotected coastlines and towards inland areas, redistributing population density across the country. The potential impacts of climate change are far-reaching, ranging from human migration and displacement to increased pressure on inland areas and land disturbance.</p>
+<center>
+<img src="data/climate.png" style="width:60%">
+</center>
 </div>
 <div id="related-work" class="section level1">
 <h1>Related Work</h1>
 <p>Oddly enough, the initial inspiration for this work actually came from the coveted p8105 Cow Sticker. Our original project idea was going to revolve around cows but our discussions of cows quickly shifted to methane gas and the effects it has on our planet. As a result, we pivoted to examining climate change and natural disasters. Additionally, our work with NOAA data in class, seeing first hand how in-depth that dataset is, gave us an early understanding of the possibilities achievable with such varied data.</p>
-<p>In the news, climate change has been a hot topic of conversation, particularly surrounding increasing global temperatures and increased intensity of natural disasters. We have seen setbacks and progress made recently. Under the Trump Administration, the United States will pull out of the Paris Agreement as of November 4, 2020. Our group personally discussed the implications of this policy and we voiced our concerns while discussing project idases. However, there are people out there doing fantastic work in the fight for our planet, and we hope to do our part. Recently, Greta Thunberg visited NYC for the Climate Strike on September 20, 2019. An estimated 60,000 people participated in NYC while millions joined globally. We are inspired by this action by young people and hope it motivates others to join the cause. We hope our findings can do just a small part in this movement. And maybe get a sticker with a cow on it if we get a little creative along the way.</p>
+<p>In the news, climate change has been a hot topic of conversation, particularly surrounding increasing global temperatures and increased intensity of natural disasters. We have seen setbacks and progress made recently. Under the Trump Administration, the United States will pull out of the <a href="https://www.washingtonpost.com/climate-environment/2019/11/04/trump-makes-it-official-us-will-withdraw-paris-climate-accord/">“Paris Agreement”</a> as of November 4, 2020. Our group personally discussed the implications of this policy and we voiced our concerns while discussing project idases. However, there are people out there doing fantastic work in the fight for our planet, and we hope to do our part. Recently, Greta Thunberg visited NYC for the <a href="https://www.outsideonline.com/2402494/new-york-city-climate-march">“Climate Strike”</a> on September 20, 2019. An estimated 60,000 people participated in NYC while millions joined globally. We are inspired by this action by young people and hope it motivates others to join the cause. We hope our findings can do just a small part in this movement. And maybe get a sticker with a cow on it if we get a little creative along the way.</p>
 </div>
 <div id="initial-questions" class="section level1">
 <h1>Initial Questions</h1>
@@ -434,8 +436,7 @@ div.tocify {
   ) %&gt;% 
   rename(&quot;n_disaster_state&quot; = &quot;n&quot;) </code></pre>
 <ul>
-<li><p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on <code>State</code>, <code>Disaster Year</code> and <code>Disaster Type</code>. Then, we counted disasters by year, state, and type.</p></li>
-<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1853. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by <code>State</code> and <code>Year</code> and summarized as described below:</p></li>
+<li><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on State, Disaster Year and Disaster Type. Then, we counted disasters by year, state, and type.</li>
 </ul>
 <pre class="r"><code>ave_temp = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -449,11 +450,9 @@ div.tocify {
     mean_temp = mean(value)) %&gt;% 
   select(state_code, location, year, mean_temp) %&gt;% 
   distinct() %&gt;% 
-  ungroup()</code></pre>
-<ul>
-<li><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</li>
-</ul>
-<pre class="r"><code>tmin = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv&quot;, skip = 3)  %&gt;% 
+  ungroup()
+
+tmin = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv&quot;, skip = 3)  %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
  mutate(
@@ -465,11 +464,9 @@ div.tocify {
     min_temp = min(value)) %&gt;% 
   select(state_code, location, year, min_temp) %&gt;% 
   distinct() %&gt;% 
-  ungroup()</code></pre>
-<ul>
-<li><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</li>
-</ul>
-<pre class="r"><code>tmax = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv&quot;, skip = 3) %&gt;% 
+  ungroup()
+
+tmax = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
  mutate(
@@ -481,11 +478,9 @@ div.tocify {
     max_temp = max(value)) %&gt;% 
   select(state_code, location, year, max_temp) %&gt;% 
   distinct() %&gt;% 
-  ungroup()</code></pre>
-<ul>
-<li><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</li>
-</ul>
-<pre class="r"><code>precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv&quot;, skip = 3) %&gt;% 
+  ungroup()
+
+precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
  mutate(
@@ -499,7 +494,13 @@ div.tocify {
   distinct() %&gt;% 
   ungroup()</code></pre>
 <ul>
-<li><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</li>
+<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1853. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by State and Year and summarized as described below:</p>
+<ul>
+<li><p><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</p></li>
+<li><p><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</p></li>
+</ul></li>
 </ul>
 </div>
 <div id="final-data-set" class="section level2">
@@ -509,19 +510,20 @@ div.tocify {
   inner_join(tmax, by = c(&quot;location&quot; = &quot;location&quot;, &quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state_code&quot;)) %&gt;% 
   inner_join(tmin, by = c(&quot;location&quot; = &quot;location&quot;, &quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state_code&quot;)) %&gt;% 
   full_join(disasters, by = c(&quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state&quot;))</code></pre>
-<p>Data on climate change indicators across 4 data sets were inner joined by <code>State</code> and <code>Year</code>. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State.</p>
+<p>Data on climate change indicators across 4 data sets were inner joined by State and Year. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State.</p>
 </div>
 <div id="data-challenges" class="section level2">
 <h2>Data Challenges</h2>
-<p>There were a couple data challenges along the way. First, our climate data had full state names (“New York”) while our disaster data had FIP code and state abbreviations (“NY”). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/1/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for the entire Thanksgiving break. While this created some last minute stress, it did not ultimately affect our work product.</p>
+<p>There were a couple data challenges along the way. First, our climate data had full state names (“New York”) while our disaster data had FIP codes and state abbreviations (“NY”). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/1/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for the entire Thanksgiving break. While this created some last minute stress, it did not ultimately affect our work product.</p>
 </div>
 </div>
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
-<p>[Lulu’s section - climate indicators] []</p>
+<p><a href="insert%20link">“Lulu’s section - climate indicators”</a> <a href="insert%20link">“Ashley’s section - natural disasters”</a> <a href="insert%20link">“Matt’s section - interactive map”</a></p>
 </div>
 <div id="statistical-analysis" class="section level1">
 <h1>Statistical Analysis</h1>
+<p><a href="insert%20link">“Jana’s section - statistical analysis”</a></p>
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>

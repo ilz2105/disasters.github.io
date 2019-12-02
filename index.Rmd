@@ -1,13 +1,38 @@
 ---
-title: "Climate change is real and here is proof!!"
+title: "Why Nothing Matters: Climate Change & Natural Disasters in the United States"
 output: 
   html_document:
-    toc: true
-    toc_float: true
     theme: flatly
 ---
-![](http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif)
+<center>
+![](http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif)  
 
-Overview page, need to add something here.
+</center>  
+
+
+Scientists across the globe confirm that climate change is at a [global tipping point](https://www.nationalgeographic.com/science/2019/11/earth-tipping-point/). First introduced 20 years ago by the Intergovernmental Panel on Climate Change ([IPCC](https://www.ipcc.ch/)), the tipping point implies a point of no return when changes to climate are irreversible. The potential impacts of climate change are far-reaching, ranging from increased intensity and frequency of natural disasters to human migration and displacement. 
+
+
+While the recent news from the Trump Administration to pull out of the [Paris Agreement](https://www.washingtonpost.com/climate-environment/2019/11/04/trump-makes-it-official-us-will-withdraw-paris-climate-accord/) is both discouraging and terrifying, there is still hope moving forward. Through clear visualizations and analyses, we hope to shed light to the relationship between climate change indicators like temperature and frequency of natural disasters. We hope our findings can do just a small part in providing evidence for climate change. And maybe get a sticker with a cow on it if we get a little creative along the way.
+
+<center>
+<img src="data/stickers.png" alt="stickers" style="width:30%">
+</center>
+## Data Set
+Our team used several publicly available datasets with information on natural disasters, temperature variables, and total precipitation across year and state from 1953-2018. The [Disaster Declarations Summary](https://www.fema.gov/media-library/assets/documents/28318) (Version 2) from the Federal Emergency Management Agency (FEMA) contained summary level data on disaster declarations. The National Oceanic and Atmospheric Administration's (NOAA) [Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data included information on monthly maximum temperature, minimum temperature, average temperature, and total precipitation. 
+
+## Website Overview
+
+**Project Report**: A complete overview of project goals, data cleaning, analyses, discussion.  
+
+**Statistical Analysis**: Association between natural disasters and climate change indicators using regression.  
+
+**Natural Disasters**: Interactive Shiny Dashboard showing prevalence of natural disasters. 
+
+**Interactive Map**: Interactive Map showing climate indicators by geographic location.  
+
+[insert screen share]
+
+
 
 

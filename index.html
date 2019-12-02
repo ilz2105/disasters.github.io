@@ -12,7 +12,7 @@
 
 
 
-<title>Climate change is real and here is proof!!</title>
+<title>Why Nothing Matters: Climate Change &amp; Natural Disasters in the United States</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,12 +20,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -251,63 +250,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -315,16 +257,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -345,28 +277,25 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="overview.html">Project Report</a>
+  <a href="project_report.html">Project Report</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Data Analysis
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="data_analysis.html">Statistical Analyses</a>
-    </li>
-    <li>
-      <a href="shiny_dashboard">Shiny Dashboard</a>
-    </li>
-    <li>
-      <a href="interactive_map">Interactive Map</a>
-    </li>
-  </ul>
+<li>
+  <a href="data_analysis.html">Statistical Analysis</a>
+</li>
+<li>
+  <a href="shiny_dashboard.html">Natural Disasters</a>
+</li>
+<li>
+  <a href="interactive_map.html">Interactive Map</a>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="https://github.com/ilz2105/disasters.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -377,18 +306,34 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Climate change is real and here is proof!!</h1>
+<h1 class="title toc-ignore">Why Nothing Matters: Climate Change &amp; Natural Disasters in the United States</h1>
 
 </div>
 
 
+<center>
 <p><img src="http://giphygifs.s3.amazonaws.com/media/rozlnqOWqxqA8/giphy.gif" /></p>
-<p>Overview page, need to add something here.</p>
-
-
-
+</center>
+<p>Scientists across the globe confirm that climate change is at a <a href="https://www.nationalgeographic.com/science/2019/11/earth-tipping-point/">global tipping point</a>. First introduced 20 years ago by the Intergovernmental Panel on Climate Change (<a href="https://www.ipcc.ch/">IPCC</a>), the tipping point implies a point of no return when changes to climate are irreversible. The potential impacts of climate change are far-reaching, ranging from increased intensity and frequency of natural disasters to human migration and displacement.</p>
+<p>While the recent news from the Trump Administration to pull out of the <a href="https://www.washingtonpost.com/climate-environment/2019/11/04/trump-makes-it-official-us-will-withdraw-paris-climate-accord/">Paris Agreement</a> is both discouraging and terrifying, there is still hope moving forward. Through clear visualizations and analyses, we hope to shed light to the relationship between climate change indicators like temperature and frequency of natural disasters. We hope our findings can do just a small part in providing evidence for climate change. And maybe get a sticker with a cow on it if we get a little creative along the way.</p>
+<center>
+<img src="data/stickers.png" alt="stickers" style="width:30%">
+</center>
+<div id="data-set" class="section level2">
+<h2>Data Set</h2>
+<p>Our team used several publicly available datasets with information on natural disasters, temperature variables, and total precipitation across year and state from 1953-2018. The <a href="https://www.fema.gov/media-library/assets/documents/28318">Disaster Declarations Summary</a> (Version 2) from the Federal Emergency Management Agency (FEMA) contained summary level data on disaster declarations. The National Oceanic and Atmospheric Administration’s (NOAA) <a href="https://www.ncdc.noaa.gov/cag/national/mapping/">Climate at a Glance</a> data included information on monthly maximum temperature, minimum temperature, average temperature, and total precipitation.</p>
 </div>
+<div id="website-overview" class="section level2">
+<h2>Website Overview</h2>
+<p><strong>Project Report</strong>: A complete overview of project goals, data cleaning, analyses, discussion.</p>
+<p><strong>Statistical Analysis</strong>: Association between natural disasters and climate change indicators using regression.</p>
+<p><strong>Natural Disasters</strong>: Interactive Shiny Dashboard showing prevalence of natural disasters.</p>
+<p><strong>Interactive Map</strong>: Interactive Map showing climate indicators by geographic location.</p>
+<p>[insert screen share]</p>
 </div>
+
+
+
 
 </div>
 
@@ -421,32 +366,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

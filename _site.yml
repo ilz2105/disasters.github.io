@@ -4,17 +4,17 @@ navbar:
   title: "Home"
   right:
     - text: "Project Report"
-      href: overview.html
-    - text: "Data Analysis"
-      menu:
-      - text: Statistical Analyses
-        href: data_analysis.html
-      - text: Shiny Dashboard
-        href: shiny_dashboard
-      - text: Interactive Map
-        href: interactive_map
+      href: project_report.html
+    - text: "Statistical Analysis"
+      href: data_analysis.html
+    - text: "Natural Disasters"
+      href: shiny_dashboard.html
+    - text: "Interactive Map"
+      href: interactive_map.html
     - text: "Discussion"
       href: Discussion.html
+    - icon: fa-github fa-lg
+      href: https://github.com/ilz2105/disasters.github.io
 output:
   html_document:
     theme: flatly
