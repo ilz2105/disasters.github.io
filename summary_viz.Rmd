@@ -1,0 +1,35 @@
+---
+title: "Summary Visualizations"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+
+```{r}
+library(tidyverse)
+#library(ggridges)
+final_data
+final_data %>% 
+  ggplot(aes(x = min_temp, y = max_temp))+
+  geom_point(aes(color = year))+
+  geom_smooth(color = "red", se = FALSE)+
+  labs(title = "Minimum Temp vs. Maximum Temp Plot (F)", 
+       xlab = "Minimum Temperature",
+       ylab = "Maximum Temperature")+
+  theme_bw()+
+  theme(legend.position = "bottom")
+```
+
+```{r}
+final_data %>% 
+  filter(disaster == "Flood") %>% 
+  ggplot(aes(x = year, fill = location)) +
+  geom_density(alpha = 0.4, adjust = .5, color = "blue")
+
+final_data %>% 
+  group_by(location, disaster) %>% 
+  
+```
+
