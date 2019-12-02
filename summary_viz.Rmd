@@ -9,7 +9,10 @@ output:
 
 ```{r}
 library(tidyverse)
-#library(ggridges)
+library(ggridges)
+```
+
+```{r, scatterplot}
 final_data
 final_data %>% 
   ggplot(aes(x = min_temp, y = max_temp))+
@@ -22,14 +25,31 @@ final_data %>%
   theme(legend.position = "bottom")
 ```
 
-```{r}
+```{r, density}
 final_data %>% 
-  filter(disaster == "Flood") %>% 
+  filter(disaster == "Flood", total_precip > 60.0) %>% 
   ggplot(aes(x = year, fill = location)) +
-  geom_density(alpha = 0.4, adjust = .5, color = "blue")
-
-final_data %>% 
-  group_by(location, disaster) %>% 
-  
+  geom_density(alpha = 0.4, adjust = .5, color = "blue")+
+  labs(title = "Distribution of Floods from 1953-2018 in the US when Total 
+       Precipitation > 60.0 inches",
+       xlab = "Year",
+       ylab = "Density")
 ```
 
+
+
+```{r}
+final_data %>% 
+  drop_na(disaster) %>% 
+  #group_by(location, disaster) %>% 
+  ggplot(aes(x = disaster, fill = disaster))+
+  geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
+  theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
+  labs(title = "Frequency of Types of Disaster")
+```
+
+# do a violin plot
+
+# box plot
+
+# density plot
