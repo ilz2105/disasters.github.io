@@ -34,109 +34,86 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 
 ```{r loadtidydata, echo = FALSE, results = 'hide', message = FALSE}
-# clean and pull average temperature by state and month. 
-# 1) pulled data from online
-# 2) created year and month fields
-# 3) grouped by state and year
-# 4) took average temperature across state by year
-# 5) selected variables of interest and distinct rows
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
   mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     mean_temp = mean(value)) %>% 
-  select(fips_state_code, location, year, mean_temp) %>% 
+  select(state_code, location, year, mean_temp) %>% 
   distinct()
 
-# clean and pull precipitation by state and month. 
-# 1) pulled data from online
-# 2) created year and month fields
-# 3) grouped by state and year
-# 4) summed total precipitation across state by year
-# 5) selected variables of interest and distinct rows
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     total_precip = sum(value)) %>% 
-  select(fips_state_code, location, year, total_precip) %>% 
+  select(state_code, location, year, total_precip) %>% 
   distinct()
 
-# clean and pull maximum temperature by state and month. 
-# 1) pulled data from online
-# 2) created year and month fields
-# 3) grouped by state and year
-# 4) took maximum temperature across state by year
-# 5) selected variables of interest and distinct rows
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     max_temp = max(value)) %>% 
-  select(fips_state_code, location, year, max_temp) %>% 
+  select(state_code, location, year, max_temp) %>% 
   distinct()
 
-# clean and pull minimum temperature by state and month. 
-# 1) pulled data from online
-# 2) created year and month fields
-# 3) grouped by state and year
-# 4) took minimum temperature across state by year
-# 5) selected variables of interest and distinct rows
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     min_temp = min(value)) %>% 
-  select(fips_state_code, location, year, min_temp) %>% 
+  select(state_code, location, year, min_temp) %>% 
   distinct()
 
-# clean and pull natural disasters by state and year
-# 1) imported downloaded data
-# 2) updated variable types and names
-# 3) selected variables of interest 
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
   janitor::clean_names() %>% 
-  mutate(incident_type = factor(incident_type), 
-       fips_state_code = fips_state_code*100) %>% 
+  mutate(disaster = factor(incident_type)) %>% 
   rename(
-     year = fy_declared, 
-     disaster = incident_type) %>% 
-  select(fips_state_code, year, disaster)
+     year = fy_declared) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  count(state, year, disaster) %>%
+  group_by(year, state) %>% 
+  mutate(
+    n_state = sum(n)
+  ) %>% 
+  group_by(year) %>% 
+  mutate(
+    n_total = sum(n)
+  ) %>% 
+  group_by(year, disaster) %>% 
+  mutate(
+    n_type = sum(n)
+  ) %>% 
+  rename("n_disaster_state" = "n") 
 
 # joined data from 5 data sets
 final_data = 
-  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  inner_join(tmax, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  inner_join(tmin, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  rename(state = location)
-
-# count of disasters
-disasters_count =
-  final_data %>% 
-  filter(disaster != "NA") %>% 
-  count(location, disaster) %>% 
-  rename("disaster_count" = "n")
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>% 
+  rename ("state" = "location")
 ```
 
 
@@ -168,11 +145,14 @@ selectInput(
   choices = disaster_name, selected = "Coastal Storm")
 
 
-  
+
+min_temp = -20
+max_temp = 110
+
 sliderInput(
   "temp_range", 
   label = h3("Choose temperature range"), 
-  min = tmin, max = tmax, value = c(-50, 150))
+  min = min_temp, max = max_temp, value = c(-50, 150))
 ```
 
 Column {data-width=650}
@@ -199,21 +179,16 @@ Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### Count of Disasters (x) vs. Average Temperature (y)
-Need to do an inner join of the ave_temp and disasters_count dataframes in order to graph? Can you use a dataframe for x and y?
 
 ```{r, echo = FALSE}
 renderPlotly({
-  disasters_avetemp = 
-    ave_temp %>% 
-    inner_join(., disasters_count, by = "fips")
-  
-  disasters_avetemp %>%
+  final_data %>%
   filter(
     state == input[["state_choice"]], 
     disaster == input[["disaster_choice"]]) %>%
   mutate(text_label = str_c("Number of Disasters: ", disasters_count, '\nAverage Temperature: ', ave_temp)) %>% 
   plot_ly(
-    x = ~disasters_count, y = ~ave_temp, type = "scatter", mode = "markers",
+    x = ~n_state, y = ~mean_temp, type = "scatter", mode = "markers",
     alpha = 0.5, color = ~price, text = ~text_label)
 })
 ```
@@ -226,7 +201,7 @@ renderPlotly({
     filter(
       state == input[["state_choice"]], 
       temp %in% input$temp_range[1]:input$temp_range[2]) %>%
-    plot_ly(y = ~ave_temp, color = ~state, type = "box")
+    plot_ly(y = ~mean_temp, color = ~state, type = "box")
 })
 ```
 
