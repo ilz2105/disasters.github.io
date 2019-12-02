@@ -105,7 +105,7 @@ map_data = disasters_count %>%
 	mutate(year = as.numeric(str_extract(year, "[0-9]{4}")))
 ```
 
-Disaster Count Map
+Disaster Map
 ===================================== 
 
 Column {.sidebar}
@@ -126,6 +126,7 @@ selectInput("year_1", label = h3("Choose year"),
 # variable select box -- Matt Note: Same as above for variable type. 
 selectInput("variable_type", label = h3("Choose variable"),
 						choices = type_variable, selected = "disaster")
+# Matt Note: Definitely seems like type_variable is something that does not exist in our data and we will have to find a proxy or make a new variable. Once we have our data again this shouldn't be too hard I believe.
 ```
 
 
@@ -175,12 +176,12 @@ renderPlotly({
 
 ### Description
 
-The Disaster Count map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize state differences across the country. The map includes of the following variables:
+The Disaster Map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize differences across the country. The map includes the following variables:
 
-* **Disaster Declarations**: Darker areas mean higher counts of disasters, hovering over each state will display the counts.
+* **Disaster Declarations**: Darker areas represent higher counts of disasters, hovering over each state will display the counts.
 
 * **Climate Indicators**:
-  + **Average Temperature**: Darker areas mean a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature.
-  + **Minimum Temperature**: Darker areas mean a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature.
-  + **Maximum Temperature**: Darker areas mean a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature.
-  + **Total Precipitation**: Darker areas mean a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation.
+  + **Average Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature.
+  + **Minimum Temperature**: Darker areas represent a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature.
+  + **Maximum Temperature**: Darker areas represent a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature.
+  + **Total Precipitation**: Darker areas represent a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation.
