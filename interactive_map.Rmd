@@ -21,78 +21,79 @@ ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.cs
   separate(date, into = c("year", "month"), sep = 4) %>%
   mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     mean_temp = mean(value)) %>% 
-  select(fips_state_code, location, year, mean_temp) %>% 
+  select(state_code, location, year, mean_temp) %>% 
   distinct()
 
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     total_precip = sum(value)) %>% 
-  select(fips_state_code, location, year, total_precip) %>% 
+  select(state_code, location, year, total_precip) %>% 
   distinct()
 
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     max_temp = max(value)) %>% 
-  select(fips_state_code, location, year, max_temp) %>% 
+  select(state_code, location, year, max_temp) %>% 
   distinct()
 
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("year", "month"), sep = 4) %>%
-  mutate(
+ mutate(
     year = as.numeric(year), 
-    fips_state_code = as.numeric(location_id)) %>% 
-  filter(year >= 1953 & year != 2019) %>% 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
   group_by(location, year) %>% 
   mutate(
     min_temp = min(value)) %>% 
-  select(fips_state_code, location, year, min_temp) %>% 
+  select(state_code, location, year, min_temp) %>% 
   distinct()
 
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
   janitor::clean_names() %>% 
-  mutate(incident_type = factor(incident_type), 
-       fips_state_code = fips_state_code*100) %>% 
+  mutate(disaster = factor(incident_type)) %>% 
   rename(
-     year = fy_declared, 
-     disaster = incident_type) %>% 
-  select(fips_state_code, year, disaster)
+     year = fy_declared) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  count(state, year, disaster) %>%
+  group_by(year, state) %>% 
+  mutate(
+    n_state = sum(n)
+  ) %>% 
+  group_by(year) %>% 
+  mutate(
+    n_total = sum(n)
+  ) %>% 
+  group_by(year, disaster) %>% 
+  mutate(
+    n_type = sum(n)
+  ) %>% 
+  rename("n_disaster_state" = "n") 
 
-# joined data from 5 data sets
 final_data = 
-  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  inner_join(tmax, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  inner_join(tmin, by = c("location" = "location", "year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  full_join(disasters, by = c("year" = "year", "fips_state_code" = "fips_state_code")) %>% 
-  rename(state = location)
-
-# count of disasters
-disasters_count =
-  final_data %>% 
-  filter(disaster != "NA") %>% 
-  count(location, disaster) %>% 
-  rename("disaster_count" = "n")
-
-
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
 
 ### I have no idea if this will be needed, but I have included it here if it is. Run without it first and then go from there. I think it was just used to fill in missing years before, so it shouldn't be needed for us. Left out the r on purpose in the code chunk to make sure not to run it.
@@ -115,7 +116,7 @@ Column {.sidebar}
 ```{r for_sidebar}
 
 # entries to select from -- Matt Note: type_variable may have to be created. I think it is a new variable to describe things like "temp variable" or "disaster variable".
-type_variable <- (disasters_count %>% distinct(type_variable) %>% pull())
+type_variable <- (final_data %>% distinct(type_variable) %>% pull())
 year <- c(1953:2019)
 
 # year select box -- Matt Note: may have to make variable name year_1 using our final data and mutating further in a previous step. Slightly unclear.  
@@ -154,7 +155,7 @@ renderPlotly({
 	)
 	
 	# display values using color intensity -- This should also be good to go if previous code chunk works.
-	disasters_count %>% 
+	final_data %>% 
 	filter(type_variable == input$variable_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
 	add_trace(
