@@ -357,7 +357,7 @@ div.tocify {
   <a href="data_analysis.html">Statistical Analysis</a>
 </li>
 <li>
-  <a href="shiny_dashboard.html">Natural Disasters</a>
+  <a href="https://ashleytseng.shinyapps.io/disastersgithub/_w_70c32f14/shiny_dashboard.html">Natural Disasters</a>
 </li>
 <li>
   <a href="shiny_map.html">Interactive Map</a>
@@ -497,11 +497,13 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
   distinct() %&gt;% 
   ungroup()</code></pre>
 <ul>
-<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1853. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by State and Year and summarized as described below:</p></li>
+<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1853. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by State and Year and summarized as described below:</p>
+<ul>
 <li><p><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</p></li>
+</ul></li>
 </ul>
 </div>
 <div id="final-data-set" class="section level2">
