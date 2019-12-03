@@ -102,25 +102,20 @@ final_data =
 final_data %>% 
 mutate(
   region = case_when(
-    location %in% c("Alabama", "Arkansas","Delaware","Florida","Georgia","Kentucky","Louisiana",
-"Maryland","Mississippi","Oklahoma","North Carolina","South Carolina",
-"Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
-   location %in% c("Connecticut",
-"Maine",
-"New Hampshire",
-"Massachusetts",
-"New Jersey",
-"New York",
-"Pennsylvania",
-"Rhode Island",
-"Vermont") ~ 'northeast',
-location %in% c("Alaska", 
+    location %in% c(
+                    "Alabama","Arkansas","Delaware","Florida","Georgia"
+                    ,"Kentucky","Louisiana","Maryland","Mississippi",
+                    "Oklahoma","North Carolina","South Carolina",
+                    "Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
+   location %in% c("Connecticut","Maine","New Hampshire","Massachusetts",
+                   "New Jersey","New York","Pennsylvania","Rhode Island","Vermont") ~ 'northeast',
+  location %in% c("Alaska", 
                 "Arizona","California","Colorado","Hawaii","Idaho",
                 "Montana","Nevada","New Mexico","Oregon","Utah","Washington","Wyoming")
        ~  'west',
-location %in% c("Illinois",
+  location %in% c("Illinois",
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
-"Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
+                "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
   
   
    
