@@ -8,9 +8,9 @@ navbar:
     - text: "Statistical Analysis"
       href: data_analysis.html
     - text: "Natural Disasters"
-      href: http://127.0.0.1:3700/shiny_dashboard_new.Rmd
+      href: 
     - text: "Interactive Map"
-      href: http://127.0.0.1:7550/shiny_map_new.Rmd
+      href: http://127.0.0.1:3019/shiny_map.Rmd
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg
