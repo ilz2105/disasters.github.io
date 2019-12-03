@@ -1,11 +1,11 @@
 ---
 title: "Interactive Map"
+runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
     source_code: embed
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
