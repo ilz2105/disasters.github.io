@@ -111,7 +111,7 @@ ui = fluidPage(
     # Application title
     titlePanel("Examining Natural Disasters and Climate Change by US State"),
     
-    # Sidebar with a slider input for number of bins 
+    # Sidebar
     sidebarLayout(
         sidebarPanel(
             state_name = 
