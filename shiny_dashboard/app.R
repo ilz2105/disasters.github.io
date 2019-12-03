@@ -136,9 +136,9 @@ ui = fluidPage(
         ),
         
         mainPanel(
-            plotOutput("count_styr"),
-            plotOutput("count_styr_avgtemp"),
-            plotOutput("avgtempchange")
+            plotlyOutput("count_styr"),
+            plotlyOutput("count_styr_avgtemp"),
+            plotlyOutput("avgtempchange")
         )
     )
 )
