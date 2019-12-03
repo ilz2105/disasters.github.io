@@ -2,11 +2,12 @@
 title: "Interactive Map"
 runtime: shiny
 output: 
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-    source_code: embed
+ html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
 ---
+
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
