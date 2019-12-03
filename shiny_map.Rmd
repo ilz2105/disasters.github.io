@@ -1,5 +1,5 @@
 ---
-title: "Interactive Map"
+title: "Interactive Disaster Map"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -95,6 +95,13 @@ final_data =
   inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
+```{r map_data Chunk, include=FALSE}
+map_data = 
+  final_data %>%
+  ungroup(location)%>%
+  select(state_code, year, disaster, n_state) %>%
+  drop_na()
+```
 
 
 
@@ -103,41 +110,35 @@ Disaster Map
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-
-```{r for_sidebar}
+```{r for_sidebar, echo=FALSE}
 
 # entries to select from -- somehow this is not making it so disasters are selected but just a lot of years
-disaster <- (final_data %>% ungroup(year) %>% distinct(disaster) %>% pull())
+disaster <- (map_data %>% ungroup(year) %>% distinct(disaster) %>% pull())
 year <- c(1953:2019)
 
 # year select box 
 selectInput("year_1", label = h3("Choose year"),
 						choices = as.list(year),
-						selected = 2019)
+						selected = 2001)
 
 # variable select box
 selectInput("disaster_type", label = h3("Choose variable"),
 						choices = disaster, 
-						selected = "Flood")
+						selected = "Fire")
 ```
-
-
-
 (See description page for more information.)
 
 Column {.tabset}
 -----------------------------------------------------------------------
-
 ### US MAP
-
-```{r us_map}
-# convert state abbreviations to state names -- Might need a slight tweak depending on our variable names for states.
+```{r us_map, echo=FALSE}
+# convert state abbreviations to state names
 state_abb <- state.name
 names(state_abb) <- state.abb
 
 # plot_geo
 renderPlotly({
-	# map plot settings -- This should be good to go. Maybe the scope is different but I think this wll work.
+	# map plot settings.
 	geo1 <- list(
 	scope = "usa",
 	projection = list(type = "state"),
@@ -145,16 +146,16 @@ renderPlotly({
 	lakecolor = toRGB("white")
 	)
 	# display values using color intensity -- This should also be good to go if previous code chunk works.
-	final_data %>% 
+	map_data %>% 
 	filter(disaster == input$disaster_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
 	add_trace(
 		z = ~n_state,
-		locations = ~location,
+		locations = ~state_code,
 		color = ~n_state,
 		colors = "Reds",
 		# add text
-		text = ~paste(n_state, state_abb[location], sep = "")
+		text = ~paste(disaster, state_abb[state_code], sep = "-")
 		) %>%
 	layout(
 		geo = geo1,
