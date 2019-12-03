@@ -211,7 +211,9 @@ final_data %>%
   ggplot(aes(x= year, y = total_precip))+
     geom_line(aes(group = location, color = location))+
   labs(title = "Spaghetti Plot Showing Total Precipitation from 1953-2018 By State")
-
+```
+---
+# Matt Note -  this part is creating issues so removed it for now to see if website can build.
 final_data %>% 
   group_by(year, location, mean_temp, total_precip) %>% 
 mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
@@ -219,7 +221,7 @@ mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', t
     x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
     color = ~location, text = ~text_label, alpha = 0.5)+
   labs(title = "Total Precipitation(in.) by Year For Each State")
-```
+
 
 ```{r}
 final_data %>% 
