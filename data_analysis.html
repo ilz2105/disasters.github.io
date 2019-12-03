@@ -394,9 +394,16 @@ div.tocify {
 
 
 <p>Is the US seeing more natural disasters over time?</p>
+<<<<<<< HEAD
 <p>After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations above, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between . We fit a linear regression where our final model took the form:</p>
 <pre class="r"><code># Full Model
 lm.full = lm(n_total ~ year + mean_temp + total_precip + year*total_precip, data = final_data)
+=======
+<p>After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches. We fit a linear regression where our final model took the form:</p>
+<p><span class="math display">\[ Number \ of \ Disasters_i \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
+<pre class="r"><code># Full Model
+lm.full = lm(n_total ~ year + mean_temp + total_precip + mean_temp*total_precip , data = final_data)
+>>>>>>> 48046e98b8c4980a6021d9256b68eb84596f8e65
 
 # Display
 lm.full %&gt;% 
@@ -414,31 +421,32 @@ lm.full %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-63652.251</td>
+<td align="right">-63315.321</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
-<td align="right">32.601</td>
+<td align="right">32.037</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp</td>
-<td align="right">-5.337</td>
-<td align="right">0.016</td>
+<td align="right">9.406</td>
+<td align="right">0.110</td>
 </tr>
 <tr class="even">
 <td align="left">total_precip</td>
-<td align="right">25.106</td>
-<td align="right">0.850</td>
+<td align="right">22.445</td>
+<td align="right">0.004</td>
 </tr>
 <tr class="odd">
-<td align="left">year:total_precip</td>
-<td align="right">-0.012</td>
-<td align="right">0.861</td>
+<td align="left">mean_temp:total_precip</td>
+<td align="right">-0.376</td>
+<td align="right">0.007</td>
 </tr>
 </tbody>
 </table>
+<p>After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.</p>
 
 
 

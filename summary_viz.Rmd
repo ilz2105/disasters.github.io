@@ -36,6 +36,7 @@ final_data %>%
        ylab = "Density")
 ```
 
+make a panel plot
 
 
 ```{r}
@@ -46,6 +47,16 @@ final_data %>%
   geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
   labs(title = "Frequency of Types of Disaster")
+
+
+final_data %>% 
+  drop_na(disaster, location) %>% 
+  ggplot(aes(x = year, fill = location))+
+  geom_bar()
+```
+
+```{r}
+
 ```
 
 # do a violin plot

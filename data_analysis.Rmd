@@ -95,13 +95,15 @@ final_data =
 
 Is the US seeing more natural disasters over time?
 
-After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations above, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between . We fit a linear regression where our final model took the form:
+After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches. We fit a linear regression where our final model took the form:
 
+$$ Number \ of \ Disasters_i \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
+for the $i^{th}$ year.
 
 
 ```{r}
 # Full Model
-lm.full = lm(n_total ~ year + mean_temp + total_precip + year*total_precip, data = final_data)
+lm.full = lm(n_total ~ year + mean_temp + total_precip + mean_temp*total_precip , data = final_data)
 
 # Display
 lm.full %>% 
@@ -109,4 +111,11 @@ lm.full %>%
   select(term, estimate, p.value) %>%
   knitr::kable(digits = 3)
 ```
+
+After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.
+
+
+
+
+
 
