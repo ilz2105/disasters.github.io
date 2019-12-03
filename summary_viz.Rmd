@@ -116,7 +116,9 @@ mutate(
   location %in% c("Illinois",
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
-  
+
+
+
    
 ```
 
@@ -142,10 +144,11 @@ final_data %>%
     color = ~region, text = ~text_label, alpha = 0.5)
 ```
 This scatterplot shows the average temperature (F) from 1953 to 2018, by region. Overall, the southeast region has the highest average temperatures and the Northeast has the lowest average temperatures.Though it may be hard to see,
-the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in the Southeast, 59.25F to 62.26F in the Southwest, 
+the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Florida, 59.25F to 62.26F in Arizona,
+56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey. 
 
 
-```{r, density}
+```{r, panel}
 # trying to make a panel of all 50 states showing # disasters over year
 final_data %>% 
   group_by( disaster, region)%>% 
@@ -161,7 +164,7 @@ final_data %>%
        ylab = "Frequency of Disasters")
 ```
 
-This is a panel showing the total number of disasters from 1953-2018 for each reagion. The disasters are shown in different colors. 
+This is a panel showing the total number of disasters from 1953-2018 for each region. The disasters are shown in different colors. 
 
 # regional?
 
@@ -174,6 +177,20 @@ final_data %>%
   geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
   labs(title = "Frequency of Types of Disaster")
+```
+
+
+# Plot showing Total Number of Disasters by State from 1953-2018, Summed up for Each Region
+```{r}
+ final_data %>% 
+  drop_na() %>% 
+  select(disaster, n_disaster_state, region) %>% 
+  distinct() %>% 
+  mutate(text_label = str_c(region, "\n", location, "\n")) %>%
+  plot_ly(
+    x = ~disaster, y = ~n_disaster_state, type = "bar", mode = "markers",
+    color = ~region, text = ~text_label, alpha = 0.5)
+
 ```
 
 This plot shows the 
@@ -205,35 +222,20 @@ final_data %>%
     geom_line(aes(group = location, color = location))+
   labs(title = "Spaghetti Plot Showing Total Precipitation from 1953-2018 By State")
 ```
----
-# Matt Note -  this part is creating issues so removed it for now to see if website can build.
-final_data %>% 
-  group_by(year, location, mean_temp, total_precip) %>% 
-mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
-  plot_ly(
-    x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
-    color = ~location, text = ~text_label, alpha = 0.5)+
-  labs(title = "Total Precipitation(in.) by Year For Each State")
+
 
 
 ```{r}
 final_data %>% 
   group_by(year, location, disaster) %>% 
-mutate(text_label = str_c( disaster, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
+mutate(text_label = str_c( disaster, "\n", location)) %>% 
   plot_ly(
-    x = ~disaster, y = ~n_total, type = "box",
+    x = ~year, y = ~n_total, type = "box",
     color = ~disaster, text = ~text_label, alpha = 0.5)
 ```
 
-```{r}
-final_data %>% 
-  group_by(location) %>% 
-  filter(n_state)
-  mutate(text_label = str_c(year, "\ntotal: ",n_total)) %>% 
-plot_ly(
-    x = ~location, y = ~disaster, type = "bar",
-    color = ~disaster, text = ~text_label, alpha = 0.5)
-```
+This box plot shows the median, maximum, and minimum values for the count of total disasters by year
+
 
 
 
