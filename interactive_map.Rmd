@@ -96,22 +96,12 @@ final_data =
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
 
-### I have no idea if this will be needed, but I have included it here if it is. Run without it first and then go from there. I think it was just used to fill in missing years before, so it shouldn't be needed for us. Left out the r on purpose in the code chunk to make sure not to run it.
-``` {}
-map_data = disasters_count %>%
-	filter(year >= 1953, year =< 2019) %>%
-	mutate(year = paste("year", year, sep = "_")) %>%
-	spread(key = year, value = Statistics) %>%
-	gather(key = year, value = Statistics, year_1953:year_2019) %>%
-	mutate(year = as.numeric(str_extract(year, "[0-9]{4}")))
-```
 
 Disaster Map
 ===================================== 
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-
 
 ```{r for_sidebar}
 
@@ -126,7 +116,8 @@ selectInput("year_1", label = h3("Choose year"),
 
 # variable select box -- Matt Note: Same as above for variable type. 
 selectInput("variable_type", label = h3("Choose variable"),
-						choices = type_variable, selected = "disaster")
+						choices = as.list(disaster), 
+						selected = "Flood")
 # Matt Note: Definitely seems like type_variable is something that does not exist in our data and we will have to find a proxy or make a new variable. Once we have our data again this shouldn't be too hard I believe.
 ```
 
