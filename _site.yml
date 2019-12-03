@@ -10,7 +10,7 @@ navbar:
     - text: "Natural Disasters"
       href: shiny_dashboard.html
     - text: "Interactive Map"
-      href: interactive_map.html
+      href: shiny_map.html
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg
