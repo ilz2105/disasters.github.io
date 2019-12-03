@@ -115,7 +115,26 @@ lm.full %>%
 After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.
 
 
+## Testing for Cross Validation
+Unsure if this is right, need to check!
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+final_data %>% 
+  ggplot(aes(x = year, y = n_total)) + 
+  geom_point() + theme_bw()
+```
 
 
+# Poisson Regression
+```{r}
+poisson_model = glm(n_total ~ year + mean_temp + total_precip, family="poisson"(link = log), data=final_data)
+
+summary(poisson_model)
+
+poisson_test %>% 
+  broom::tidy() %>%
+  select(term, estimate, p.value) %>%
+  knitr::kable(digits = 3)
+
+```
 
 
