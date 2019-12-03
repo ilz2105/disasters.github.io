@@ -1,5 +1,5 @@
 ---
-title: "Interactive Disaster Map"
+title: "Interactive Map"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -95,25 +95,37 @@ final_data =
   inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
+
 ```{r map_data Chunk, include=FALSE}
 map_data = 
   final_data %>%
   ungroup(location)%>%
-  select(state_code, year, disaster, n_state) %>%
-  drop_na()
+  select(state_code, year, mean_temp, max_temp, min_temp, total_precip, n_state) %>%
+  rename(mtotal_precip = total_precip) %>%
+  rename(mn_state = n_state) %>%
+  pivot_longer(cols = (starts_with("m")), names_to = "variable_type",
+  names_repair = "check_unique", values_to = "statistic",
+  values_ptypes = list()) %>%
+  drop_na() %>%
+  mutate(
+    variable_type = 
+    recode(variable_type,
+    "mean_temp" = "Yearly Mean Temperature",
+    "max_temp" = "Yearly Max Temperature",
+    "min_temp" = "Yearly Min Temperature",
+    "mtotal_precip" = "Yearly Total Precipitation",
+    "mn_state" = "Yearly Total of All Disasters"
+    )
+    )
 ```
 
 
-
-Disaster Map
-===================================== 
-
-Column {.sidebar}
+Variable Selection {.sidebar}
 -----------------------------------------------------------------------
 ```{r for_sidebar, echo=FALSE}
 
 # entries to select from -- somehow this is not making it so disasters are selected but just a lot of years
-disaster <- (map_data %>% ungroup(year) %>% distinct(disaster) %>% pull())
+variable_type <- (map_data %>% ungroup(year) %>% distinct(variable_type) %>% pull())
 year <- c(1953:2019)
 
 # year select box 
@@ -122,15 +134,16 @@ selectInput("year_1", label = h3("Choose year"),
 						selected = 2001)
 
 # variable select box
-selectInput("disaster_type", label = h3("Choose variable"),
-						choices = disaster, 
-						selected = "Fire")
+selectInput("variable_type", label = h3("Choose variable"),
+						choices = variable_type, 
+						selected = "mean_temp")
 ```
-(See description page for more information.)
+(See description page for more information on each variable.)
 
-Column {.tabset}
+Map and Description {.tabset}
 -----------------------------------------------------------------------
 ### US MAP
+
 ```{r us_map, echo=FALSE}
 # convert state abbreviations to state names
 state_abb <- state.name
@@ -147,19 +160,19 @@ renderPlotly({
 	)
 	# display values using color intensity -- This should also be good to go if previous code chunk works.
 	map_data %>% 
-	filter(disaster == input$disaster_type, year == input$year_1) %>% 
+	filter(variable_type == input$variable_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
 	add_trace(
-		z = ~n_state,
+		z = ~statistic,
 		locations = ~state_code,
-		color = ~n_state,
+		color = ~statistic,
 		colors = "Reds",
 		# add text
-		text = ~paste(disaster, state_abb[state_code], sep = "-")
+		text = ~paste(variable_type, state_abb[state_code], sep = "-")
 		) %>%
 	layout(
 		geo = geo1,
-		title = "US Map - State Disaster Statistics",
+		title = "US Map - State Statistics",
 		legend = list(x = 100, y = 0.5)
 	)
 })
@@ -168,12 +181,14 @@ renderPlotly({
 
 ### Description
 
-The Disaster Map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize differences across the country. The map includes the following variables:
+This map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize differences across the country. The map includes the following variables:
 
-* **Disaster Declarations**: Darker areas represent higher counts of disasters, hovering over each state will display the counts.
+* **Yearly Total of All Disasters**: Darker areas represent higher counts of disaster declarations, hovering over each state will display the counts. Blank states means there were no disasters declared or no data available in that state for that year.
 
-**Climate Indicators**:
-  + **Average Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature.
-  + **Minimum Temperature**: Darker areas represent a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature.
-  + **Maximum Temperature**: Darker areas represent a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature.
-  + **Total Precipitation**: Darker areas represent a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation.
+* **Yearly Mean Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature. Blank states means there is no data available in that state for that year.
+
+* **Yearly Min Temperature**: Darker areas represent a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature. Blank states means there is no data available in that state for that year.
+
+* **Yearly Max Temperature**: Darker areas represent a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature. Blank states means there is no data available in that state for that year.
+
+* **Yearly Total Precipitation**: Darker areas represent a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation. Blank states means there is no data available in that state for that year.
