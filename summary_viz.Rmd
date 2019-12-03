@@ -13,6 +13,91 @@ library(ggridges)
 library(plotly)
 ```
 
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(rvest)
+
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+  mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    mean_temp = mean(value)) %>% 
+  select(state_code, location, year, mean_temp) %>% 
+  distinct()
+
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    total_precip = sum(value)) %>% 
+  select(state_code, location, year, total_precip) %>% 
+  distinct()
+
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    max_temp = max(value)) %>% 
+  select(state_code, location, year, max_temp) %>% 
+  distinct()
+
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("year", "month"), sep = 4) %>%
+ mutate(
+    year = as.numeric(year), 
+    state_code = setNames(state.abb, state.name)[location]) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  group_by(location, year) %>% 
+  mutate(
+    min_temp = min(value)) %>% 
+  select(state_code, location, year, min_temp) %>% 
+  distinct()
+
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(disaster = factor(incident_type)) %>% 
+  rename(
+     year = fy_declared) %>% 
+  filter(year >= 1953 & year <= 2018) %>% 
+  count(state, year, disaster) %>%
+  group_by(year, state) %>% 
+  mutate(
+    n_state = sum(n)
+  ) %>% 
+  group_by(year) %>% 
+  mutate(
+    n_total = sum(n)
+  ) %>% 
+  group_by(year, disaster) %>% 
+  mutate(
+    n_type = sum(n)
+  ) %>% 
+  rename("n_disaster_state" = "n") 
+
+final_data = 
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
+  full_join(disasters, by = c("year" = "year", "state_code" = "state"))
+```
+
+
 ```{r, scatterplot}
 final_data
 final_data %>% 
@@ -24,20 +109,35 @@ final_data %>%
        ylab = "Maximum Temperature")+
   theme_bw()+
   theme(legend.position = "bottom")
+
+
+final_data %>% 
+  mutate(text_label = str_c("avg temp (F): ", mean_temp, '\nMin Temp: ', total_precip,  "\n", location)) %>% 
+  plot_ly(
+    x = ~min_temp, y = ~max_temp, type = "scatter", mode = "markers",
+    color = ~location, text = ~text_label, alpha = 0.5)
+ 
+
 ```
+These are scatterplots of minimun temperature (F) vs. maximum temperature (F) over 
+1953-2018 across all 50 states. 
 
 ```{r, density}
+# trying to make a panel of all 50 states showing # disasters over year
 final_data %>% 
-  filter(disaster == "Flood", total_precip > 60.0) %>% 
-  ggplot(aes(x = year, fill = location)) +
-  geom_density(alpha = 0.4, adjust = .5, color = "blue")+
+  group_by(location, disaster)%>% 
+  select(location, disaster, year, n_total) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = year, y = n_total, group = location, color = disaster)) +
+  geom_line(alpha = 0.2)+
+  geom_smooth(aes(group = disaster), se = FALSE)+
   labs(title = "Distribution of Floods from 1953-2018 in the US when Total 
        Precipitation > 60.0 inches",
        xlab = "Year",
        ylab = "Density")
 ```
 
-make a panel plot
+
 
 
 ```{r}
@@ -53,7 +153,8 @@ final_data %>%
 final_data %>% 
   drop_na(disaster, location) %>% 
   ggplot(aes(x = year, fill = location))+
-  geom_bar()
+  geom_bar()+
+  labs(title = "Number of Disasters Per Year From 1953-2018")
 
 
 final_data %>%
@@ -74,7 +175,8 @@ final_data %>%
 mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
   plot_ly(
     x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
-    color = ~location, text = ~text_label, alpha = 0.5)
+    color = ~location, text = ~text_label, alpha = 0.5)+
+  labs(title = "Total Precipitation(in.) by Year For Each State")
 ```
 
 ```{r}
@@ -89,7 +191,7 @@ mutate(text_label = str_c( disaster, '\ntotal precip(in): ', total_precip,  "\n"
 ```{r}
 final_data %>% 
   group_by(location) %>% 
-  mutate(text_label = str_c(location, year, disaster)) %>% 
+  mutate(text_label = str_c(year, "\ntotal: ",n_total)) %>% 
 plot_ly(
     x = ~location, y = ~disaster, type = "bar",
     color = ~disaster, text = ~text_label, alpha = 0.5)
