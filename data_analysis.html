@@ -404,34 +404,24 @@ div.tocify {
 <p><span class="math display">\[ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
 <pre><code>## 
 ## Call:
-## glm(formula = n_total ~ year + mean_temp + total_precip + region + 
-##     region * mean_temp, family = poisson(link = log), data = final_data)
+## glm(formula = n_total ~ year, family = poisson(link = log), data = final_data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -34.872  -16.236   -7.250    8.851   76.854  
+## -30.689  -16.615   -6.832    8.654   70.899  
 ## 
 ## Coefficients:
-##                             Estimate Std. Error   z value Pr(&gt;|z|)    
-## (Intercept)               -7.852e+01  7.518e-02 -1044.428  &lt; 2e-16 ***
-## year                       4.271e-02  3.745e-05  1140.375  &lt; 2e-16 ***
-## mean_temp                 -1.069e-04  2.298e-04    -0.465 0.641784    
-## total_precip               3.339e-03  5.789e-05    57.668  &lt; 2e-16 ***
-## regionnortheast           -8.907e-02  1.917e-02    -4.647 3.37e-06 ***
-## regionsoutheast            1.575e-01  1.603e-02     9.828  &lt; 2e-16 ***
-## regionwest                 5.613e-02  1.475e-02     3.804 0.000142 ***
-## mean_temp:regionnortheast  1.152e-03  3.996e-04     2.882 0.003952 ** 
-## mean_temp:regionsoutheast -4.019e-03  2.945e-04   -13.646  &lt; 2e-16 ***
-## mean_temp:regionwest      -6.989e-04  3.028e-04    -2.308 0.020988 *  
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -7.829e+01  7.215e-02   -1085   &lt;2e-16 ***
+## year         4.264e-02  3.606e-05    1182   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 3093082  on 3743  degrees of freedom
-## Residual deviance: 1434603  on 3734  degrees of freedom
-##   (225 observations deleted due to missingness)
-## AIC: 1463693
+##     Null deviance: 3259820  on 3968  degrees of freedom
+## Residual deviance: 1532056  on 3967  degrees of freedom
+## AIC: 1562987
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <table>
@@ -445,53 +435,13 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-78.519</td>
-<td align="right">0.000</td>
+<td align="right">-78.291</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
 <td align="right">0.043</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="odd">
-<td align="left">mean_temp</td>
-<td align="right">0.000</td>
-<td align="right">0.642</td>
-</tr>
-<tr class="even">
-<td align="left">total_precip</td>
-<td align="right">0.003</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="odd">
-<td align="left">regionnortheast</td>
-<td align="right">-0.089</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">regionsoutheast</td>
-<td align="right">0.158</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="odd">
-<td align="left">regionwest</td>
-<td align="right">0.056</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">mean_temp:regionnortheast</td>
-<td align="right">0.001</td>
-<td align="right">0.004</td>
-</tr>
-<tr class="odd">
-<td align="left">mean_temp:regionsoutheast</td>
-<td align="right">-0.004</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">mean_temp:regionwest</td>
-<td align="right">-0.001</td>
-<td align="right">0.021</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
