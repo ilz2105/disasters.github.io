@@ -97,6 +97,7 @@ final_data =
 ```
 
 
+
 Disaster Map
 ===================================== 
 
@@ -105,18 +106,18 @@ Column {.sidebar}
 
 ```{r for_sidebar}
 
-# entries to select from -- Matt Note: type_variable may have to be created. I think it is a new variable to describe things like "temp variable" or "disaster variable".
-disaster <- (final_data %>% distinct(disaster) %>% pull())
+# entries to select from -- somehow this is not making it so disasters are selected but just a lot of years
+disaster <- (final_data %>% ungroup(year) %>% distinct(disaster) %>% pull())
 year <- c(1953:2019)
 
-# year select box -- Matt Note: may have to make variable name year_1 using our final data and mutating further in a previous step. Slightly unclear.  
+# year select box 
 selectInput("year_1", label = h3("Choose year"),
 						choices = as.list(year),
 						selected = 2019)
 
-# variable select box -- Matt Note: Same as above for variable type. 
+# variable select box
 selectInput("disaster_type", label = h3("Choose variable"),
-						choices = as.list(disaster), 
+						choices = disaster, 
 						selected = "Flood")
 ```
 
@@ -143,7 +144,6 @@ renderPlotly({
 	showlakes = TRUE,
 	lakecolor = toRGB("white")
 	)
-	
 	# display values using color intensity -- This should also be good to go if previous code chunk works.
 	final_data %>% 
 	filter(disaster == input$disaster_type, year == input$year_1) %>% 
@@ -154,7 +154,7 @@ renderPlotly({
 		color = ~n_state,
 		colors = "Reds",
 		# add text
-		text = ~paste(disaster, state_abb[location], sep = "")
+		text = ~paste(n_state, state_abb[location], sep = "")
 		) %>%
 	layout(
 		geo = geo1,
