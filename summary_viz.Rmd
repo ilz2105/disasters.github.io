@@ -10,6 +10,7 @@ output:
 ```{r}
 library(tidyverse)
 library(ggridges)
+library(plotly)
 ```
 
 ```{r, scatterplot}
@@ -53,6 +54,27 @@ final_data %>%
   drop_na(disaster, location) %>% 
   ggplot(aes(x = year, fill = location))+
   geom_bar()
+
+
+final_data %>%
+  group_by(year, location) %>% 
+  ggplot(aes(x= year, y = mean_temp))+
+    geom_line(aes(group = location, color = location))+
+  labs(title = "Spaghetti Plot Showing Average Temps from 1953-2018 By State")
+  
+
+final_data %>%
+  group_by(year, location) %>% 
+  ggplot(aes(x= year, y = total_precip))+
+    geom_line(aes(group = location, color = location))+
+  labs(title = "Spaghetti Plot Showing Total Precipitation from 1953-2018 By State")
+
+final_data %>% 
+  group_by(year, location, mean_temp, total_precip) %>% 
+mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
+  plot_ly(
+    x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
+    color = ~location, text = ~text_label, alpha = 0.5)
 ```
 
 ```{r}
