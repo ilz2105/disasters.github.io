@@ -419,32 +419,103 @@ lm.full %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-63315.321</td>
+<td align="right">-60867.388</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
-<td align="right">32.037</td>
+<td align="right">30.790</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp</td>
-<td align="right">9.406</td>
-<td align="right">0.110</td>
+<td align="right">8.987</td>
+<td align="right">0.024</td>
 </tr>
 <tr class="even">
 <td align="left">total_precip</td>
-<td align="right">22.445</td>
-<td align="right">0.004</td>
+<td align="right">17.044</td>
+<td align="right">0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp:total_precip</td>
-<td align="right">-0.376</td>
-<td align="right">0.007</td>
+<td align="right">-0.291</td>
+<td align="right">0.002</td>
 </tr>
 </tbody>
 </table>
 <p>After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.</p>
+<div id="testing-for-cross-validation" class="section level2">
+<h2>Testing for Cross Validation</h2>
+<p>Unsure if this is right, need to check! <img src="data_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="poisson-regression" class="section level1">
+<h1>Poisson Regression</h1>
+<pre class="r"><code>poisson_model = glm(n_total ~ year + mean_temp + total_precip, family=&quot;poisson&quot;(link = log), data=final_data)
+
+summary(poisson_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = n_total ~ year + mean_temp + total_precip, family = poisson(link = log), 
+##     data = final_data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -33.528  -16.317   -7.128    8.623   74.339  
+## 
+## Coefficients:
+##                Estimate Std. Error  z value Pr(&gt;|z|)    
+## (Intercept)  -7.868e+01  7.412e-02 -1061.56   &lt;2e-16 ***
+## year          4.288e-02  3.716e-05  1154.15   &lt;2e-16 ***
+## mean_temp    -3.391e-03  7.534e-05   -45.01   &lt;2e-16 ***
+## total_precip  1.921e-03  4.001e-05    48.02   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 3093082  on 3743  degrees of freedom
+## Residual deviance: 1436557  on 3740  degrees of freedom
+##   (225 observations deleted due to missingness)
+## AIC: 1465635
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code>poisson_model %&gt;% 
+  broom::tidy() %&gt;%
+  select(term, estimate, p.value) %&gt;%
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-78.681</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">0.043</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">mean_temp</td>
+<td align="right">-0.003</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">total_precip</td>
+<td align="right">0.002</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
 

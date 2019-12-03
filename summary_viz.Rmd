@@ -98,6 +98,30 @@ final_data =
 ```
 
 
+```{r}
+final_data %>% 
+mutate(
+  region = case_when(
+    location %in% c(
+                    "Alabama","Arkansas","Delaware","Florida","Georgia"
+                    ,"Kentucky","Louisiana","Maryland","Mississippi",
+                    "Oklahoma","North Carolina","South Carolina",
+                    "Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
+   location %in% c("Connecticut","Maine","New Hampshire","Massachusetts",
+                   "New Jersey","New York","Pennsylvania","Rhode Island","Vermont") ~ 'northeast',
+  location %in% c("Alaska", 
+                "Arizona","California","Colorado","Hawaii","Idaho",
+                "Montana","Nevada","New Mexico","Oregon","Utah","Washington","Wyoming")
+       ~  'west',
+  location %in% c("Illinois",
+                "Indiana","Iowa","Kansas","Michigan","Missouri",
+                "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
+  
+  
+   
+```
+
+
 ```{r, scatterplot}
 final_data
 final_data %>% 
@@ -112,7 +136,7 @@ final_data %>%
 
 
 final_data %>% 
-  mutate(text_label = str_c("avg temp (F): ", mean_temp, '\nMin Temp: ', total_precip,  "\n", location)) %>% 
+  mutate(text_label = str_c("avg temp (F): ", mean_temp, '\nTotal Precip(in): ', total_precip,  "\n", location)) %>% 
   plot_ly(
     x = ~min_temp, y = ~max_temp, type = "scatter", mode = "markers",
     color = ~location, text = ~text_label, alpha = 0.5)
@@ -126,43 +150,56 @@ These are scatterplots of minimun temperature (F) vs. maximum temperature (F) ov
 # trying to make a panel of all 50 states showing # disasters over year
 final_data %>% 
   group_by(location, disaster)%>% 
-  select(location, disaster, year, n_total) %>% 
+  select(location, disaster, year, n_total)%>% 
   drop_na() %>% 
-  ggplot(aes(x = year, y = n_total, group = location, color = disaster)) +
+  ggplot(aes(x = year, y = n_total, color = disaster)) +
   geom_line(alpha = 0.2)+
-  geom_smooth(aes(group = disaster), se = FALSE)+
-  labs(title = "Distribution of Floods from 1953-2018 in the US when Total 
-       Precipitation > 60.0 inches",
+  geom_smooth( se = FALSE)+
+  theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90,  hjust = 1))+
+  facet_wrap(~location)+
+  labs(title = "",
        xlab = "Year",
-       ylab = "Density")
+       ylab = "Frequency of Disasters")
 ```
 
+This is a panel showing the total number of disasters from 1953-2018 for each state. The disasters are shown in different colors. 
 
+# regional?
 
 
 ```{r}
 final_data %>% 
   drop_na(disaster) %>% 
-  #group_by(location, disaster) %>% 
-  ggplot(aes(x = disaster, fill = disaster))+
+  summarize(total_d = sum(n_total)) %>% 
+  ggplot(aes(x = , fill = ))+
   geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
   labs(title = "Frequency of Types of Disaster")
+```
 
+This plot shows the 
+
+```{r}
 
 final_data %>% 
   drop_na(disaster, location) %>% 
   ggplot(aes(x = year, fill = location))+
   geom_bar()+
   labs(title = "Number of Disasters Per Year From 1953-2018")
+```
 
+```{r}
 
 final_data %>%
   group_by(year, location) %>% 
+  drop_na( ) %>% 
   ggplot(aes(x= year, y = mean_temp))+
     geom_line(aes(group = location, color = location))+
   labs(title = "Spaghetti Plot Showing Average Temps from 1953-2018 By State")
-  
+```
+
+
+```{r}
 
 final_data %>%
   group_by(year, location) %>% 
@@ -193,6 +230,7 @@ mutate(text_label = str_c( disaster, '\ntotal precip(in): ', total_precip,  "\n"
 ```{r}
 final_data %>% 
   group_by(location) %>% 
+  filter(n_state)
   mutate(text_label = str_c(year, "\ntotal: ",n_total)) %>% 
 plot_ly(
     x = ~location, y = ~disaster, type = "bar",
