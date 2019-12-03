@@ -118,7 +118,6 @@ mutate(
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
 
 
-
    
 ```
 
