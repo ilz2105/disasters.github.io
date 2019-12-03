@@ -415,28 +415,28 @@ lm.full %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-63315.321</td>
+<td align="right">-60867.388</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
-<td align="right">32.037</td>
+<td align="right">30.790</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp</td>
-<td align="right">9.406</td>
-<td align="right">0.110</td>
+<td align="right">8.987</td>
+<td align="right">0.024</td>
 </tr>
 <tr class="even">
 <td align="left">total_precip</td>
-<td align="right">22.445</td>
-<td align="right">0.004</td>
+<td align="right">17.044</td>
+<td align="right">0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp:total_precip</td>
-<td align="right">-0.376</td>
-<td align="right">0.007</td>
+<td align="right">-0.291</td>
+<td align="right">0.002</td>
 </tr>
 </tbody>
 </table>
@@ -457,23 +457,23 @@ summary(poisson_model)</code></pre>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -33.528  -17.579   -5.596    8.655   71.625  
+## -33.528  -16.317   -7.128    8.623   74.339  
 ## 
 ## Coefficients:
-##                Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)  -6.152e+01  9.234e-02  -666.2   &lt;2e-16 ***
-## year          3.440e-02  4.613e-05   745.8   &lt;2e-16 ***
-## mean_temp    -4.895e-03  8.091e-05   -60.5   &lt;2e-16 ***
-## total_precip  1.863e-03  4.312e-05    43.2   &lt;2e-16 ***
+##                Estimate Std. Error  z value Pr(&gt;|z|)    
+## (Intercept)  -7.868e+01  7.412e-02 -1061.56   &lt;2e-16 ***
+## year          4.288e-02  3.716e-05  1154.15   &lt;2e-16 ***
+## mean_temp    -3.391e-03  7.534e-05   -45.01   &lt;2e-16 ***
+## total_precip  1.921e-03  4.001e-05    48.02   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 1671019  on 2265  degrees of freedom
-## Residual deviance: 1003204  on 2262  degrees of freedom
-##   (1703 observations deleted due to missingness)
-## AIC: 1022228
+##     Null deviance: 3093082  on 3743  degrees of freedom
+## Residual deviance: 1436557  on 3740  degrees of freedom
+##   (225 observations deleted due to missingness)
+## AIC: 1465635
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <pre class="r"><code>poisson_model %&gt;% 
@@ -491,17 +491,17 @@ summary(poisson_model)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-61.519</td>
+<td align="right">-78.681</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
-<td align="right">0.034</td>
+<td align="right">0.043</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp</td>
-<td align="right">-0.005</td>
+<td align="right">-0.003</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
