@@ -78,11 +78,20 @@ mutate(text_label = str_c("avg temp (F): ", mean_temp, '\ntotal precip(in): ', t
 ```
 
 ```{r}
-
+final_data %>% 
+  group_by(year, location, disaster) %>% 
+mutate(text_label = str_c( disaster, '\ntotal precip(in): ', total_precip,  "\n", location)) %>% 
+  plot_ly(
+    x = ~disaster, y = ~n_total, type = "box",
+    color = ~disaster, text = ~text_label, alpha = 0.5)
 ```
 
-# do a violin plot
+```{r}
+final_data %>% 
+  group_by(location) %>% 
+  mutate(text_label = str_c(location, year, disaster)) %>% 
+plot_ly(
+    x = ~location, y = ~disaster, type = "bar",
+    color = ~disaster, text = ~text_label, alpha = 0.5)
+```
 
-# box plot
-
-# density plot
