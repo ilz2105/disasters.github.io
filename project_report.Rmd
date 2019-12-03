@@ -138,7 +138,7 @@ final_data =
   inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
-Data on climate change indicators across 4 data sets were inner joined by State and Year. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State. 
+Data on climate change indicators across 4 data sets were inner joined by State and Year. This created a data set with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full joined to the disaster data set which had rows for each disaster by Year and State.
 
 
 ## Data Challenges

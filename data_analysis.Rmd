@@ -94,9 +94,14 @@ final_data =
 
 
 Is the US seeing more natural disasters over time?
+
+After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations above, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between . We fit a linear regression where our final model took the form:
+
+
+
 ```{r}
 # Full Model
-lm.full = lm(n_total ~ year + mean_temp + total_precip + year:total_precip, data = final_data)
+lm.full = lm(n_total ~ year + mean_temp + total_precip + year*total_precip, data = final_data)
 
 # Display
 lm.full %>% 
