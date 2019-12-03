@@ -357,11 +357,7 @@ div.tocify {
   <a href="data_analysis.html">Statistical Analysis</a>
 </li>
 <li>
-<<<<<<< HEAD
   <a href="https://ashleytseng.shinyapps.io/disastersgithub/_w_70c32f14/shiny_dashboard.html">Natural Disasters</a>
-=======
-  <a href="shiny_dashboard.html">Natural Disasters</a>
->>>>>>> 036574bc1f165c844ae999e7e51a1665132f0e7f
 </li>
 <li>
   <a href="shiny_map.html">Interactive Map</a>
@@ -401,92 +397,43 @@ div.tocify {
 
 
 <p>Is the US seeing more natural disasters over time?</p>
-<p>After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches. We fit a linear regression where our final model took the form:</p>
-<p><span class="math display">\[ Number \ of \ Disasters_i \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
-<pre class="r"><code># Full Model
-lm.full = lm(n_total ~ year + mean_temp + total_precip + mean_temp*total_precip , data = final_data)
-
-# Display
-lm.full %&gt;% 
-  broom::tidy() %&gt;%
-  select(term, estimate, p.value) %&gt;%
-  knitr::kable(digits = 3)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">-60867.388</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">year</td>
-<td align="right">30.790</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="odd">
-<td align="left">mean_temp</td>
-<td align="right">8.987</td>
-<td align="right">0.024</td>
-</tr>
-<tr class="even">
-<td align="left">total_precip</td>
-<td align="right">17.044</td>
-<td align="right">0.001</td>
-</tr>
-<tr class="odd">
-<td align="left">mean_temp:total_precip</td>
-<td align="right">-0.291</td>
-<td align="right">0.002</td>
-</tr>
-</tbody>
-</table>
-<p>After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.</p>
-<div id="testing-for-cross-validation" class="section level2">
-<h2>Testing for Cross Validation</h2>
-<p>Unsure if this is right, need to check! <img src="data_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-</div>
-<div id="poisson-regression" class="section level1">
-<h1>Poisson Regression</h1>
-<pre class="r"><code>poisson_model = glm(n_total ~ year + mean_temp + total_precip, family=&quot;poisson&quot;(link = log), data=final_data)
-
-summary(poisson_model)</code></pre>
+<p><img src="data_analysis_files/figure-html/poisson_dist-1.png" width="672" /></p>
+<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters per year in the US has increased from 1953 to 2018.</p>
+<p>Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches.</p>
+<p>We fit a Poisson regression where our final model took the form:</p>
+<p><span class="math display">\[ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
 <pre><code>## 
 ## Call:
-## glm(formula = n_total ~ year + mean_temp + total_precip, family = poisson(link = log), 
-##     data = final_data)
+## glm(formula = n_total ~ year + mean_temp + total_precip + region + 
+##     region * mean_temp, family = poisson(link = log), data = final_data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -33.528  -16.317   -7.128    8.623   74.339  
+## -34.872  -16.236   -7.250    8.851   76.854  
 ## 
 ## Coefficients:
-##                Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)  -7.868e+01  7.412e-02 -1061.56   &lt;2e-16 ***
-## year          4.288e-02  3.716e-05  1154.15   &lt;2e-16 ***
-## mean_temp    -3.391e-03  7.534e-05   -45.01   &lt;2e-16 ***
-## total_precip  1.921e-03  4.001e-05    48.02   &lt;2e-16 ***
+##                             Estimate Std. Error   z value Pr(&gt;|z|)    
+## (Intercept)               -7.852e+01  7.518e-02 -1044.428  &lt; 2e-16 ***
+## year                       4.271e-02  3.745e-05  1140.375  &lt; 2e-16 ***
+## mean_temp                 -1.069e-04  2.298e-04    -0.465 0.641784    
+## total_precip               3.339e-03  5.789e-05    57.668  &lt; 2e-16 ***
+## regionnortheast           -8.907e-02  1.917e-02    -4.647 3.37e-06 ***
+## regionsoutheast            1.575e-01  1.603e-02     9.828  &lt; 2e-16 ***
+## regionwest                 5.613e-02  1.475e-02     3.804 0.000142 ***
+## mean_temp:regionnortheast  1.152e-03  3.996e-04     2.882 0.003952 ** 
+## mean_temp:regionsoutheast -4.019e-03  2.945e-04   -13.646  &lt; 2e-16 ***
+## mean_temp:regionwest      -6.989e-04  3.028e-04    -2.308 0.020988 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
 ##     Null deviance: 3093082  on 3743  degrees of freedom
-## Residual deviance: 1436557  on 3740  degrees of freedom
+## Residual deviance: 1434603  on 3734  degrees of freedom
 ##   (225 observations deleted due to missingness)
-## AIC: 1465635
+## AIC: 1463693
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
-<pre class="r"><code>poisson_model %&gt;% 
-  broom::tidy() %&gt;%
-  select(term, estimate, p.value) %&gt;%
-  knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -498,27 +445,57 @@ summary(poisson_model)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-78.681</td>
-<td align="right">0</td>
+<td align="right">-78.519</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
 <td align="right">0.043</td>
-<td align="right">0</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">mean_temp</td>
-<td align="right">-0.003</td>
-<td align="right">0</td>
+<td align="right">0.000</td>
+<td align="right">0.642</td>
 </tr>
 <tr class="even">
 <td align="left">total_precip</td>
-<td align="right">0.002</td>
-<td align="right">0</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">regionnortheast</td>
+<td align="right">-0.089</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">regionsoutheast</td>
+<td align="right">0.158</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">regionwest</td>
+<td align="right">0.056</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">mean_temp:regionnortheast</td>
+<td align="right">0.001</td>
+<td align="right">0.004</td>
+</tr>
+<tr class="odd">
+<td align="left">mean_temp:regionsoutheast</td>
+<td align="right">-0.004</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">mean_temp:regionwest</td>
+<td align="right">-0.001</td>
+<td align="right">0.021</td>
 </tr>
 </tbody>
 </table>
-</div>
+<p>After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.</p>
 
 
 

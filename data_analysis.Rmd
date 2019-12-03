@@ -1,146 +1,158 @@
 ---
 title: "Statistical Analysis"
-output: 
+output:
   html_document:
     toc: true
     toc_float: true
     code_folding: hide
 ---
-
-
+ 
+ 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(rvest)
-
-ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
-  janitor::clean_names() %>% 
+ 
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>%
+  janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
   mutate(
-    year = as.numeric(year), 
-    state_code = setNames(state.abb, state.name)[location]) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
-  group_by(location, year) %>% 
+    year = as.numeric(year),
+    state_code = setNames(state.abb, state.name)[location]) %>%
+  filter(year >= 1953 & year <= 2018) %>%
+  group_by(location, year) %>%
   mutate(
-    mean_temp = mean(value)) %>% 
-  select(state_code, location, year, mean_temp) %>% 
-  distinct() %>% 
+    mean_temp = mean(value)) %>%
+  select(state_code, location, year, mean_temp) %>%
+  distinct() %>%
   ungroup()
-
-precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
-  janitor::clean_names() %>% 
+ 
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>%
+  janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
- mutate(
-    year = as.numeric(year), 
-    state_code = setNames(state.abb, state.name)[location]) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
-  group_by(location, year) %>% 
+mutate(
+    year = as.numeric(year),
+    state_code = setNames(state.abb, state.name)[location]) %>%
+  filter(year >= 1953 & year <= 2018) %>%
+  group_by(location, year) %>%
   mutate(
-    total_precip = sum(value)) %>% 
-  select(state_code, location, year, total_precip) %>% 
-  distinct() %>% 
+    total_precip = sum(value)) %>%
+  select(state_code, location, year, total_precip) %>%
+  distinct() %>%
   ungroup()
-
-tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
-  janitor::clean_names() %>% 
+ 
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>%
+  janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
- mutate(
-    year = as.numeric(year), 
-    state_code = setNames(state.abb, state.name)[location]) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
-  group_by(location, year) %>% 
+mutate(
+    year = as.numeric(year),
+    state_code = setNames(state.abb, state.name)[location]) %>%
+  filter(year >= 1953 & year <= 2018) %>%
+  group_by(location, year) %>%
   mutate(
-    max_temp = max(value)) %>% 
-  select(state_code, location, year, max_temp) %>% 
-  distinct() %>% 
+    max_temp = max(value)) %>%
+  select(state_code, location, year, max_temp) %>%
+  distinct() %>%
   ungroup()
-
-tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
-  janitor::clean_names() %>% 
+ 
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>%
+  janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
- mutate(
-    year = as.numeric(year), 
-    state_code = setNames(state.abb, state.name)[location]) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
-  group_by(location, year) %>% 
+mutate(
+    year = as.numeric(year),
+    state_code = setNames(state.abb, state.name)[location]) %>%
+  filter(year >= 1953 & year <= 2018) %>%
+  group_by(location, year) %>%
   mutate(
-    min_temp = min(value)) %>% 
-  select(state_code, location, year, min_temp) %>% 
-  distinct() %>% 
+    min_temp = min(value)) %>%
+  select(state_code, location, year, min_temp) %>%
+  distinct() %>%
   ungroup()
-
-disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
-  janitor::clean_names() %>% 
-  mutate(disaster = factor(incident_type)) %>% 
+ 
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
+  janitor::clean_names() %>%
+  mutate(disaster = factor(incident_type)) %>%
   rename(
-     year = fy_declared) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
-  count(state, year, disaster) %>% 
+     year = fy_declared) %>%
+  filter(year >= 1953 & year <= 2018) %>%
+  count(state, year, disaster) %>%
   ungroup()
-
-final_data = 
-  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>% 
-  mutate(n = replace_na(n, 0)) %>% 
-  group_by(year, location) %>% 
+ 
+final_data =
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>%
+  mutate(n = replace_na(n, 0)) %>%
+  group_by(year, location) %>%
   mutate(
     n_state = sum(n)
-  ) %>% 
-  group_by(year) %>% 
+  ) %>%
+  group_by(year) %>%
   mutate(
     n_total = sum(n)
-  ) %>% 
-  group_by(year, disaster) %>% 
+  ) %>%
+  group_by(year, disaster) %>%
   mutate(
     n_type = sum(n)
-  ) %>% 
-  rename("n_disaster_state" = "n") 
+  ) %>%
+  rename("n_disaster_state" = "n") %>%
+  mutate(
+  region = case_when(
+    location %in% c(
+                    "Alabama","Arkansas","Delaware","Florida","Georgia"
+                    ,"Kentucky","Louisiana","Maryland","Mississippi",
+                    "Oklahoma","North Carolina","South Carolina",
+                    "Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
+   location %in% c("Connecticut","Maine","New Hampshire","Massachusetts",
+                   "New Jersey","New York","Pennsylvania","Rhode Island","Vermont") ~ 'northeast',
+  location %in% c("Alaska",
+                "Arizona","California","Colorado","Hawaii","Idaho",
+                "Montana","Nevada","New Mexico","Oregon","Utah","Washington","Wyoming")
+       ~  'west',
+  location %in% c("Illinois",
+                "Indiana","Iowa","Kansas","Michigan","Missouri",
+                "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
 ```
-
-
+ 
+ 
 Is the US seeing more natural disasters over time?
-
-After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches. We fit a linear regression where our final model took the form:
-
-$$ Number \ of \ Disasters_i \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
+ 
+```{r poisson_dist, echo = FALSE, warning = FALSE, message = FALSE}
+poisson_dist = final_data %>%
+  filter(n_total != "NA") %>%
+  select(year, n_total) %>%
+  distinct() %>%
+  
+  ggplot(aes(x = n_total)) +
+  geom_density(alpha = .5) +
+  theme(legend.position = "none") +
+  labs(
+    title = "Distribution of Number of Disasters per Year",
+    x = "Number of Disasters per Year")
+ 
+ 
+poisson_dist
+```
+ 
+After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters per year in the US has increased from 1953 to 2018.
+ 
+Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches.
+ 
+We fit a Poisson regression where our final model took the form:
+ 
+$$ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
 for the $i^{th}$ year.
-
-
-```{r}
-# Full Model
-lm.full = lm(n_total ~ year + mean_temp + total_precip + mean_temp*total_precip , data = final_data)
-
-# Display
-lm.full %>% 
-  broom::tidy() %>%
-  select(term, estimate, p.value) %>%
-  knitr::kable(digits = 3)
-```
-
-After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.
-
-
-## Testing for Cross Validation
-Unsure if this is right, need to check!
-```{r echo = FALSE, warning = FALSE, message = FALSE}
-final_data %>% 
-  ggplot(aes(x = year, y = n_total)) + 
-  geom_point() + theme_bw()
-```
-
-
-# Poisson Regression
-```{r}
-poisson_model = glm(n_total ~ year + mean_temp + total_precip, family="poisson"(link = log), data=final_data)
-
+ 
+```{r poisson_model, echo = FALSE, warning = FALSE, message = FALSE}
+poisson_model = glm(n_total ~ year + mean_temp + total_precip + region + region*mean_temp, family="poisson"(link = log), data=final_data)
+ 
 summary(poisson_model)
-
-poisson_model %>% 
+ 
+poisson_model %>%
   broom::tidy() %>%
   select(term, estimate, p.value) %>%
   knitr::kable(digits = 3)
-
 ```
-
-
+ 
+After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.
+ 
