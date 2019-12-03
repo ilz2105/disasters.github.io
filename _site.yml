@@ -8,9 +8,9 @@ navbar:
     - text: "Statistical Analysis"
       href: data_analysis.html
     - text: "Natural Disasters"
-      href: https://ashleytseng.shinyapps.io/disastersgithub/_w_70c32f14/shiny_dashboard.html
+      href: shiny_dashboard_new.html
     - text: "Interactive Map"
-      href: shiny_map.html
+      href: shiny_map_new.html
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg
