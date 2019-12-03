@@ -144,7 +144,7 @@ $$ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \
 for the $i^{th}$ year.
  
 ```{r poisson_model, echo = FALSE, warning = FALSE, message = FALSE}
-poisson_model = glm(n_total ~ year + mean_temp + total_precip + region + region*mean_temp, family="poisson"(link = log), data=final_data)
+poisson_model = glm(n_total ~ year, family="poisson"(link = log), data=final_data)
  
 summary(poisson_model)
  
