@@ -10,7 +10,7 @@ navbar:
     - text: "Natural Disasters"
       href: https://ashleytseng.shinyapps.io/disastersgithub/_w_70c32f14/shiny_dashboard.html
     - text: "Interactive Map"
-      href: interactive_map.html
+      href: shiny_map.html
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg
