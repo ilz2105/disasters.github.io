@@ -8,13 +8,16 @@ navbar:
     - text: "Statistical Analysis"
       href: data_analysis.html
     - text: "Natural Disasters"
-      href: shiny_dashboard.html
+      href: http://127.0.0.1:3480/
     - text: "Interactive Map"
-      href: shiny_map.html
+      href: http://127.0.0.1:3019/shiny_map.Rmd
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg
       href: https://github.com/ilz2105/disasters.github.io
+    - text: ""
+      href: secret_cow.html
 output:
   html_document:
     theme: flatly
+runtime: shiny

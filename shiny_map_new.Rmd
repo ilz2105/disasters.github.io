@@ -2,10 +2,10 @@
 title: "Interactive Map"
 runtime: shiny
 output: 
- html_document:
-    toc: true
-    toc_float: true
-    theme: flatly
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
 ---
 
 
