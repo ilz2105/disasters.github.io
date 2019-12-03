@@ -137,7 +137,8 @@ selectInput(
 disaster_name = 
   final_data %>% 
   filter(disaster != "NA") %>% 
-  distinct(disaster)
+  distinct(disaster) %>% 
+  pull(disaster)
 
 selectInput(
   "disaster_choice", 
@@ -146,62 +147,63 @@ selectInput(
 
 
 
-min_temp = -20
-max_temp = 110
+min_year = 1950
+max_year = 2019
 
 sliderInput(
-  "temp_range", 
-  label = h3("Choose temperature range"), 
-  min = min_temp, max = max_temp, value = c(-50, 150))
+  "year_range", 
+  label = h3("Choose year range"), 
+  min = min_year, max = max_year, value = c(1950, 2019))
 ```
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Number of Disasters Over Time
+### Count of Disaster Type by State and Year Over Time
 
 ```{r, echo = FALSE}
 renderPlotly({
   final_data %>% 
     filter(
       state == input[["state_choice"]], 
-      disaster == input[["disaster_choice"]]) %>%
-    count(state, disaster) %>% 
-    mutate(disaster = fct_reorder(disaster, n)) %>% 
-    rename(
-      "Total Number of Disaster Events" = "n",
-      "Year" = "year") %>% 
-    plot_ly(x = ~Year, y = ~`Total Number of Disaster Events`, color = ~disaster, type = "bar")
+      disaster == input[["disaster_choice"]],
+      year %in% input$year_range[1]:input$year_range[2]) %>%
+    plot_ly(x = ~year, y = ~n_disaster_state, color = ~disaster, type = "bar")
 })
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Count of Disasters (x) vs. Average Temperature (y)
+### Count of Total Disasters By State and Year vs. Average Temperature
 
 ```{r, echo = FALSE}
 renderPlotly({
   final_data %>%
   filter(
     state == input[["state_choice"]], 
-    disaster == input[["disaster_choice"]]) %>%
-  mutate(text_label = str_c("Number of Disasters: ", disasters_count, '\nAverage Temperature: ', ave_temp)) %>% 
+    disaster == input[["disaster_choice"]],
+    n_state != "NA",
+    mean_temp != "NA") %>%
+    group_by(state, year) %>%
+  mutate(text_label = str_c("Number of Disasters: ", n_state, '\nAverage Temperature: ', mean_temp)) %>% 
   plot_ly(
     x = ~n_state, y = ~mean_temp, type = "scatter", mode = "markers",
-    alpha = 0.5, color = ~price, text = ~text_label)
+    alpha = 0.5, color = ~state, text = ~text_label)
 })
 ```
 
-### Distribution of change in average temperature over time (or take the difference of tmax-tmin and graph this value over time?)
+### Change in Average Temperature Over Time in State
 
 ```{r, echo = FALSE}
 renderPlotly({
   final_data %>% 
-    filter(
-      state == input[["state_choice"]], 
-      temp %in% input$temp_range[1]:input$temp_range[2]) %>%
-    plot_ly(y = ~mean_temp, color = ~state, type = "box")
+  filter(
+    state == input[["state_choice"]],
+    year %in% input$year_range[1]:input$year_range[2]) %>%
+  distinct() %>%
+  mutate(text_label = str_c('Average Temperature: ', mean_temp, '\nMinimum Temperature: ', min_temp, '\nMaximum Temperature: ', max_temp)) %>% 
+  plot_ly(x = ~year, y = ~mean_temp, color = ~state, type = "bar", text = ~text_label)
 })
 ```
 

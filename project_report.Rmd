@@ -146,7 +146,7 @@ There were a couple data challenges along the way. First, our climate data had f
 
 # Exploratory Analysis
 ["Lulu's section - climate indicators"](insert link)
-["Ashley's section - natural disasters"](insert link)
+["Ashley's section - natural disasters"](shiny_dashboard.html)
 ["Matt's section - interactive map"](insert link)
 
 # Statistical Analysis 
