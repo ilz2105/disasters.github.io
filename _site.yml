@@ -8,7 +8,7 @@ navbar:
     - text: "Statistical Analysis"
       href: data_analysis.html
     - text: "Natural Disasters"
-      href: 
+      href: http://127.0.0.1:3480/
     - text: "Interactive Map"
       href: http://127.0.0.1:3019/shiny_map.Rmd
     - text: "Discussion"
