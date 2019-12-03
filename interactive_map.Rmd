@@ -106,7 +106,7 @@ Column {.sidebar}
 ```{r for_sidebar}
 
 # entries to select from -- Matt Note: type_variable may have to be created. I think it is a new variable to describe things like "temp variable" or "disaster variable".
-type_variable <- (final_data %>% distinct(type_variable) %>% pull())
+disaster <- (final_data %>% distinct(disaster) %>% pull())
 year <- c(1953:2019)
 
 # year select box -- Matt Note: may have to make variable name year_1 using our final data and mutating further in a previous step. Slightly unclear.  
@@ -115,10 +115,9 @@ selectInput("year_1", label = h3("Choose year"),
 						selected = 2019)
 
 # variable select box -- Matt Note: Same as above for variable type. 
-selectInput("variable_type", label = h3("Choose variable"),
+selectInput("disaster_type", label = h3("Choose variable"),
 						choices = as.list(disaster), 
 						selected = "Flood")
-# Matt Note: Definitely seems like type_variable is something that does not exist in our data and we will have to find a proxy or make a new variable. Once we have our data again this shouldn't be too hard I believe.
 ```
 
 
@@ -147,15 +146,15 @@ renderPlotly({
 	
 	# display values using color intensity -- This should also be good to go if previous code chunk works.
 	final_data %>% 
-	filter(type_variable == input$variable_type, year == input$year_1) %>% 
+	filter(disaster == input$disaster_type, year == input$year_1) %>% 
 	plot_geo(locationmode = "USA-states") %>% 
 	add_trace(
-		z = ~Statistics,
-		locations = ~state,
-		color = ~Statistics,
+		z = ~n_state,
+		locations = ~location,
+		color = ~n_state,
 		colors = "Reds",
 		# add text
-		text = ~paste(type_variable, state_abb[state], sep = "")
+		text = ~paste(disaster, state_abb[location], sep = "")
 		) %>%
 	layout(
 		geo = geo1,
@@ -172,7 +171,7 @@ The Disaster Map allows users to select different years (1953-2019), demonstrati
 
 * **Disaster Declarations**: Darker areas represent higher counts of disasters, hovering over each state will display the counts.
 
-* **Climate Indicators**:
+**Climate Indicators**:
   + **Average Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature.
   + **Minimum Temperature**: Darker areas represent a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature.
   + **Maximum Temperature**: Darker areas represent a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature.
