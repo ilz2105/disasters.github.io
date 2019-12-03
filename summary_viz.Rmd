@@ -99,7 +99,7 @@ final_data =
 
 
 ```{r}
-final_data %>% 
+final_data = final_data %>% 
 mutate(
   region = case_when(
     location %in% c(
@@ -117,52 +117,52 @@ mutate(
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
   
-  
+ 
    
 ```
 
 
 ```{r, scatterplot}
-final_data
+
 final_data %>% 
-  ggplot(aes(x = min_temp, y = max_temp))+
-  geom_point(aes(color = year))+
-  geom_smooth(color = "red", se = FALSE)+
-  labs(title = "Minimum Temp vs. Maximum Temp Plot (F)", 
-       xlab = "Minimum Temperature",
-       ylab = "Maximum Temperature")+
+  drop_na() %>% 
+  ggplot(aes(x = year, y = mean_temp, group = region, color = region))+
+  geom_point(aes(color = region), alpha = 0.2)+
+  geom_smooth( se = FALSE, alpha = 4)+
+  labs(title = "Average Temps(F) by Region from 1953-2018", 
+       xlab = "Year",
+       ylab = "Average Temperature(F)")+
   theme_bw()+
-  theme(legend.position = "bottom")
+  theme(legend.position = "left")
 
-
+# plotly verson of above scatterplot
 final_data %>% 
-  mutate(text_label = str_c("avg temp (F): ", mean_temp, '\nTotal Precip(in): ', total_precip,  "\n", location)) %>% 
+  mutate(text_label = str_c("avg temp (F): ", mean_temp,   "\n", location)) %>% 
   plot_ly(
-    x = ~min_temp, y = ~max_temp, type = "scatter", mode = "markers",
-    color = ~location, text = ~text_label, alpha = 0.5)
- 
-
+    x = ~year, y = ~mean_temp, type = "scatter", mode = "markers",
+    color = ~region, text = ~text_label, alpha = 0.5)
 ```
-These are scatterplots of minimun temperature (F) vs. maximum temperature (F) over 
-1953-2018 across all 50 states. 
+This scatterplot shows the average temperature (F) from 1953 to 2018, by region. Overall, the southeast region has the highest average temperatures and the Northeast has the lowest average temperatures.Though it may be hard to see,
+the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in the Southeast, 59.25F to 62.26F in the Southwest, 
+
 
 ```{r, density}
 # trying to make a panel of all 50 states showing # disasters over year
 final_data %>% 
-  group_by(location, disaster)%>% 
-  select(location, disaster, year, n_total)%>% 
+  group_by( disaster, region)%>% 
+  select(region, disaster, year, n_total)%>% 
   drop_na() %>% 
   ggplot(aes(x = year, y = n_total, color = disaster)) +
   geom_line(alpha = 0.2)+
   geom_smooth( se = FALSE)+
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90,  hjust = 1))+
-  facet_wrap(~location)+
+  facet_wrap(~region)+
   labs(title = "",
        xlab = "Year",
        ylab = "Frequency of Disasters")
 ```
 
-This is a panel showing the total number of disasters from 1953-2018 for each state. The disasters are shown in different colors. 
+This is a panel showing the total number of disasters from 1953-2018 for each reagion. The disasters are shown in different colors. 
 
 # regional?
 
@@ -170,8 +170,8 @@ This is a panel showing the total number of disasters from 1953-2018 for each st
 ```{r}
 final_data %>% 
   drop_na(disaster) %>% 
-  summarize(total_d = sum(n_total)) %>% 
-  ggplot(aes(x = , fill = ))+
+  #summarize(total_d = sum(n_total)) %>% 
+  ggplot(aes(x = disaster, fill = disaster ))+
   geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
   labs(title = "Frequency of Types of Disaster")
@@ -182,8 +182,8 @@ This plot shows the
 ```{r}
 
 final_data %>% 
-  drop_na(disaster, location) %>% 
-  ggplot(aes(x = year, fill = location))+
+  drop_na(disaster) %>% 
+  ggplot(aes(x = year, fill = region))+
   geom_bar()+
   labs(title = "Number of Disasters Per Year From 1953-2018")
 ```
@@ -191,16 +191,15 @@ final_data %>%
 ```{r}
 
 final_data %>%
-  group_by(year, location) %>% 
+  group_by(year, region) %>% 
   drop_na( ) %>% 
   ggplot(aes(x= year, y = mean_temp))+
-    geom_line(aes(group = location, color = location))+
-  labs(title = "Spaghetti Plot Showing Average Temps from 1953-2018 By State")
+    geom_line(aes(group = region, color = region))+
+  labs(title = "Spaghetti Plot Showing Average Temps from 1953-2018 By Region")
 ```
 
 
 ```{r}
-
 final_data %>%
   group_by(year, location) %>% 
   ggplot(aes(x= year, y = total_precip))+
@@ -236,4 +235,6 @@ plot_ly(
     x = ~location, y = ~disaster, type = "bar",
     color = ~disaster, text = ~text_label, alpha = 0.5)
 ```
+
+
 
