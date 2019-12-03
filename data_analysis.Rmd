@@ -97,6 +97,8 @@ Is the US seeing more natural disasters over time?
 
 After inspecting the summary visualizations, we decided to run a multivariable linear regression model to formally test the hypothesis that the total number of natural disasters per year in the US has increased from 1953 to 2018. Motivated by our exploratory visualizations above, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between . We fit a linear regression where our final model took the form:
 
+$$ Number \ of \ Disasters_i \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Year*Total \ Precip_i + \varepsilon_i,$$
+for the $i^{th}$ year.
 
 
 ```{r}
