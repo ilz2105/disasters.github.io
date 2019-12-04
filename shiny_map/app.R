@@ -161,20 +161,5 @@ output$map=renderPlotly({
     )
 })}
 
-### Description
-
-# This map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize differences across the country. The map includes the following variables:
-
-# * **Yearly Total of All Disasters**: Darker areas represent higher counts of disaster declarations, hovering over each state will display the counts. Blank states means there were no disasters declared or no data available in that state for that year.
-
-# * **Yearly Mean Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature. Blank states means there is no data available in that state for that year.
-
-# * **Yearly Min Temperature**: Darker areas represent a higher minimum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the minimum temperature. Blank states means there is no data available in that state for that year.
-
-# * **Yearly Max Temperature**: Darker areas represent a higher maximum temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the maximum temperature. Blank states means there is no data available in that state for that year.
-
-# * **Yearly Total Precipitation**: Darker areas represent a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation. Blank states means there is no data available in that state for that year.
-
-
 shinyApp(ui = ui, server = server)
 
