@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -238,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -269,6 +269,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -421,7 +427,7 @@ div.tocify {
 <div id="data-source" class="section level1">
 <h1>Data Source</h1>
 <p>Our team used a publicly available dataset called the <a href="https://www.fema.gov/media-library/assets/documents/28318">“Disaster Declarations Summary”</a> (Version 2) from the Federal Emergency Management Agency (FEMA). This dataset contains summary level data on disaster declarations from 1953 to March 2019 by state and includes all three types of disaster declarations: major disaster, emergency, and fire management assistance.</p>
-<p>For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature and total precipitation by month by state from 1895. These values came from <a href="https://www.ncdc.noaa.gov/cag/national/mapping/">NOAA’s Climate at a Glance</a> data.</p>
+<p>For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from <a href="https://www.ncdc.noaa.gov/cag/national/mapping/">NOAA’s Climate at a Glance</a> data.</p>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
 <pre class="r"><code>disasters = read_csv(&quot;./data/DisasterDeclarationsSummaries2.csv&quot;) %&gt;% 
@@ -433,20 +439,15 @@ div.tocify {
   count(state, year, disaster) %&gt;%
   group_by(year, state) %&gt;% 
   mutate(
-    n_state = sum(n)
-  ) %&gt;% 
+    n_state = sum(n)) %&gt;% 
   group_by(year) %&gt;% 
   mutate(
-    n_total = sum(n)
-  ) %&gt;% 
+    n_total = sum(n)) %&gt;% 
   group_by(year, disaster) %&gt;% 
   mutate(
-    n_type = sum(n)
-  ) %&gt;% 
+    n_type = sum(n)) %&gt;% 
   rename(&quot;n_disaster_state&quot; = &quot;n&quot;) </code></pre>
-<ul>
-<li><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on State, Disaster Year and Disaster Type. Then, we counted disasters by year, state, and type.</li>
-</ul>
+<p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on State, Disaster Year and Disaster Type. Then, we counted disasters by year, state, and type.</p>
 <pre class="r"><code>ave_temp = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
@@ -532,9 +533,21 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <p><a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters</a></p>
 <p><a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a></p>
 </div>
+<div id="summary-visualizations" class="section level1">
+<h1><a href="summary_viz.html">Summary Visualizations</a></h1>
+<p>Plots were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018.</p>
+</div>
 <div id="statistical-analysis" class="section level1">
 <h1>Statistical Analysis</h1>
 <p><a href="data_analysis.html">Statistical Analysis</a></p>
+<div id="justification-for-poisson-regression" class="section level3">
+<h3>Justification for Poisson Regression</h3>
+<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.</p>
+</div>
+<div id="main-findings" class="section level3">
+<h3>Main Findings</h3>
+<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there was a 1.034 increase of natural disasters by US region. Similarly, we found that as compared to the Midwest region of the United States, the Northeast, Southeast, and West regions had seen increases in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.</p>
+</div>
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>
