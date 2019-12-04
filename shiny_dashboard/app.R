@@ -126,20 +126,33 @@ ui = fluidPage(
     # Sidebar
     sidebarLayout(
         sidebarPanel(
+            
+            helpText("On this interactive page, you can examine patterns of natural disasters and 
+                     average temperatures in a certain US state between the years 1950-2019. 
+                     Average temperature is used as a proxy for climate change in this instance. 
+                     You can select a specific state and natural disaster of interest using the dropdown menus. 
+                     You can also customize the year range to the period that you are interested in using the
+                     slider."),
+            
+            # Select state
             selectInput("state_choice", "Select State", choices = state_name),
             
+            # Select natural disaster type
             selectInput("disaster_choice", "Select Disaster Type", choices = disaster_name),
             
+            # Select year range
             sliderInput("year_range", "Choose year range", min = 1950, max = 2019, value = c(1950, 2019))
         ),
         
         mainPanel(
-            plotlyOutput("count_styr"),
-            plotlyOutput("count_styr_avgtemp"),
-            plotlyOutput("avgtempchange")
+            tabsetPanel(
+                tabPanel("Trends of Disaster Type", plotlyOutput("count_styr")),
+                tabPanel("Trends of Disasters & Average Temperature", plotlyOutput("count_styr_avgtemp")),
+                tabPanel("Trends of Average Temperatures", plotlyOutput("avgtempchange")))
         )
     )
 )
+
 
 
 server = function(input, output) {
@@ -151,12 +164,17 @@ server = function(input, output) {
                     state == input[["state_choice"]], 
                     disaster == input[["disaster_choice"]],
                     year %in% input$year_range[1]:input$year_range[2]) %>%
-                rename(
-                    "year" = "Year",
-                     "Count of Disaster Type by State and Year" = "n_disaster_state") %>% 
-                plot_ly(x = ~year, y = ~n_disaster_state, color = ~disaster, type = "bar", 
-                        name = "Count of Disaster Type by State and Year Over Time")
+                plot_ly(x = ~year, y = ~n_disaster_state, color = ~disaster, type = "bar") %>% 
+                layout(
+                    title = "Count of Disaster Type by State and Year Over Time",
+                    xaxis = list(title = "Year",
+                                 zeroline = TRUE),
+                    yaxis = list(title = "Count of Disaster Type by State and Year",
+                                 zeroline = TRUE))
         })
+    
+    
+    
     
     output$count_styr_avgtemp = 
         renderPlotly({
@@ -167,15 +185,21 @@ server = function(input, output) {
                     n_state != "NA",
                     mean_temp != "NA") %>%
                 group_by(state, year) %>%
-                mutate(text_label = str_c("Number of Disasters: ", n_state, '\nAverage Temperature: ', mean_temp)) %>% 
-                rename(
-                    "Average Temperature (degrees F)" = "mean_temp",
-                    "Count of Total Disasters By State and Year" = "n_state") %>% 
-                 plot_ly(
+                mutate(text_label = str_c("Number of Disaster Events: ", n_state, 
+                                          "\nAverage Temperature: ", round(mean_temp, digits = 1), " F")) %>% 
+                plot_ly(
                     x = ~n_state, y = ~mean_temp, type = "scatter", mode = "markers",
-                    alpha = 0.5, color = ~state, text = ~text_label,
-                    name = "Count of Total Disasters By State and Year vs. Average Temperature (degrees F)")
+                    alpha = 0.5, color = ~state, text = ~text_label) %>% 
+                layout(
+                    title = "Count of Total Disasters By State and Year vs. Average Temperature (degrees F)",
+                    xaxis = list(title = "Count of Total Disasters By State and Year", 
+                                  zeroline = TRUE),
+                    yaxis = list(title = "Average Temperature (degrees F)",
+                                 zeroline = TRUE))
         })
+    
+    
+    
     
     output$avgtempchange =
         renderPlotly({
@@ -184,13 +208,17 @@ server = function(input, output) {
                     state == input[["state_choice"]],
                     year %in% input$year_range[1]:input$year_range[2]) %>%
                 distinct() %>%
-                mutate(text_label = str_c('Average Temperature: ', mean_temp, '\nMinimum Temperature: ', min_temp, '\nMaximum Temperature: ', max_temp)) %>%
-                rename(
-                    "Year" = "year",
-                    "Average Temperature (degrees F)" = "mean_temp") %>% 
-                plot_ly(x = ~Year, y = ~`Average Temperature`, color = ~state, 
-                        type = "bar", text = ~text_label, 
-                        name = "Change in Average Temperature (degrees F) Over Time in State") %>% 
+                mutate(text_label = str_c("Average Temperature: ", round(mean_temp, digits = 1), " F", 
+                                          "\nMinimum Temperature: ", round(min_temp, digits = 1), " F", 
+                                          "\nMaximum Temperature: ", round(max_temp, digits = 1), " F")) %>%
+                plot_ly(x = ~year, y = ~mean_temp, color = ~state, 
+                        type = "bar", text = ~text_label) %>% 
+                layout(
+                    title = "Change in Average Temperature (degrees F) Over Time",
+                    xaxis = list(title = "Year",
+                                 zezroline = TRUE), 
+                    yaxis = list(title = "Average Temperature (degrees F)",
+                                 zeroline = TRUE)) 
                 
         })
 }
