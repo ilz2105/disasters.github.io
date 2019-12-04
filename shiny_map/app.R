@@ -116,7 +116,7 @@ titlePanel("Interactive Map of the US"),
 
 sidebarLayout(
   sidebarPanel(
-    helpText("(insert text about this page)"),
+    helpText("Select which year and climate or disaster variable you would like displayed"),
     # year select box 
     selectInput("year_1", label = h3("Choose year"),
             choices = as.list(year),
