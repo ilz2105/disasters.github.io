@@ -23,13 +23,13 @@ Our team used several publicly available datasets with information on natural di
 
 ## Website Overview
 
-**Project Report**: A complete overview of project goals, data cleaning, analyses, discussion.  
+[**Project Report**](project_report.html): A complete overview of project goals, data cleaning, analyses, discussion.  
 
-**Statistical Analysis**: Association between natural disasters and climate change indicators using regression.  
+[**Statistical Analysis**](data_analysis.html): Association between natural disasters and climate change indicators using regression.  
 
-**Natural Disasters**: Interactive Shiny Dashboard showing prevalence of natural disasters. 
+[**Natural Disasters**](https://ashleytseng.shinyapps.io/shiny_dashboard/): Interactive Shiny Dashboard showing prevalence of natural disasters. 
 
-**Interactive Map**: Interactive Map showing climate indicators by geographic location.  
+[**Interactive Map**](https://mrc2229.shinyapps.io/shiny_map/): Interactive Map showing climate indicators by geographic location.  
 
 [insert screen share]
 
