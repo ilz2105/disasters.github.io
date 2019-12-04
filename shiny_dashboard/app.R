@@ -105,6 +105,18 @@ final_data =
     full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>% 
     rename ("state" = "location")
 
+state_name = 
+    final_data %>% 
+    filter(state != "NA") %>% 
+    distinct(state) %>% 
+    pull(state)
+
+disaster_name = 
+    final_data %>% 
+    filter(disaster != "NA") %>% 
+    distinct(disaster) %>% 
+    pull(disaster)
+
 
 ui = fluidPage(
     
@@ -114,23 +126,9 @@ ui = fluidPage(
     # Sidebar
     sidebarLayout(
         sidebarPanel(
-            state_name = 
-                final_data %>% 
-                filter(state != "NA") %>% 
-                distinct(state) %>% 
-                pull(state),
-            
             selectInput("state_choice", "Select State", choices = state_name),
             
-            
-            disaster_name = 
-                final_data %>% 
-                filter(disaster != "NA") %>% 
-                distinct(disaster) %>% 
-                pull(disaster),
-            
             selectInput("disaster_choice", "Select Disaster Type", choices = disaster_name),
-            
             
             sliderInput("year_range", "Choose year range", min = 1950, max = 2019, value = c(1950, 2019))
         ),
