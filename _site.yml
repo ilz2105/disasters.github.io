@@ -17,7 +17,7 @@ navbar:
       href: Discussion.html
     - icon: fa-github fa-lg
       href: https://github.com/ilz2105/disasters.github.io
-    - icon: fa-gem
+    - icon: fa-lemon
       href: secret_cow.html
 output:
   html_document:
