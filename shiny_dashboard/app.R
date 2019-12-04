@@ -24,86 +24,120 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 
 # Loading and tidying data
-ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
-    janitor::clean_names() %>% 
+ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>%
+    janitor::clean_names() %>%
     separate(date, into = c("year", "month"), sep = 4) %>%
     mutate(
-        year = as.numeric(year), 
-        state_code = setNames(state.abb, state.name)[location]) %>% 
-    filter(year >= 1953 & year <= 2018) %>% 
-    group_by(location, year) %>% 
+        year = as.numeric(year),
+        state_code = setNames(state.abb, state.name)[location]) %>%
+    filter(year >= 1953 & year <= 2018) %>%
+    group_by(location, year) %>%
     mutate(
-        mean_temp = mean(value)) %>% 
-    dplyr::select((state_code, location, year, mean_temp) %>% 
-    distinct()
+        mean_temp = mean(value)) %>%
+    select(state_code, location, year, mean_temp) %>%
+    distinct() %>%
+    ungroup()
 
-precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
-    janitor::clean_names() %>% 
+precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>%
+    janitor::clean_names() %>%
     separate(date, into = c("year", "month"), sep = 4) %>%
     mutate(
-        year = as.numeric(year), 
-        state_code = setNames(state.abb, state.name)[location]) %>% 
-    filter(year >= 1953 & year <= 2018) %>% 
-    group_by(location, year) %>% 
+        year = as.numeric(year),
+        state_code = setNames(state.abb, state.name)[location]) %>%
+    filter(year >= 1953 & year <= 2018) %>%
+    group_by(location, year) %>%
     mutate(
-        total_precip = sum(value)) %>% 
-    dplyr::select((state_code, location, year, total_precip) %>% 
-    distinct()
+        total_precip = sum(value)) %>%
+    select(state_code, location, year, total_precip) %>%
+    distinct() %>%
+    ungroup()
 
-tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
-    janitor::clean_names() %>% 
+tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>%
+    janitor::clean_names() %>%
     separate(date, into = c("year", "month"), sep = 4) %>%
     mutate(
-        year = as.numeric(year), 
-        state_code = setNames(state.abb, state.name)[location]) %>% 
-    filter(year >= 1953 & year <= 2018) %>% 
-    group_by(location, year) %>% 
+        year = as.numeric(year),
+        state_code = setNames(state.abb, state.name)[location]) %>%
+    filter(year >= 1953 & year <= 2018) %>%
+    group_by(location, year) %>%
     mutate(
-        max_temp = max(value)) %>% 
-    dplyr::select((state_code, location, year, max_temp) %>% 
-    distinct()
+        max_temp = max(value)) %>%
+    select(state_code, location, year, max_temp) %>%
+    distinct() %>%
+    ungroup()
 
-tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
-    janitor::clean_names() %>% 
+tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>%
+    janitor::clean_names() %>%
     separate(date, into = c("year", "month"), sep = 4) %>%
     mutate(
-        year = as.numeric(year), 
-        state_code = setNames(state.abb, state.name)[location]) %>% 
-    filter(year >= 1953 & year <= 2018) %>% 
-    group_by(location, year) %>% 
+        year = as.numeric(year),
+        state_code = setNames(state.abb, state.name)[location]) %>%
+    filter(year >= 1953 & year <= 2018) %>%
+    group_by(location, year) %>%
     mutate(
-        min_temp = min(value)) %>% 
-    dplyr::select((state_code, location, year, min_temp) %>% 
-    distinct()
+        min_temp = min(value)) %>%
+    select(state_code, location, year, min_temp) %>%
+    distinct() %>%
+    ungroup()
 
-disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
-    janitor::clean_names() %>% 
-    mutate(disaster = factor(incident_type)) %>% 
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
+    janitor::clean_names() %>%
+    mutate(disaster = factor(incident_type)) %>%
     rename(
-        year = fy_declared) %>% 
-    filter(year >= 1953 & year <= 2018) %>% 
+        year = fy_declared) %>%
+    filter(year >= 1953 & year <= 2018) %>%
     count(state, year, disaster) %>%
-    group_by(year, state) %>% 
-    mutate(
-        n_state = sum(n)
-    ) %>% 
-    group_by(year) %>% 
-    mutate(
-        n_total = sum(n)
-    ) %>% 
-    group_by(year, disaster) %>% 
-    mutate(
-        n_type = sum(n)
-    ) %>% 
-    rename("n_disaster_state" = "n") 
+    ungroup()
 
 # Joined data from 5 data sets
-final_data = 
-    inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-    inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-    inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-    full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>% 
+final_data =
+    inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+    inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+    inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+    full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>%
+    mutate(n = replace_na(n, 0)) %>%
+    group_by(year, location) %>%
+    mutate(
+        n_state = sum(n)
+    ) %>%
+    group_by(year) %>%
+    mutate(
+        n_total = sum(n)
+    ) %>%
+    group_by(year, disaster) %>%
+    mutate(
+        n_type = sum(n)
+    ) %>%
+    rename("n_disaster_state" = "n") %>%
+    mutate(
+        region = case_when(
+            location %in% c(
+                "Alabama","Arkansas","Delaware","Florida","Georgia"
+                ,"Kentucky","Louisiana","Maryland","Mississippi",
+                "Oklahoma","North Carolina","South Carolina",
+                "Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
+            location %in% c("Connecticut","Maine","New Hampshire","Massachusetts",
+                            "New Jersey","New York","Pennsylvania","Rhode Island","Vermont") ~ 'northeast',
+            location %in% c("Alaska",
+                            "Arizona","California","Colorado","Hawaii","Idaho",
+                            "Montana","Nevada","New Mexico","Oregon","Utah","Washington","Wyoming")
+            ~  'west',
+            location %in% c("Illinois",
+                            "Indiana","Iowa","Kansas","Michigan","Missouri",
+                            "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest')) %>% 
     rename ("state" = "location")
+
+regional_data = final_data %>%
+    group_by(year, region) %>%
+    mutate(
+        ave_temp = mean(mean_temp),
+        sum_precip = sum(total_precip),
+        count_region = sum(n_disaster_state)
+    ) %>%
+    select(region, year, ave_temp, sum_precip, count_region) %>%
+    filter(region != "NA") %>%
+    distinct() %>%
+    ungroup()
 
 state_name = 
     final_data %>% 
@@ -128,7 +162,7 @@ ui = fluidPage(
         sidebarPanel(
             
             helpText("On this interactive page, you can examine patterns of natural disasters and 
-                     average temperatures in a certain US state between the years 1950-2019. 
+                     average temperatures in a certain US state between the years 1950-2018. 
                      Average temperature is used as a proxy for climate change in this instance. 
                      You can select a specific state and natural disaster of interest using the dropdown menus. 
                      You can also customize the year range to the period that you are interested in using the

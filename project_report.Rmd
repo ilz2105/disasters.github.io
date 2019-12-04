@@ -143,7 +143,8 @@ There were a couple data challenges along the way. First, our climate data had f
 
 # Exploratory Analysis
 
-[Natural Disasters And Climate Indicators](https://ashleytseng.shinyapps.io/shiny_dashboard/)
+The [Natural Disasters & Climate Change](https://ashleytseng.shinyapps.io/shiny_dashboard/) Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1950-2018. Average temperature is used as a proxy for climate change in this instance. 
+
 
 [This Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
 

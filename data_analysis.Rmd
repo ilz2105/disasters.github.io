@@ -24,6 +24,7 @@ ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.cs
   select(state_code, location, year, mean_temp) %>%
   distinct() %>%
   ungroup()
+
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -37,6 +38,7 @@ mutate(
   select(state_code, location, year, total_precip) %>%
   distinct() %>%
   ungroup()
+
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -50,6 +52,7 @@ mutate(
   select(state_code, location, year, max_temp) %>%
   distinct() %>%
   ungroup()
+
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -63,6 +66,7 @@ mutate(
   select(state_code, location, year, min_temp) %>%
   distinct() %>%
   ungroup()
+
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   janitor::clean_names() %>%
   mutate(disaster = factor(incident_type)) %>%
@@ -71,6 +75,7 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   filter(year >= 1953 & year <= 2018) %>%
   count(state, year, disaster) %>%
   ungroup()
+
 final_data =
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
   inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%

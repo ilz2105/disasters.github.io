@@ -187,7 +187,7 @@ final_data %>%
   mutate(text_label = str_c( year, "\nTotal Precip(in.):", total_precip)) %>% 
   plot_ly( x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
     color = ~region, text = ~text_label, alpha = 0.5) %>% 
-  layout(title = "Total Precipitation by Region, from 1953 to 2018",
+  layout(title = "Total Precipitation by Region, from 1953-2018",
          xaxis = list(title = "Total Precip (in.)",
                       zeroline = TRUE),
          yaxis = list(title = "Year",
@@ -210,7 +210,7 @@ This plot shows the breakdown of the total precipitation amount by state for eac
   plot_ly(
     x = ~year, y = ~n_disaster_state, type = "bar", mode = "markers",
     color = ~region, text = ~text_label, alpha = 0.5) %>% 
-  layout(title = "Total Disasters by Region, from 1953- 2018",
+  layout(title = "Total Disasters by Region, from 1953-2018",
          xaxis = list(title = "Total Number of Disastesr",
                       zeroline = TRUE),
          yaxis = list(title = "Year",
