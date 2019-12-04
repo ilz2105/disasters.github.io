@@ -18,7 +18,7 @@ While the recent news from the Trump Administration to pull out of the [Paris Ag
 <center>
 <img src="data/stickers.png" alt="stickers" style="width:30%">
 </center>
-## Data Set
+## Dataset
 Our team used several publicly available datasets with information on natural disasters, temperature variables, and total precipitation across year and state from 1953-2018. The [Disaster Declarations Summary](https://www.fema.gov/media-library/assets/documents/28318) (Version 2) from the Federal Emergency Management Agency (FEMA) contained summary level data on disaster declarations. The National Oceanic and Atmospheric Administration's (NOAA) [Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data included information on monthly maximum temperature, minimum temperature, average temperature, and total precipitation. 
 
 ## Website Overview

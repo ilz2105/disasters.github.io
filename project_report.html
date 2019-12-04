@@ -438,7 +438,7 @@ div.tocify {
   mutate(
     n_type = sum(n)) %&gt;% 
   rename(&quot;n_disaster_state&quot; = &quot;n&quot;) </code></pre>
-<p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. Then, we counted disasters by year, state, and type.</p>
+<p><strong>Disaster Declarations Summary</strong>: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. Then, we counted disasters by year, state, and type.</p>
 <pre class="r"><code>ave_temp = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
@@ -504,14 +504,14 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 </ul></li>
 </ul>
 </div>
-<div id="final-data-set" class="section level2">
-<h2>Final Data Set</h2>
+<div id="final-dataset" class="section level2">
+<h2>Final Dataset</h2>
 <pre class="r"><code>final_data = 
   inner_join(ave_temp, precip, by = c(&quot;location&quot; = &quot;location&quot;, &quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state_code&quot;)) %&gt;% 
   inner_join(tmax, by = c(&quot;location&quot; = &quot;location&quot;, &quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state_code&quot;)) %&gt;% 
   inner_join(tmin, by = c(&quot;location&quot; = &quot;location&quot;, &quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state_code&quot;)) %&gt;% 
   full_join(disasters, by = c(&quot;year&quot; = &quot;year&quot;, &quot;state_code&quot; = &quot;state&quot;))</code></pre>
-<p>Data on climate change indicators across four datasets were inner-joined by state and year. This created a dataset with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full-joined to the disaster data set which had rows for each disaster by year and state.</p>
+<p>Data on climate change indicators across four datasets were inner-joined by state and year. This created a dataset with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this dataset was full-joined to the disaster dataset which had rows for each disaster by year and state.</p>
 </div>
 <div id="data-challenges" class="section level2">
 <h2>Data Challenges</h2>
@@ -525,15 +525,14 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <p><a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a></p>
 </div>
 <div id="summary-visualizations" class="section level1">
-<h1><a href="summary_viz.html">Summary Visualizations</a></h1>
-<p>Plots were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018.</p>
+<h1>Summary Visualizations</h1>
+<p>Plots <a href="summary_viz.html">were generated</a> to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018.</p>
 </div>
 <div id="statistical-analysis" class="section level1">
 <h1>Statistical Analysis</h1>
-<p><a href="data_analysis.html">Statistical Analysis</a></p>
 <div id="justification-for-poisson-regression" class="section level3">
 <h3>Justification for Poisson Regression</h3>
-<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for average temperature and precipitation.</p>
+<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a <a href="data_analysis.html">Poisson regression model</a> to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for average temperature and precipitation.</p>
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>

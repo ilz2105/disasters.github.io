@@ -57,7 +57,7 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
     n_type = sum(n)) %>% 
   rename("n_disaster_state" = "n") 
 ```
-**Disaster Declarations Summary**: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. Then, we counted disasters by year, state, and type. 
+**Disaster Declarations Summary**: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. Then, we counted disasters by year, state, and type. 
 
 ```{r climate, warning = FALSE, message = FALSE}
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
@@ -127,7 +127,7 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
   
   + **Total Precipitation**: The total precipation, in inches, by state across all 12 months per year was totaled. 
 
-## Final Data Set
+## Final Dataset
 ```{r joined, warning = FALSE, message = FALSE}
 final_data = 
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
@@ -135,7 +135,7 @@ final_data =
   inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 ```
-Data on climate change indicators across four datasets were inner-joined by state and year. This created a dataset with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this data set was full-joined to the disaster data set which had rows for each disaster by year and state.
+Data on climate change indicators across four datasets were inner-joined by state and year. This created a dataset with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this dataset was full-joined to the disaster dataset which had rows for each disaster by year and state.
 
 
 ## Data Challenges
@@ -149,16 +149,14 @@ There were a couple data challenges along the way. First, our climate data had f
 
 [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/)
 
-# [Summary Visualizations](summary_viz.html)
+# Summary Visualizations
 
-Plots were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018. 
+Plots [were generated](summary_viz.html) to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018. 
 
-# Statistical Analysis 
-
-[Statistical Analysis](data_analysis.html)
+# Statistical Analysis
 
 ### Justification for Poisson Regression
-After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for average temperature and precipitation.
+After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a [Poisson regression model](data_analysis.html) to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for average temperature and precipitation.
 
 ### Main Findings
 Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there was a 1.034 increase of natural disasters by US region. Similarly, we found that as compared to the Midwestern region of the United States, the Northeastern, Southeastern, and Western regions had seen increases in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.
