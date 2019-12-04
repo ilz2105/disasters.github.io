@@ -145,12 +145,16 @@ Data on climate change indicators across 4 data sets were inner joined by State 
 There were a couple data challenges along the way. First, our climate data had full state names ("New York") while our disaster data had FIP codes and state abbreviations ("NY"). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/1/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for the entire Thanksgiving break. While this created some last minute stress, it did not ultimately affect our work product.  
 
 # Exploratory Analysis
-["Lulu's section - climate indicators"](insert link)
-["Ashley's section - natural disasters"](shiny_dashboard.html)
-["Matt's section - interactive map"](insert link)
+
+[Climate Indicators](insert link)
+
+[Natural Disasters](https://ashleytseng.shinyapps.io/shiny_dashboard/)
+
+[Interactive Map](https://mrc2229.shinyapps.io/shiny_map/)
 
 # Statistical Analysis 
-["Jana's section - statistical analysis"](insert link)
+
+[Statistical Analysis](data_analysis.html)
 
 # Discussion
 
