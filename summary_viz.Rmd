@@ -2,16 +2,18 @@
 title: "Summary Visualizations"
 output: 
   html_document:
-    toc: true
-    toc_float: true
+    toc: false
+    toc_float: false
     theme: flatly
 ---
 
-```{r}
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
 library(tidyverse)
 library(ggridges)
 library(plotly)
 ```
+
+## Plot Showing Average Temperatures by Region
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
@@ -98,7 +100,7 @@ final_data =
 ```
 
 
-```{r}
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
 final_data = final_data %>% 
 mutate(
   region = case_when(
@@ -117,45 +119,41 @@ mutate(
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
 
-
-   
 ```
 
 
-```{r, scatterplot}
+```{r, scatterplot, echo = FALSE, warning= FALSE, message=FALSE}
 
 final_data %>% 
   drop_na() %>% 
   ggplot(aes(x = year, y = mean_temp, group = region, color = region))+
-  geom_point(aes(color = region), alpha = 0.2)+
-  geom_smooth( se = FALSE, alpha = .4)+
+  geom_point(aes(color = region))+
+  geom_smooth( se = FALSE)+
   labs(title = "Average Temps(F) by Region from 1953-2018", 
        xlab = "Year",
        ylab = "Average Temperature(F)")+
   theme_bw()+
   theme(legend.position = "left")
-
-# plotly verson of above scatterplot
-final_data %>% 
-  mutate(text_label = str_c("avg temp (F): ", mean_temp,   "\n", location)) %>% 
-  plot_ly(
-    x = ~year, y = ~mean_temp, type = "scatter", mode = "markers",
-    color = ~region, text = ~text_label, alpha = 0.5)
 ```
+
+
 This scatterplot shows the average temperature (F) from 1953 to 2018, by region. Overall, the southeast region has the highest average temperatures and the Northeast has the lowest average temperatures.Though it may be hard to see,
 the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Florida, 59.25F to 62.26F in Arizona,
-56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey. 
+56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey.The different colored lines show the average trend over the years for average temperature, for each region.
 
 
-```{r, panel}
+```{r, panel, echo = FALSE, warning= FALSE, message=FALSE}
 # trying to make a panel of all 50 states showing # disasters over year
 final_data %>% 
   group_by( disaster, region)%>% 
   select(region, disaster, year, n_total)%>% 
   drop_na() %>% 
+  filter(disaster == "Fire"| 
+           disaster =="Hurricane"| 
+           disaster =="Tornado"|
+           disaster =="Earthquake") %>% 
   ggplot(aes(x = year, y = n_total, color = disaster)) +
-  geom_line(alpha = 0.2)+
-  geom_smooth( se = FALSE)+
+  geom_line()+
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90,  hjust = 1))+
   facet_wrap(~region)+
   labs(title = "",
@@ -163,24 +161,27 @@ final_data %>%
        ylab = "Frequency of Disasters")
 ```
 
-This is a panel showing the total number of disasters from 1953-2018 for each region. The disasters are shown in different colors. 
-
-# regional?
+This is a panel showing the total number of earthquakes, fires, hurricanes, and tornadoes from 1953-2018 for each region. The disasters are shown in different colors.We see that the Western region had no hurricanes while the other three regions did not have any earthquakes.  
 
 
-```{r}
+## Plot showing total precipitation in inches for each region
+
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
 final_data %>% 
-  drop_na(disaster) %>% 
-  #summarize(total_d = sum(n_total)) %>% 
-  ggplot(aes(x = disaster, fill = disaster ))+
-  geom_histogram(stat = "count" , position = "dodge", binwidth = 2) +
-  theme(axis.text.x = element_text(angle = 90,  hjust = 1))+
-  labs(title = "Frequency of Types of Disaster")
+  drop_na() %>% 
+  select(region, year, total_precip) %>% 
+  distinct() %>% 
+  mutate(text_label = str_c( year, "\n", location)) %>% 
+  plot_ly( x = ~region, y = ~total_precip, type = "bar",
+    color = ~region, text = ~text_label, alpha = 0.5)
+
 ```
 
+This plot shows the breakdown of the total precipitation amount by state for each year, and is split up into regions and the total precipitation is summed up for each region. The southeast had overall the most inches in precipitation, while the west had the least amount of precipitation. 
 
-# Plot showing Total Number of Disasters by State from 1953-2018, Summed up for Each Region
-```{r}
+## Plot showing Total Number of Disasters by State from 1953-2018, Summed up for Each Region
+
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
  final_data %>% 
   drop_na() %>% 
   select(disaster, n_disaster_state, region) %>% 
@@ -192,48 +193,30 @@ final_data %>%
 
 ```
 
-This plot shows the 
+This bar graph shows the total number of disasters for each region in the US, from 1953-2018. By hovering over the bars, you can see the individual number of disasters for each state.We can see that the southeast had the most hurricanes, while the midwest had a great frequency of floods. 
 
-```{r}
 
+## Boxplot showing the count of total disaster type by state
+
+
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
 final_data %>% 
-  drop_na(disaster) %>% 
-  ggplot(aes(x = year, fill = region))+
-  geom_bar()+
-  labs(title = "Number of Disasters Per Year From 1953-2018")
-```
-
-```{r}
-
-final_data %>%
-  group_by(year, region) %>% 
-  drop_na( ) %>% 
-  ggplot(aes(x= year, y = mean_temp))+
-    geom_line(aes(group = region, color = region))+
-  labs(title = "Spaghetti Plot Showing Average Temps from 1953-2018 By Region")
-```
-
-
-```{r}
-final_data %>%
-  group_by(year, location) %>% 
-  ggplot(aes(x= year, y = total_precip))+
-    geom_line(aes(group = location, color = location))+
-  labs(title = "Spaghetti Plot Showing Total Precipitation from 1953-2018 By State")
-```
-
-
-
-```{r}
-final_data %>% 
+  drop_na() %>% 
+  select(disaster, n_disaster_state, region) %>% 
+  distinct() %>% 
   group_by(year, location, disaster) %>% 
 mutate(text_label = str_c( disaster, "\n", location)) %>% 
   plot_ly(
-    x = ~year, y = ~n_total, type = "box",
+    x = ~disaster, y = ~n_disaster_state, type = "box",
     color = ~disaster, text = ~text_label, alpha = 0.5)
 ```
 
-This box plot shows the median, maximum, and minimum values for the count of total disasters by year
+This box plot shows the median, maximum, and minimum values for the count of total disasters, and it also shows the count of disaster type for each state. For example, for `hurricane`, the median is 18, maximum is 763, minimum is 1, and Louisiana had 161 hurricanes from 1953 to 2018. 
+
+
+
+
+
 
 
 
