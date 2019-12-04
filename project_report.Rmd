@@ -26,16 +26,15 @@ According to the United States Geological Survey, scientists predict that increa
 # Related Work
 Oddly enough, the initial inspiration for this work actually came from the coveted p8105 Cow Sticker. Our original project idea was going to revolve around cows but our discussions of cows quickly shifted to methane gas and the effects it has on our planet. As a result, we pivoted to examining climate change and natural disasters. Additionally, our work with NOAA data in class, seeing first hand how in-depth that dataset is, gave us an early understanding of the possibilities achievable with such varied data. 
 
-In the news, climate change has been a hot topic of conversation, particularly surrounding increasing global temperatures and increased intensity of natural disasters. We have seen setbacks and progress made recently. Under the Trump Administration, the United States will pull out of the [Paris Agreement](https://www.washingtonpost.com/climate-environment/2019/11/04/trump-makes-it-official-us-will-withdraw-paris-climate-accord/) as of November 4, 2020. Our group personally discussed the implications of this policy and we voiced our concerns while discussing project idases. However, there are people out there doing fantastic work in the fight for our planet, and we hope to do our part. Recently, Greta Thunberg visited NYC for the [Climate Strike](https://www.outsideonline.com/2402494/new-york-city-climate-march) on September 20, 2019. An estimated 60,000 people participated in NYC while millions joined globally. We are inspired by this action by young people and hope it motivates others to join the cause. We hope our findings can do just a small part in this movement. And maybe get a sticker with a cow on it if we get a little creative along the way.
+In the news, climate change has been a hot topic of conversation, particularly surrounding increasing global temperatures and increased intensity of natural disasters. We have seen setbacks and progress made recently. Under the Trump Administration, the United States will pull out of the [Paris Agreement](https://www.washingtonpost.com/climate-environment/2019/11/04/trump-makes-it-official-us-will-withdraw-paris-climate-accord/) as of November 4, 2020. Our group personally discussed the implications of this policy and we voiced our concerns while discussing project ideas. However, there are people out there doing fantastic work in the fight for our planet, and we hope to do our part. Recently, Greta Thunberg visited NYC for the [Climate Strike](https://www.outsideonline.com/2402494/new-york-city-climate-march) on September 20, 2019. An estimated 60,000 people participated in NYC while millions joined globally. We are inspired by this action by young people and hope it motivates others to join the cause. We hope our findings can do just a small part in this movement. And maybe get a sticker with a cow on it if we get a little creative along the way.
 
 # Initial Questions
-We first want to know if the total count of natural disasters are increasing every five years between 1953-2018 in the United States. We also want to know if average, minimum, and maximum land temperatures are increasing with certain natural disasters over time, examining the states where the frequency of natural disasters does significantly increase with temperature in greater detail. We will fit a multivariable regression model to address our question of whether the United States overall is seeing more natural disasters over time, then create multiple data visualizations to assess state-by-state differences.
+We first want to know if the total count of natural disasters are increasing every five years between 1953-2018 in the United States. We also want to know if average, minimum, and maximum land temperatures are increasing with certain natural disasters over time, examining the states where the frequency of natural disasters does significantly increase with temperature in greater detail. We will fit a multivariable Poisson regression model to address our question of whether the United States overall is seeing more natural disasters over time, then create multiple data visualizations to assess state-by-state differences.
 
 # Data Source
-Our team used a publicly available dataset called the ["Disaster Declarations Summary"](https://www.fema.gov/media-library/assets/documents/28318) (Version 2) from the Federal Emergency Management Agency (FEMA). This dataset contains summary level data on disaster declarations from 1953 to March 2019 by state and includes all three types of disaster declarations: major disaster, emergency, and fire 
-management assistance. 
+Our team used a publicly available dataset called the ["Disaster Declarations Summary"](https://www.fema.gov/media-library/assets/documents/28318) (Version 2) from the Federal Emergency Management Agency (FEMA). This dataset contains summary level data on disaster declarations from 1953 to March 2019 by state and includes all three types of disaster declarations: major disaster, emergency, and fire management assistance. 
 
-For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature and total precipitation by month by state from 1895. These values came from [NOAA's Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data.
+For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from [NOAA's Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data.
 
 ## Data Cleaning
 ```{r disasters,  warning = FALSE, message = FALSE}
@@ -48,19 +47,16 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   count(state, year, disaster) %>%
   group_by(year, state) %>% 
   mutate(
-    n_state = sum(n)
-  ) %>% 
+    n_state = sum(n)) %>% 
   group_by(year) %>% 
   mutate(
-    n_total = sum(n)
-  ) %>% 
+    n_total = sum(n)) %>% 
   group_by(year, disaster) %>% 
   mutate(
-    n_type = sum(n)
-  ) %>% 
+    n_type = sum(n)) %>% 
   rename("n_disaster_state" = "n") 
 ```
-* **Disaster Declarations Summary**: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on State, Disaster Year and Disaster Type. Then, we counted disasters by year, state, and type. 
+**Disaster Declarations Summary**: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on State, Disaster Year and Disaster Type. Then, we counted disasters by year, state, and type. 
 
 ```{r climate, warning = FALSE, message = FALSE}
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
@@ -155,6 +151,12 @@ There were a couple data challenges along the way. First, our climate data had f
 # Statistical Analysis 
 
 [Statistical Analysis](data_analysis.html)
+
+### Justification for Poisson Regression
+After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.
+
+### Main Findings
+Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there was a 1.034 increase of natural disasters by US region. Similarly, we found that as compared to the Midwest region of the United States, the Northeast, Southeast, and West regions had seen increases in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.
 
 # Discussion
 
