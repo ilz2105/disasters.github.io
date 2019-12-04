@@ -151,7 +151,11 @@ server = function(input, output) {
                     state == input[["state_choice"]], 
                     disaster == input[["disaster_choice"]],
                     year %in% input$year_range[1]:input$year_range[2]) %>%
-                plot_ly(x = ~year, y = ~n_disaster_state, color = ~disaster, type = "bar")
+                rename(
+                    "year" = "Year",
+                     "Count of Disaster Type by State and Year" = "n_disaster_state") %>% 
+                plot_ly(x = ~year, y = ~n_disaster_state, color = ~disaster, type = "bar", 
+                        name = "Count of Disaster Type by State and Year Over Time")
         })
     
     output$count_styr_avgtemp = 
@@ -164,9 +168,13 @@ server = function(input, output) {
                     mean_temp != "NA") %>%
                 group_by(state, year) %>%
                 mutate(text_label = str_c("Number of Disasters: ", n_state, '\nAverage Temperature: ', mean_temp)) %>% 
-                plot_ly(
+                rename(
+                    "Average Temperature (degrees F)" = "mean_temp",
+                    "Count of Total Disasters By State and Year" = "n_state") %>% 
+                 plot_ly(
                     x = ~n_state, y = ~mean_temp, type = "scatter", mode = "markers",
-                    alpha = 0.5, color = ~state, text = ~text_label)
+                    alpha = 0.5, color = ~state, text = ~text_label,
+                    name = "Count of Total Disasters By State and Year vs. Average Temperature (degrees F)")
         })
     
     output$avgtempchange =
@@ -176,8 +184,14 @@ server = function(input, output) {
                     state == input[["state_choice"]],
                     year %in% input$year_range[1]:input$year_range[2]) %>%
                 distinct() %>%
-                mutate(text_label = str_c('Average Temperature: ', mean_temp, '\nMinimum Temperature: ', min_temp, '\nMaximum Temperature: ', max_temp)) %>% 
-                plot_ly(x = ~year, y = ~mean_temp, color = ~state, type = "bar", text = ~text_label)
+                mutate(text_label = str_c('Average Temperature: ', mean_temp, '\nMinimum Temperature: ', min_temp, '\nMaximum Temperature: ', max_temp)) %>%
+                rename(
+                    "Year" = "year",
+                    "Average Temperature (degrees F)" = "mean_temp") %>% 
+                plot_ly(x = ~Year, y = ~`Average Temperature`, color = ~state, 
+                        type = "bar", text = ~text_label, 
+                        name = "Change in Average Temperature (degrees F) Over Time in State") %>% 
+                
         })
 }
 
