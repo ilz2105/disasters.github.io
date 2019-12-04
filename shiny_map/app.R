@@ -108,7 +108,7 @@ map_data =
   )
 
 variable_type = (map_data %>% ungroup(year) %>% distinct(variable_type) %>% pull())
-year <- c(1953:2019)
+year <- c(1953:2018)
 
 ui = fluidPage(
 

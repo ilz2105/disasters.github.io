@@ -145,7 +145,7 @@ There were a couple data challenges along the way. First, our climate data had f
 
 [Natural Disasters And Climate Indicators](https://ashleytseng.shinyapps.io/shiny_dashboard/)
 
-[This Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2019) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
+[This Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
 
 * Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.
 
