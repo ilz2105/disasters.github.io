@@ -1,12 +1,4 @@
----
-  title: "Interactive Map"
-runtime: shiny
-output: 
-  flexdashboard::flex_dashboard:
-  orientation: columns
-vertical_layout: fill
-source_code: embed
----
+
 
 library(flexdashboard)
 library(shiny)
@@ -115,37 +107,34 @@ map_data =
       )
   )
 
-
-Variable Selection {.sidebar}
------------------------------------------------------------------------
-
-# entries to select from -- somehow this is not making it so disasters are selected but just a lot of years
 variable_type <- (map_data %>% ungroup(year) %>% distinct(variable_type) %>% pull())
 year <- c(1953:2019)
 
-# year select box 
-selectInput("year_1", label = h3("Choose year"),
+ui = fluidPage(
+
+titlePanel("Interactive Map"), 
+
+sidebarLayout(
+  sidebarPanel(
+    # year select box 
+    selectInput("year_1", label = h3("Choose year"),
             choices = as.list(year),
-            selected = 2001)
-
-# variable select box
-selectInput("variable_type", label = h3("Choose variable"),
+            selected = 2001),# variable select box
+    selectInput("variable_type", label = h3("Choose variable"),
             choices = variable_type, 
-            selected = "mean_temp")
+            selected = "mean_temp")),
+    mainPanel(
+      plotlyOutput("map")
+    )
+    )
+)
 
-# (See description page for more information on each variable.)
 
-# Map and Description {.tabset}
------------------------------------------------------------------------
-  ### US MAP
-  
 
-# convert state abbreviations to state names
-state_abb <- state.name
+server = function(input, output){
+  state_abb <- state.name
 names(state_abb) <- state.abb
-
-# plot_geo
-renderPlotly({
+output$map=renderPlotly({
   # map plot settings.
   geo1 <- list(
     scope = "usa",
@@ -170,12 +159,12 @@ renderPlotly({
       title = "US Map - State Statistics",
       legend = list(x = 100, y = 0.5)
     )
-})
+})}
 
 ### Description
 
 # This map allows users to select different years (1953-2019), demonstrating the changes in variables over time and visualize differences across the country. The map includes the following variables:
-  
+
 # * **Yearly Total of All Disasters**: Darker areas represent higher counts of disaster declarations, hovering over each state will display the counts. Blank states means there were no disasters declared or no data available in that state for that year.
 
 # * **Yearly Mean Temperature**: Darker areas represent a higher average temperature in that state across all 12 months of the year that was summarized. Hovering over each state will display the average temperature. Blank states means there is no data available in that state for that year.
@@ -187,46 +176,5 @@ renderPlotly({
 # * **Yearly Total Precipitation**: Darker areas represent a higher total precipitation in that state across all 12 months of the year that was summarized. Hovering over each state will display the total precipitation. Blank states means there is no data available in that state for that year.
 
 
-
-
-library(shiny)
-
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
-)
-
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
-}
-
-# Run the application 
 shinyApp(ui = ui, server = server)
 
