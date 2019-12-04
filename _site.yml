@@ -13,8 +13,6 @@ navbar:
       href: https://ashleytseng.shinyapps.io/shiny_dashboard/
     - text: "Interactive Map"
       href: https://mrc2229.shinyapps.io/shiny_map/
-    - text: "Discussion"
-      href: Discussion.html
     - icon: fa-github fa-lg
       href: https://github.com/ilz2105/disasters.github.io
     - icon: fa-lemon
