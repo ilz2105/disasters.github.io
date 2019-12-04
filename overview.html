@@ -354,6 +354,9 @@ div.tocify {
   <a href="project_report.html">Project Report</a>
 </li>
 <li>
+  <a href="summary_viz.html">Summary Visualizations</a>
+</li>
+<li>
   <a href="data_analysis.html">Statistical Analysis</a>
 </li>
 <li>
@@ -372,7 +375,10 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="secret_cow.html"></a>
+  <a href="secret_cow.html">
+    <span class="fa fa-cow"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -417,11 +423,13 @@ div.tocify {
 <h2>Data Cleaning</h2>
 <ul>
 <li><p><strong>Disaster Declarations Summary</strong>: This data set was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on <code>State</code>, <code>Disaster Year</code> and <code>Disaster Type</code>. Then, we counted disasters by year, state, and type. Overall, there were 2491 disasters delared to FEMA.</p></li>
-<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into “Month” and “Year”. Next, data were grouped by state and year and summarized as described below:</p></li>
+<li><p><strong>Climate Indicators</strong>: These data sets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded for year month by State since 1853. After pulling the data and cleaning variable names, the date fields were split into “Month” and “Year”. Next, data were grouped by state and year and summarized as described below:</p>
+<ul>
 <li><p><strong>Average Temperature</strong> The average temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Maximum Temperature</strong>: The maximum temperature by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Total Precipitation</strong>: The total precipation by state across all 12 months per year was totaled.</p></li>
+</ul></li>
 </ul>
 </div>
 <div id="final-data-set" class="section level2">

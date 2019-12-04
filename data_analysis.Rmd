@@ -133,13 +133,13 @@ poisson_dist
 ```
 
 ### Poisson Regression
-After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicates that our data are not normally distributed, thereby justifying a Poisson model with the count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.
+After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicates that our data are not normally distributed. Rather, our data follows a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.
  
 + **Count of Disasters:** The number of disasters by year and region.
  
 + **Year:** Ranges from 1953 to 2018.
  
-+ **Region:** The US regions categorized by Midwest, Northeast, Southwest, and West.
++ **Region:** The US regions categorized by Midwest (reference category), Northeast, Southwest, and West.
  
 + **Average Temperture:** The average temperature in degrees Fahrenheit by region.
  
@@ -154,8 +154,8 @@ poisson_model = glm(count_region ~ year + region + ave_temp + sum_precip, family
 poisson_model %>%
   broom::tidy() %>%
   select(term, estimate, p.value) %>%
-  mutate(exp(estimate)) %>%
+  mutate(exp(estimate)) %>% 
   knitr::kable(digits = 3)
 ```
 
-The results are quite significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we find that for every increase in year, there is a 1.034 increase of natural disasters by region. This supports our hypothesis that the count of natural disasters increases from 1953 to 2018.
+The results are significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we find that for every increase in year, there is a 1.034 increase of natural disasters by US region. This supports our hypothesis that the count of natural disasters increases from 1953 to 2018.
