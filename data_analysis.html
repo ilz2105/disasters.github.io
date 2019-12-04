@@ -20,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
@@ -257,63 +254,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -321,16 +261,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -354,6 +284,9 @@ div.tocify {
   <a href="project_report.html">Project Report</a>
 </li>
 <li>
+  <a href="summary_viz.html">Summary Visualizations</a>
+</li>
+<li>
   <a href="data_analysis.html">Statistical Analysis</a>
 </li>
 <li>
@@ -372,7 +305,10 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="secret_cow.html"></a>
+  <a href="secret_cow.html">
+    <span class="fa fa-cow"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -397,45 +333,28 @@ div.tocify {
 
 
 <p>Is the US seeing more natural disasters over time?</p>
+<div id="distribution-of-outcome-count-of-disasters" class="section level3">
+<h3>Distribution of Outcome: Count of Disasters</h3>
 <p><img src="data_analysis_files/figure-html/poisson_dist-1.png" width="672" /></p>
-<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters per year in the US has increased from 1953 to 2018.</p>
-<p>Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches.</p>
-<p>We fit a Poisson regression where our final model took the form:</p>
-<p><span class="math display">\[ log(Count \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
-<pre><code>## 
-## Call:
-## glm(formula = count_region ~ year + region + ave_temp + sum_precip, 
-##     family = poisson(link = log), data = regional_data)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -23.214   -7.373   -3.518    1.823   63.168  
-## 
-## Coefficients:
-##                   Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     -6.179e+01  6.543e-01 -94.436   &lt;2e-16 ***
-## year             3.342e-02  3.566e-04  93.719   &lt;2e-16 ***
-## regionnortheast -1.392e+00  1.792e-02 -77.691   &lt;2e-16 ***
-## regionsoutheast -6.205e-01  4.875e-02 -12.727   &lt;2e-16 ***
-## regionwest      -7.760e-01  1.814e-02 -42.789   &lt;2e-16 ***
-## ave_temp        -8.438e-03  3.417e-03  -2.469   0.0135 *  
-## sum_precip       2.145e-03  2.570e-05  83.470   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## (Dispersion parameter for poisson family taken to be 1)
-## 
-##     Null deviance: 78958  on 263  degrees of freedom
-## Residual deviance: 23725  on 257  degrees of freedom
-## AIC: 25242
-## 
-## Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+<div id="poisson-regression" class="section level3">
+<h3>Poisson Regression</h3>
+<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicates that our data are not normally distributed, thereby justifying a Poisson model with the count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.</p>
+<ul>
+<li><p><strong>Count of Disasters:</strong> The number of disasters by year and region.</p></li>
+<li><p><strong>Year:</strong> Ranges from 1953 to 2018.</p></li>
+<li><p><strong>Region:</strong> The US regions categorized by Midwest, Northeast, Southwest, and West.</p></li>
+<li><p><strong>Average Temperture:</strong> The average temperature in degrees Fahrenheit by region.</p></li>
+<li><p><strong>Precipitation:</strong> The total amount of rainfall in inches by region.</p></li>
+</ul>
+<p>We fit a Poisson regression where our final model took the form: <span class="math display">\[ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation \]</span></p>
 <table>
 <thead>
 <tr class="header">
 <th align="left">term</th>
 <th align="right">estimate</th>
 <th align="right">p.value</th>
+<th align="right">exp(estimate)</th>
 </tr>
 </thead>
 <tbody>
@@ -443,45 +362,51 @@ div.tocify {
 <td align="left">(Intercept)</td>
 <td align="right">-61.791</td>
 <td align="right">0.000</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
 <td align="right">0.033</td>
 <td align="right">0.000</td>
+<td align="right">1.034</td>
 </tr>
 <tr class="odd">
 <td align="left">regionnortheast</td>
 <td align="right">-1.392</td>
 <td align="right">0.000</td>
+<td align="right">0.248</td>
 </tr>
 <tr class="even">
 <td align="left">regionsoutheast</td>
 <td align="right">-0.621</td>
 <td align="right">0.000</td>
+<td align="right">0.538</td>
 </tr>
 <tr class="odd">
 <td align="left">regionwest</td>
 <td align="right">-0.776</td>
 <td align="right">0.000</td>
+<td align="right">0.460</td>
 </tr>
 <tr class="even">
 <td align="left">ave_temp</td>
 <td align="right">-0.008</td>
 <td align="right">0.014</td>
+<td align="right">0.992</td>
 </tr>
 <tr class="odd">
 <td align="left">sum_precip</td>
 <td align="right">0.002</td>
 <td align="right">0.000</td>
+<td align="right">1.002</td>
 </tr>
 </tbody>
 </table>
-<p>After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.</p>
-
-
-
+<p>The results are quite significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we find that for every increase in year, there is a 1.034 increase of natural disasters by region. This supports our hypothesis that the count of natural disasters increases from 1953 to 2018.</p>
 </div>
-</div>
+
+
+
 
 </div>
 
@@ -519,32 +444,6 @@ $(document).ready(function () {
 });
 </script>
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
