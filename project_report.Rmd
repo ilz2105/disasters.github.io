@@ -148,6 +148,10 @@ There were a couple data challenges along the way. First, our climate data had f
 
 [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/)
 
+# [Summary Visualizations](summary_viz.html)
+
+Plots were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018. 
+
 # Statistical Analysis 
 
 [Statistical Analysis](data_analysis.html)
