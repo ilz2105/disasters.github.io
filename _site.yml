@@ -5,6 +5,8 @@ navbar:
   right:
     - text: "Project Report"
       href: project_report.html
+    - text: "Summary Visualizations"
+      href: summary_viz.html
     - text: "Statistical Analysis"
       href: data_analysis.html
     - text: "Natural Disasters"
@@ -15,7 +17,7 @@ navbar:
       href: Discussion.html
     - icon: fa-github fa-lg
       href: https://github.com/ilz2105/disasters.github.io
-    - text: ""
+    - icon: fa-github fa-cow
       href: secret_cow.html
 output:
   html_document:
