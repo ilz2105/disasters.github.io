@@ -9,7 +9,7 @@ navbar:
       href: summary_viz.html
     - text: "Statistical Analysis"
       href: data_analysis.html
-    - text: "Natural Disasters"
+    - text: "Natural Disasters & Climate Change"
       href: https://ashleytseng.shinyapps.io/shiny_dashboard/
     - text: "Interactive Map"
       href: https://mrc2229.shinyapps.io/shiny_map/

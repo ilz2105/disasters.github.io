@@ -117,15 +117,15 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
   ungroup()
 ```
 
-* **Climate Indicators**: These datasets were downloaded from NOAA's website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:
+**Climate Indicators**: These datasets were downloaded from NOAA's website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:
   
-  + **Average Temperature** The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
+  * **Average Temperature** The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
   
-  + **Minimum Temperature**: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
+  * **Minimum Temperature**: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
   
-  + **Maximum Temperature**: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
+  * **Maximum Temperature**: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
   
-  + **Total Precipitation**: The total precipation, in inches, by state across all 12 months per year was totaled. 
+  * **Total Precipitation**: The total precipation, in inches, by state across all 12 months per year was totaled. 
 
 ## Final Dataset
 ```{r joined, warning = FALSE, message = FALSE}
@@ -143,11 +143,15 @@ There were a couple data challenges along the way. First, our climate data had f
 
 # Exploratory Analysis
 
-[Climate Indicators](insert link)
+[Natural Disasters And Climate Indicators](https://ashleytseng.shinyapps.io/shiny_dashboard/)
 
-[Natural Disasters](https://ashleytseng.shinyapps.io/shiny_dashboard/)
+[This Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2019) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
 
-[Interactive Map](https://mrc2229.shinyapps.io/shiny_map/)
+* Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.
+
+* Hovering over each state will display the statistic of the chosen variable for that state. 
+
+* Blank states means there is no data available in that state for that year.
 
 # Summary Visualizations
 

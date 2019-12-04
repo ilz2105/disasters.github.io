@@ -195,7 +195,7 @@ final_data %>%
 
 ```
 
-This plot showed the breakdown of the total precipitation amount by state for each year, and was split up into regions, with the total precipitation summed up for each region. The southeast had overall the most inches in precipitation, while the west had the least amount of precipitation. 
+This plot shows the breakdown of the total precipitation amount by state for each year, and was split up into regions, with the total precipitation summed up for each region. The southeast had overall the most inches in precipitation, while the west had the least amount of precipitation. 
 
 ## Plot showing Total Number of Disasters by Region from 1953-2018, 
 
@@ -283,7 +283,7 @@ plot_ly( x = ~disaster, y = ~n_disaster, type = "bar",
 p
 ```
 
-This bar graph showed the total number of different disasters for each region in the US, from 1953-2018. The individual number of disasters for each state are shown along the bars. We observed that the southeast had the most hurricanes, while the midwest had a greater frequency of floods. 
+This bar graph shows the total number of different disasters for each region in the US, from 1953-2018. The individual number of disasters for each state are shown along the bars. We observed that the southeast had the most hurricanes, while the midwest had a greater frequency of floods. 
 
  
 

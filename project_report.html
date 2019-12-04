@@ -360,7 +360,7 @@ div.tocify {
   <a href="data_analysis.html">Statistical Analysis</a>
 </li>
 <li>
-  <a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters</a>
+  <a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters &amp; Climate Change</a>
 </li>
 <li>
   <a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a>
@@ -494,8 +494,8 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
   dplyr::select(state_code, location, year, total_precip) %&gt;% 
   distinct() %&gt;% 
   ungroup()</code></pre>
+<p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p>
 <ul>
-<li><p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p></li>
 <li><p><strong>Average Temperature</strong> The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Maximum Temperature</strong>: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
@@ -518,9 +518,13 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 </div>
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
-<p><a href="insert%20link">Climate Indicators</a></p>
-<p><a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters</a></p>
-<p><a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a></p>
+<p><a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters And Climate Indicators</a></p>
+<p><a href="https://mrc2229.shinyapps.io/shiny_map/">This Interactive Map</a> allows users to select different years (1953-2019) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the “Data Cleaning” section.</p>
+<ul>
+<li><p>Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.</p></li>
+<li><p>Hovering over each state will display the statistic of the chosen variable for that state.</p></li>
+<li><p>Blank states means there is no data available in that state for that year.</p></li>
+</ul>
 </div>
 <div id="summary-visualizations" class="section level1">
 <h1>Summary Visualizations</h1>
