@@ -99,23 +99,24 @@ map_data =
   mutate(
     variable_type = 
       recode(variable_type,
-             "mean_temp" = "Yearly Mean Temperature",
-             "max_temp" = "Yearly Max Temperature",
-             "min_temp" = "Yearly Min Temperature",
-             "mtotal_precip" = "Yearly Total Precipitation",
+             "mean_temp" = "Yearly Mean Temperature (degrees F)",
+             "max_temp" = "Yearly Maximum Temperature (degrees F)",
+             "min_temp" = "Yearly Minimum Temperature (degrees F)",
+             "mtotal_precip" = "Yearly Total Precipitation (inches)",
              "mn_state" = "Yearly Total of All Disasters"
       )
   )
 
-variable_type <- (map_data %>% ungroup(year) %>% distinct(variable_type) %>% pull())
+variable_type = (map_data %>% ungroup(year) %>% distinct(variable_type) %>% pull())
 year <- c(1953:2019)
 
 ui = fluidPage(
 
-titlePanel("Interactive Map"), 
+titlePanel("Interactive Map of the US"), 
 
 sidebarLayout(
   sidebarPanel(
+    helpText("(insert text about this page)"),
     # year select box 
     selectInput("year_1", label = h3("Choose year"),
             choices = as.list(year),
@@ -142,7 +143,7 @@ output$map=renderPlotly({
     showlakes = TRUE,
     lakecolor = toRGB("white")
   )
-  # display values using color intensity -- This should also be good to go if previous code chunk works.
+
   map_data %>% 
     filter(variable_type == input$variable_type, year == input$year_1) %>% 
     plot_geo(locationmode = "USA-states") %>% 
@@ -156,7 +157,7 @@ output$map=renderPlotly({
     ) %>%
     layout(
       geo = geo1,
-      title = "US Map - State Statistics",
+      title = "Climate and Natural Disaster Statistics of States in the US",
       legend = list(x = 100, y = 0.5)
     )
 })}
