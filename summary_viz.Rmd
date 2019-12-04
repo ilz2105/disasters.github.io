@@ -29,7 +29,7 @@ ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.cs
   group_by(location, year) %>% 
   mutate(
     mean_temp = mean(value)) %>% 
-  select(state_code, location, year, mean_temp) %>% 
+  dplyr::select(state_code, location, year, mean_temp) %>% 
   distinct()
 
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
@@ -42,7 +42,7 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
   group_by(location, year) %>% 
   mutate(
     total_precip = sum(value)) %>% 
-  select(state_code, location, year, total_precip) %>% 
+  dplyr::select(state_code, location, year, total_precip) %>% 
   distinct()
 
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
@@ -55,7 +55,7 @@ tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", 
   group_by(location, year) %>% 
   mutate(
     max_temp = max(value)) %>% 
-  select(state_code, location, year, max_temp) %>% 
+  dplyr::select(state_code, location, year, max_temp) %>% 
   distinct()
 
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
@@ -68,7 +68,7 @@ tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", 
   group_by(location, year) %>% 
   mutate(
     min_temp = min(value)) %>% 
-  select(state_code, location, year, min_temp) %>% 
+  dplyr::select(state_code, location, year, min_temp) %>% 
   distinct()
 
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
@@ -155,7 +155,7 @@ the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Flo
 panel = 
 final_data %>% 
   group_by( disaster, region)%>% 
-  select(region, disaster, year, n_total)%>% 
+  dplyr::select(region, disaster, year, n_total)%>% 
   rename(total = n_total) %>% 
   drop_na() %>% 
   filter(disaster == "Fire"| 
@@ -182,7 +182,7 @@ This panel shows the total number of earthquakes, fires, hurricanes, and tornado
 ```{r, echo = FALSE, warning= FALSE, message=FALSE}
 final_data %>% 
   drop_na() %>% 
-  select(region, year, total_precip) %>% 
+  dplyr::select(region, year, total_precip) %>% 
   distinct() %>% 
   mutate(text_label = str_c( year, "\nTotal Precip(in.):", total_precip)) %>% 
   plot_ly( x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
@@ -202,7 +202,7 @@ This plot showed the breakdown of the total precipitation amount by state for ea
 ```{r, echo = FALSE, warning= FALSE, message=FALSE}
  final_data %>% 
   drop_na() %>% 
-  select( n_disaster_state, region, year) %>% 
+  dplyr::select( n_disaster_state, region, year) %>% 
   group_by(region) %>% 
   distinct() %>%
   mutate(
