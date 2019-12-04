@@ -10,7 +10,7 @@ navbar:
     - text: "Natural Disasters"
       href: http://127.0.0.1:3480/
     - text: "Interactive Map"
-      href: http://127.0.0.1:3019/shiny_map.Rmd
+      href: https://mrc2229.shinyapps.io/shiny_map/
     - text: "Discussion"
       href: Discussion.html
     - icon: fa-github fa-lg

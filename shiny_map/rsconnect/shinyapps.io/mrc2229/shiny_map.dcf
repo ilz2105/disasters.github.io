@@ -1,0 +1,12 @@
+name: shiny_map
+title: shiny_map
+username:
+account: mrc2229
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1557952
+bundleId: 2638167
+url: https://mrc2229.shinyapps.io/shiny_map/
+when: 1575418996.17512
+asMultiple: FALSE
+asStatic: FALSE

@@ -360,7 +360,7 @@ div.tocify {
   <a href="http://127.0.0.1:3480/">Natural Disasters</a>
 </li>
 <li>
-  <a href="http://127.0.0.1:3019/shiny_map.Rmd">Interactive Map</a>
+  <a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a>
 </li>
 <li>
   <a href="Discussion.html">Discussion</a>
@@ -401,27 +401,33 @@ div.tocify {
 <p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters per year in the US has increased from 1953 to 2018.</p>
 <p>Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches.</p>
 <p>We fit a Poisson regression where our final model took the form:</p>
-<p><span class="math display">\[ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
+<p><span class="math display">\[ log(Count \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,\]</span> for the <span class="math inline">\(i^{th}\)</span> year.</p>
 <pre><code>## 
 ## Call:
-## glm(formula = n_total ~ year, family = poisson(link = log), data = final_data)
+## glm(formula = count_region ~ year + region + ave_temp + sum_precip, 
+##     family = poisson(link = log), data = regional_data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -30.689  -16.615   -6.832    8.654   70.899  
+## -23.214   -7.373   -3.518    1.823   63.168  
 ## 
 ## Coefficients:
-##               Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept) -7.829e+01  7.215e-02   -1085   &lt;2e-16 ***
-## year         4.264e-02  3.606e-05    1182   &lt;2e-16 ***
+##                   Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)     -6.179e+01  6.543e-01 -94.436   &lt;2e-16 ***
+## year             3.342e-02  3.566e-04  93.719   &lt;2e-16 ***
+## regionnortheast -1.392e+00  1.792e-02 -77.691   &lt;2e-16 ***
+## regionsoutheast -6.205e-01  4.875e-02 -12.727   &lt;2e-16 ***
+## regionwest      -7.760e-01  1.814e-02 -42.789   &lt;2e-16 ***
+## ave_temp        -8.438e-03  3.417e-03  -2.469   0.0135 *  
+## sum_precip       2.145e-03  2.570e-05  83.470   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 3259820  on 3968  degrees of freedom
-## Residual deviance: 1532056  on 3967  degrees of freedom
-## AIC: 1562987
+##     Null deviance: 78958  on 263  degrees of freedom
+## Residual deviance: 23725  on 257  degrees of freedom
+## AIC: 25242
 ## 
 ## Number of Fisher Scoring iterations: 5</code></pre>
 <table>
@@ -435,13 +441,38 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-78.291</td>
-<td align="right">0</td>
+<td align="right">-61.791</td>
+<td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">year</td>
-<td align="right">0.043</td>
-<td align="right">0</td>
+<td align="right">0.033</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">regionnortheast</td>
+<td align="right">-1.392</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">regionsoutheast</td>
+<td align="right">-0.621</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">regionwest</td>
+<td align="right">-0.776</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">ave_temp</td>
+<td align="right">-0.008</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="odd">
+<td align="left">sum_precip</td>
+<td align="right">0.002</td>
+<td align="right">0.000</td>
 </tr>
 </tbody>
 </table>
