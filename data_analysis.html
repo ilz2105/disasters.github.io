@@ -332,14 +332,25 @@ $(document).ready(function () {
 </div>
 
 
-<p>Has the US seen more natural disasters over time?</p>
+<div id="hypothesis" class="section level3">
+<h3>Hypothesis</h3>
+<p>Has the US seen more natural disasters over time? Our team hypotehsizes that the continental United States is seeing an increase in count of natural disasters over the years as average temperatures rise. We will consider including temperature varibles, total precipitation (inches), and year in our model.</p>
+</div>
 <div id="distribution-of-outcome-count-of-disasters" class="section level3">
 <h3>Distribution of Outcome: Count of Disasters</h3>
 <p><img src="data_analysis_files/figure-html/poisson_dist-1.png" width="672" /></p>
 </div>
-<div id="poisson-regression" class="section level3">
-<h3>Poisson Regression</h3>
-<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.</p>
+<div id="modeling-poisson-vs-negative-binomial-regression" class="section level3">
+<h3>Modeling: Poisson vs Negative Binomial Regression</h3>
+<p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region is increasing between 1953-2018. The distribution illustrating the number of disasters per year indicated that our data was highly right skewed. Poisson modeling is appropriate because (1) we are modeling count data and (2) our data is right skewed with positive values only. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.</p>
+<p>There are two main ways to model this data:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Poisson Regression</strong>: assumes mean = variance</p></li>
+<li><p><strong>Negative Binomial Regression</strong>: accounts for overdispersion where variance &gt; mean</p></li>
+</ol>
+<div id="variables-of-interest" class="section level4">
+<h4>Variables of Interest</h4>
+<p>First, let’s consider our variables of interest.</p>
 <ul>
 <li><p><strong>Count of Disasters:</strong> The number of disasters by year and region.</p></li>
 <li><p><strong>Year:</strong> Ranges from 1953 to 2018.</p></li>
@@ -347,7 +358,48 @@ $(document).ready(function () {
 <li><p><strong>Average Temperture:</strong> The average temperature in degrees Fahrenheit by region.</p></li>
 <li><p><strong>Precipitation:</strong> The total amount of rainfall in inches by region.</p></li>
 </ul>
-<p>We fit a Poisson regression where our final model took the form: <span class="math display">\[ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation \]</span></p>
+</div>
+<div id="cross-validation" class="section level4">
+<h4>Cross Validation</h4>
+<p>After testing various models with just Poisson, we fit a final model that takes the form:</p>
+<p><span class="math display">\[ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation \]</span></p>
+<p>Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best.</p>
+<p><img src="data_analysis_files/figure-html/cross_validation-1.png" width="672" /></p>
+<p>Reviewing the distributions of residual mean squared errors above, it is hard to distinguish between our two models. Instead, we can compare AICs and use the model with the lowest AIC.</p>
+<p><strong>Poisson Model</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">25242.19</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Negative Binomial Model</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">AIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2880.346</td>
+</tr>
+</tbody>
+</table>
+<p>Using AIC as a measure for Goodness of Fit, we choose the Poisson Model.</p>
+<pre class="r"><code>poisson_output = poisson_model %&gt;%
+  broom::tidy() %&gt;%
+  dplyr::select(term, estimate, p.value) %&gt;%
+  mutate(exp(estimate)) 
+
+poisson_output %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -402,6 +454,7 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>
