@@ -495,13 +495,11 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
   distinct() %&gt;% 
   ungroup()</code></pre>
 <ul>
-<li><p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p>
-<ul>
+<li><p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p></li>
 <li><p><strong>Average Temperature</strong> The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Maximum Temperature</strong>: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Total Precipitation</strong>: The total precipation, in inches, by state across all 12 months per year was totaled.</p></li>
-</ul></li>
 </ul>
 </div>
 <div id="final-data-set" class="section level2">
