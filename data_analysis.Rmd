@@ -2,16 +2,12 @@
 title: "Statistical Analysis"
 output:
   html_document:
-    toc: true
-    toc_float: true
     code_folding: hide
 ---
- 
  
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(rvest)
- 
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -25,7 +21,6 @@ ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.cs
   select(state_code, location, year, mean_temp) %>%
   distinct() %>%
   ungroup()
- 
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -39,7 +34,6 @@ mutate(
   select(state_code, location, year, total_precip) %>%
   distinct() %>%
   ungroup()
- 
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -53,7 +47,6 @@ mutate(
   select(state_code, location, year, max_temp) %>%
   distinct() %>%
   ungroup()
- 
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month"), sep = 4) %>%
@@ -67,7 +60,6 @@ mutate(
   select(state_code, location, year, min_temp) %>%
   distinct() %>%
   ungroup()
- 
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   janitor::clean_names() %>%
   mutate(disaster = factor(incident_type)) %>%
@@ -76,7 +68,6 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   filter(year >= 1953 & year <= 2018) %>%
   count(state, year, disaster) %>%
   ungroup()
- 
 final_data =
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
   inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
@@ -112,23 +103,23 @@ final_data =
   location %in% c("Illinois",
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
-
-regional_data = final_data %>% 
-  group_by(year, region) %>% 
+ 
+regional_data = final_data %>%
+  group_by(year, region) %>%
   mutate(
-    ave_temp = mean(mean_temp), 
-    sum_precip = sum(total_precip), 
+    ave_temp = mean(mean_temp),
+    sum_precip = sum(total_precip),
     count_region = sum(n_disaster_state)
-  ) %>% 
-  select(region, year, ave_temp, sum_precip, count_region) %>% 
-  filter(region != "NA") %>% 
-  distinct() %>% 
+  ) %>%
+  select(region, year, ave_temp, sum_precip, count_region) %>%
+  filter(region != "NA") %>%
+  distinct() %>%
   ungroup()
 ```
  
- 
 Is the US seeing more natural disasters over time?
- 
+
+### Distribution of Outcome: Count of Disasters
 ```{r poisson_dist, echo = FALSE, warning = FALSE, message = FALSE}
 poisson_dist = regional_data %>%
   select(year, count_region) %>%
@@ -137,32 +128,34 @@ poisson_dist = regional_data %>%
   geom_density(alpha = .5) +
   theme(legend.position = "none") +
   labs(
-    title = "Distribution of Number of Disasters per Year",
-    x = "Number of Disasters per Year")
- 
- 
+    x = "Count of Disasters")
 poisson_dist
 ```
+
+### Poisson Regression
+After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicates that our data are not normally distributed, thereby justifying a Poisson model with the count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature and precipitation.
  
-After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a Poisson regression model to formally test the hypothesis that the count of natural disasters per year in the US has increased from 1953 to 2018.
++ **Count of Disasters:** The number of disasters by year and region.
  
-Motivated by our exploratory visualizations, we also decided it was necessary to control for mean temperature, total precipitation, and the interaction between mean temperature in degrees Fahrenheit and total precipitation in inches.
++ **Year:** Ranges from 1953 to 2018.
+ 
++ **Region:** The US regions categorized by Midwest, Northeast, Southwest, and West.
+ 
++ **Average Temperture:** The average temperature in degrees Fahrenheit by region.
+ 
++ **Precipitation:** The total amount of rainfall in inches by region.
  
 We fit a Poisson regression where our final model took the form:
- 
-$$ log(Count \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
-for the $i^{th}$ year.
- 
+$$ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation $$
+
 ```{r poisson_model, echo = FALSE, warning = FALSE, message = FALSE}
 poisson_model = glm(count_region ~ year + region + ave_temp + sum_precip, family="poisson" (link = log), data=regional_data)
- 
-summary(poisson_model)
- 
+
 poisson_model %>%
   broom::tidy() %>%
   select(term, estimate, p.value) %>%
+  mutate(exp(estimate)) %>%
   knitr::kable(digits = 3)
 ```
- 
-After adjusting for mean temperature, total precipitation, and the interaction between the mean temperature and total precipitation, we find that for every-year increase, we expect the number of natural disasters to increase by 32.0 disasters across the US, on average.
- 
+
+The results are quite significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we find that for every increase in year, there is a 1.034 increase of natural disasters by region. This supports our hypothesis that the count of natural disasters increases from 1953 to 2018.
