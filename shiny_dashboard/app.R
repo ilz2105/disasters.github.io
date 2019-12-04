@@ -34,7 +34,7 @@ ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.cs
     group_by(location, year) %>% 
     mutate(
         mean_temp = mean(value)) %>% 
-    select(state_code, location, year, mean_temp) %>% 
+    dplyr::select((state_code, location, year, mean_temp) %>% 
     distinct()
 
 precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv", skip = 3) %>% 
@@ -47,7 +47,7 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
     group_by(location, year) %>% 
     mutate(
         total_precip = sum(value)) %>% 
-    select(state_code, location, year, total_precip) %>% 
+    dplyr::select((state_code, location, year, total_precip) %>% 
     distinct()
 
 tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", skip = 3) %>% 
@@ -60,7 +60,7 @@ tmax = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmax.csv", 
     group_by(location, year) %>% 
     mutate(
         max_temp = max(value)) %>% 
-    select(state_code, location, year, max_temp) %>% 
+    dplyr::select((state_code, location, year, max_temp) %>% 
     distinct()
 
 tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", skip = 3)  %>% 
@@ -73,7 +73,7 @@ tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", 
     group_by(location, year) %>% 
     mutate(
         min_temp = min(value)) %>% 
-    select(state_code, location, year, min_temp) %>% 
+    dplyr::select((state_code, location, year, min_temp) %>% 
     distinct()
 
 disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
