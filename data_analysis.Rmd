@@ -112,18 +112,28 @@ final_data =
   location %in% c("Illinois",
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
+
+regional_data = final_data %>% 
+  group_by(year, region) %>% 
+  mutate(
+    ave_temp = mean(mean_temp), 
+    sum_precip = sum(total_precip), 
+    count_region = sum(n_disaster_state)
+  ) %>% 
+  select(region, year, ave_temp, sum_precip, count_region) %>% 
+  filter(region != "NA") %>% 
+  distinct() %>% 
+  ungroup()
 ```
  
  
 Is the US seeing more natural disasters over time?
  
 ```{r poisson_dist, echo = FALSE, warning = FALSE, message = FALSE}
-poisson_dist = final_data %>%
-  filter(n_total != "NA") %>%
-  select(year, n_total) %>%
+poisson_dist = regional_data %>%
+  select(year, count_region) %>%
   distinct() %>%
-  
-  ggplot(aes(x = n_total)) +
+  ggplot(aes(x = count_region)) +
   geom_density(alpha = .5) +
   theme(legend.position = "none") +
   labs(
@@ -140,11 +150,11 @@ Motivated by our exploratory visualizations, we also decided it was necessary to
  
 We fit a Poisson regression where our final model took the form:
  
-$$ log(Number \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
+$$ log(Count \ of \ Disasters_i) \sim \beta_0 + \beta_1 Year_i + \beta_2 Mean \ Temp_i + \beta_3 Total \ Precip_i + \beta_4 Mean \ Temp_*Total \ Precip_i + \varepsilon_i,$$
 for the $i^{th}$ year.
  
 ```{r poisson_model, echo = FALSE, warning = FALSE, message = FALSE}
-poisson_model = glm(n_total ~ year, family="poisson"(link = log), data=final_data)
+poisson_model = glm(count_region ~ year + region + ave_temp + sum_precip, family="poisson" (link = log), data=regional_data)
  
 summary(poisson_model)
  
