@@ -33,7 +33,13 @@ Our team used several publicly available datasets with information on natural di
 
 [**Interactive Map**](https://mrc2229.shinyapps.io/shiny_map/): Interactive Shiny map demonstrating trends in disasters and climate indicators over time and differences across the country. 
 
-<iframe width="560" height="315" src="https://youtu.be/i3u-O1KZxhU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+[**Screencast**](https://youtu.be/i3u-O1KZxhU): Check out our 2 minute screencast and secret tips for what to look at.
+```{r echo=FALSE, message = FALSE, warning=FALSE}
+library(vembedr)
+
+embed_url("https://youtu.be/i3u-O1KZxhU")
+```
+
 
 
 
