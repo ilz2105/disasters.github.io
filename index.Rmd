@@ -43,5 +43,3 @@ embed_url("https://youtu.be/i3u-O1KZxhU")
 
 
 
-
-
