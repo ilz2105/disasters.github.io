@@ -29,11 +29,11 @@ Our team used several publicly available datasets with information on natural di
 
 [**Statistical Analysis**](data_analysis.html): Association between natural disasters and climate change indicators using Poisson regression.  
 
-[**Natural Disasters**](https://ashleytseng.shinyapps.io/shiny_dashboard/): Interactive Shiny dashboard showing prevalence of natural disasters. 
+[**Natural Disasters**](https://ashleytseng.shinyapps.io/shiny_dashboard/): Interactive Shiny dashboard showing trends of natural disasters and average temperatures over time in the United States.
 
 [**Interactive Map**](https://mrc2229.shinyapps.io/shiny_map/): Interactive Shiny map demonstrating trends in disasters and climate indicators over time and differences across the country. 
 
-[**Screencast**](https://youtu.be/i3u-O1KZxhU): Check out our 2 minute screencast and secret tips for what to look at.
+[**Screencast**](https://youtu.be/i3u-O1KZxhU): Check out our 2-minute screencast and secret tips for what to look at.
 ```{r echo=FALSE, message = FALSE, warning=FALSE}
 library(vembedr)
 

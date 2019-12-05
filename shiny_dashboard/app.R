@@ -162,7 +162,7 @@ ui = fluidPage(
         sidebarPanel(
             
             helpText("On this interactive page, you can examine patterns of natural disasters and 
-                     average temperatures in a certain US state between the years 1950-2018. 
+                     average temperatures in a certain US state between the years 1953-2018. 
                      Average temperature is used as a proxy for climate change in this instance. 
                      You can select a specific state and natural disaster of interest using the dropdown menus. 
                      You can also customize the year range to the period that you are interested in using the
@@ -175,7 +175,7 @@ ui = fluidPage(
             selectInput("disaster_choice", "Select Disaster Type", choices = disaster_name),
             
             # Select year range
-            sliderInput("year_range", "Choose year range", min = 1950, max = 2019, value = c(1950, 2019))
+            sliderInput("year_range", "Choose year range", min = 1953, max = 2018, value = c(1953, 2018))
         ),
         
         mainPanel(

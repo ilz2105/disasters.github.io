@@ -142,7 +142,7 @@ There were a couple data challenges along the way. First, our climate data had f
 
 # Exploratory Analysis
 
-The [Natural Disasters & Climate Change](https://ashleytseng.shinyapps.io/shiny_dashboard/) Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1950-2018. Average temperature is used as a proxy for climate change in this instance. 
+The [Natural Disasters & Climate Change](https://ashleytseng.shinyapps.io/shiny_dashboard/) Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1953-2018. Average temperature is used as a proxy for climate change in this instance. 
 
 
 The [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
@@ -176,14 +176,14 @@ Fitting the Poisson regression model, the results were significant at the 5% lev
 
 ### Exploratory Analysis: 
 
-Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the west and northeast. Looking at each region independently, overall, the freuency of disasters also increased. 
+Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the Southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the West and Northeast. Looking at each region independently, overall, the freuency of disasters also increased. 
 
 ### Statistical Analysis: 
 We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms. 
 
 Some large limitations are important to consider: 
 
-* **Year**: We assumed a linear relationship with the continuous variable Year (1953-2018) and log of expected count of natural disasters. This is most likely not correct and further research must consider how to best use a time related variable.   
+* **Year**: We assumed a linear relationship with the continuous variable `Year` (1953-2018) and log of expected count of natural disasters. This is most likely not correct and further research must consider how to best use a time related variable.   
 
 * **Type of Natural Disaster**: We grouped all natural disasters together. It is important for future researchers to consider how changing temperatures and precipitation could be associated differently with different types of disasters (drought vs blizzard). 
 
