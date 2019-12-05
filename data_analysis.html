@@ -455,7 +455,17 @@ poisson_output %&gt;%
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>
-<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there was a 1.034 increase of natural disasters by US region. Similarly, we found that as compared to the Midwest region of the United States, the Northeast, Southeast, and West regions had seen increases in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.</p>
+<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the count of natural disastrs increase by 1.034. Similarly, we found that as compared to the Midwest region of the United States, the Northeast, Southeast, and West regions saw an increase in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.</p>
+<p>However, we also found that average temperature is negatively associated with count of natural disasters. We expected that the gradual increase in temperature per year would be associated with count of natural disasters. Reflecting on this, we can conclude that the varying types of natural disasters (earthquake, severe storms, etc) may not be associated with temperature.</p>
+</div>
+<div id="limitations" class="section level3">
+<h3>Limitations</h3>
+<p>There are several large limitations to this analysis:</p>
+<ul>
+<li><p><strong>Year</strong>: We assumed a linear relationship with the continuous variable Year (1953-2018) and log of expected count of natural disasters. This is most likely not correct and further research must consider how to best use a time related variable.</p></li>
+<li><p><strong>Missing Data</strong>: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.</p></li>
+<li><p><strong>Other Variablaes</strong>: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.</p></li>
+</ul>
 </div>
 
 
