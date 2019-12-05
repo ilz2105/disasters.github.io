@@ -13,7 +13,7 @@ library(ggridges)
 library(plotly)
 ```
 
-## Plot Showing Average Temperatures by Region
+## Average Temperatures by Region
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
@@ -92,17 +92,26 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
   ) %>% 
   rename("n_disaster_state" = "n") 
 
-final_data = 
-  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>% 
-  full_join(disasters, by = c("year" = "year", "state_code" = "state"))
-```
-
-
-```{r, echo = FALSE, warning= FALSE, message=FALSE}
-final_data = final_data %>% 
-mutate(
+final_data =
+  inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
+  full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>%
+  mutate(n = replace_na(n, 0)) %>%
+  group_by(year, location) %>%
+  mutate(
+    n_state = sum(n)
+  ) %>%
+  group_by(year) %>%
+  mutate(
+    n_total = sum(n)
+  ) %>%
+  group_by(year, disaster) %>%
+  mutate(
+    n_type = sum(n)
+  ) %>%
+  rename("n_disaster_state" = "n") %>%
+  mutate(
   region = case_when(
     location %in% c(
                     "Alabama","Arkansas","Delaware","Florida","Georgia"
@@ -111,20 +120,45 @@ mutate(
                     "Tennessee","Texas","Virginia","West Virginia") ~ "southeast",
    location %in% c("Connecticut","Maine","New Hampshire","Massachusetts",
                    "New Jersey","New York","Pennsylvania","Rhode Island","Vermont") ~ 'northeast',
-  location %in% c("Alaska", 
+  location %in% c("Alaska",
                 "Arizona","California","Colorado","Hawaii","Idaho",
                 "Montana","Nevada","New Mexico","Oregon","Utah","Washington","Wyoming")
        ~  'west',
   location %in% c("Illinois",
                 "Indiana","Iowa","Kansas","Michigan","Missouri",
                 "Minnesota","Nebraska","North Dakota","Ohio","South Dakota", "Wisconsin") ~ 'midwest'))
+ 
+regional_data = final_data %>%
+  group_by(year, region) %>%
+  mutate(
+    ave_temp = mean(mean_temp),
+    sum_precip = sum(total_precip),
+    count_region = sum(n_disaster_state)
+  ) %>%
+  select(region, year, ave_temp, sum_precip, count_region) %>%
+  filter(region != "NA") %>%
+  distinct() %>%
+  ungroup()
+
+regional_disaster_count = final_data %>%
+  group_by(disaster, year, region) %>%
+  mutate(
+    ave_temp = mean(mean_temp),
+    sum_precip = sum(total_precip),
+    count_region = sum(n_disaster_state)
+  ) %>%
+  select(region, year, ave_temp, sum_precip, count_region) %>%
+  filter(region != "NA" & disaster != "NA") %>%
+  distinct() %>%
+  ungroup()
 
 ```
 
 
+
 ```{r, scatterplot, echo = FALSE, warning= FALSE, message=FALSE}
 
-scatter= final_data %>% 
+scatter = final_data %>% 
   drop_na() %>% 
   ggplot(aes(x = year, y = mean_temp, color = region))+
   geom_point( alpha = 0.2)+
@@ -153,10 +187,10 @@ the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Flo
 
 ```{r, panel, echo = FALSE, warning= FALSE, message=FALSE}
 panel = 
-final_data %>% 
-  group_by( disaster, region)%>% 
-  dplyr::select(region, disaster, year, n_total)%>% 
-  rename(total = n_total) %>% 
+regional_disaster_count %>% 
+  group_by(disaster, region)%>% 
+  dplyr::select(region, disaster, year, count_region)%>% 
+  rename(total = count_region) %>% 
   drop_na() %>% 
   filter(disaster == "Fire"| 
            disaster =="Hurricane"| 
@@ -177,7 +211,7 @@ ggplotly(panel) %>%
 This panel shows the total number of earthquakes, fires, hurricanes, and tornadoes from 1953-2018 for each region. The disasters are shown in different colors. The Western region had no hurricanes while the other three regions did not have any earthquakes.  
 
 
-## Plot showing total precipitation in inches for each region
+## Total precipitation in inches for each region
 
 ```{r, echo = FALSE, warning= FALSE, message=FALSE}
 final_data %>% 
@@ -188,16 +222,16 @@ final_data %>%
   plot_ly( x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
     color = ~region, text = ~text_label, alpha = 0.5) %>% 
   layout(title = "Total Precipitation by Region, from 1953-2018",
-         xaxis = list(title = "Total Precip (in.)",
+         xaxis = list(title = "Year",
                       zeroline = TRUE),
-         yaxis = list(title = "Year",
+         yaxis = list(title = "Total Precip (in.)",
                       zeroline = TRUE)) 
 
 ```
 
 This plot shows the breakdown of the total precipitation amount by state for each year, and was split up into regions, with the total precipitation summed up for each region. The southeast had overall the most inches in precipitation, while the west had the least amount of precipitation. 
 
-## Plot showing Total Number of Disasters by Region from 1953-2018, 
+## Total Number of Disasters by Region from 1953-2018, 
 
 ```{r, echo = FALSE, warning= FALSE, message=FALSE}
  final_data %>% 
@@ -211,9 +245,9 @@ This plot shows the breakdown of the total precipitation amount by state for eac
     x = ~year, y = ~n_disaster_state, type = "bar", mode = "markers",
     color = ~region, text = ~text_label, alpha = 0.5) %>% 
   layout(title = "Total Disasters by Region, from 1953-2018",
-         xaxis = list(title = "Total Number of Disastesr",
+         xaxis = list(title = "Year",
                       zeroline = TRUE),
-         yaxis = list(title = "Year",
+         yaxis = list(title = "Total Number of Disastesr",
                       zeroline = TRUE))
 ```
 
@@ -253,7 +287,6 @@ northeast = final_data %>%
   summarize(
     total_ne = sum(n_disaster_state)
   ) 
-
 
 ne_se = dplyr::left_join(northeast, southeast, by = "disaster") 
 mw_w = dplyr::left_join(midwest, west, by = "disaster")

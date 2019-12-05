@@ -252,6 +252,10 @@ There are several large limitations to this analysis:
 
 * **Year**: We assumed a linear relationship with the continuous variable Year (1953-2018) and log of expected count of natural disasters. This is most likely not correct and further research must consider how to best use a time related variable.   
 
+* **Type of Natural Disaster**: We grouped all natural disasters together. It is important for future researchers to consider how changing temperatures and precipitation could be associated differently with different types of disasters (drought vs blizzard). 
+
+* **FEMA Reporting**: We used data from FEMA reported disaster declarations which included county level reporting. For this reason, one large blizzard could be reported by 10 counties and over counted in our data. 
+
 * **Missing Data**: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.   
 
 * **Other Variablaes**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change. 

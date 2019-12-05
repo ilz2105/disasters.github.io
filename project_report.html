@@ -438,7 +438,7 @@ div.tocify {
   mutate(
     n_type = sum(n)) %&gt;% 
   rename(&quot;n_disaster_state&quot; = &quot;n&quot;) </code></pre>
-<p><strong>Disaster Declarations Summary</strong>: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. Then, we counted disasters by year, state, and type.</p>
+<p><strong>Disaster Declarations Summary</strong>: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. From there, we created several counts of disasters: by year, disaster type by year, per state by year, and disaster type by state by year. Some visualizations rely on count of disasters by region which was created as needed.</p>
 <pre class="r"><code>ave_temp = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
@@ -494,7 +494,7 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
   dplyr::select(state_code, location, year, total_precip) %&gt;% 
   distinct() %&gt;% 
   ungroup()</code></pre>
-<p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953. After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p>
+<p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953 (<em>excluding Hawaii and Alaska</em>). After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p>
 <ul>
 <li><p><strong>Average Temperature</strong> The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
@@ -519,22 +519,25 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
 <p>The <a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters &amp; Climate Change</a> Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1950-2018. Average temperature is used as a proxy for climate change in this instance.</p>
-<p><a href="https://mrc2229.shinyapps.io/shiny_map/">This Interactive Map</a> allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the “Data Cleaning” section.</p>
+<p>The <a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a> allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the “Data Cleaning” section.</p>
 <ul>
 <li><p>Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.</p></li>
 <li><p>Hovering over each state will display the statistic of the chosen variable for that state.</p></li>
 <li><p>Blank states means there is no data available in that state for that year.</p></li>
 </ul>
-</div>
-<div id="summary-visualizations" class="section level1">
-<h1>Summary Visualizations</h1>
-<p>Plots <a href="summary_viz.html">were generated</a> to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018.</p>
+<p><a href="summary_viz.html">Summary Visualizations</a> were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018.</p>
 </div>
 <div id="statistical-analysis" class="section level1">
 <h1>Statistical Analysis</h1>
 <div id="justification-for-poisson-regression" class="section level3">
 <h3>Justification for Poisson Regression</h3>
 <p>After inspecting the summary visualizations and plotting the distribution of the data, we decided to run a <a href="data_analysis.html">Poisson regression model</a> to formally test the hypothesis that the count of natural disasters by US region has increased from 1953 to 2018. The distribution illustrating the number of disasters per year indicated that our data was not normally distributed. Rather, our data followed a Poisson distribution, thereby justifying a Poisson model with disaster count data. Motivated by our exploratory visualizations, we also decided it was necessary to control for average temperature and precipitation.</p>
+</div>
+<div id="final-model" class="section level3">
+<h3>Final Model</h3>
+<p>Our final model was:</p>
+<p><span class="math display">\[ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation \]</span></p>
+<p>We ran cross validation to confirm that a Poisson Model fit the data better than a Negative Binomial Model. While a visual comparison of the residual mean squared errors did not prove helpful, we were able to choose a model using the Goodness of Fit value, AIC.</p>
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>
@@ -543,7 +546,23 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>
+<div id="exploratory-analysis-1" class="section level3">
+<h3>Exploratory Analysis:</h3>
+<p>Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the southeast had much higher temperatures and precipitation.</p>
+</div>
+<div id="statistical-analysis-1" class="section level3">
+<h3>Statistical Analysis:</h3>
+<p>We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms.</p>
+<p>Some large limitations are important to consider:</p>
+<ul>
+<li><p><strong>Year</strong>: We assumed a linear relationship with the continuous variable Year (1953-2018) and log of expected count of natural disasters. This is most likely not correct and further research must consider how to best use a time related variable.</p></li>
+<li><p><strong>Type of Natural Disaster</strong>: We grouped all natural disasters together. It is important for future researchers to consider how changing temperatures and precipitation could be associated differently with different types of disasters (drought vs blizzard).</p></li>
+<li><p><strong>FEMA Reporting</strong>: We used data from FEMA reported disaster declarations which included county level reporting. For this reason, one large blizzard could be reported by 10 counties and over counted in our data.</p></li>
+<li><p><strong>Missing Data</strong>: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.</p></li>
+<li><p><strong>Other Variablaes</strong>: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.</p></li>
+</ul>
 <p>Contributors: Holly Finertie | Matt Curran | Jana Lee | Ashley Tseng | Lulu Zhang</p>
+</div>
 </div>
 
 
