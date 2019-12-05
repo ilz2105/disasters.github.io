@@ -170,7 +170,7 @@ ggplotly(scatter) %>%
 
 This scatterplot showed the average temperature (F) from 1953 to 2018, by region. Overall, the southeast region had the highest average temperatures and the Northeast had the lowest average temperatures. Though it may be hard to see,
 the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Florida, 59.25F to 62.26F in Arizona, 
-56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey.The different colored lines show the average trend over the years for average temperature, for each region.
+56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey. The different colored lines show the average trend over the years for average temperature, for each region.
 
 ## Sever Storm(s), Drought, Fire, and Flood by Region, 1953-2018
 
@@ -197,7 +197,7 @@ ggplotly(panel) %>%
                       zeroline = TRUE))
 ```
 
-This panel shows the frequency of selected disaster types from 1953-2018 for each region. The disasters are shown in different colors. The West and Northeast regions had relatively few occurences of these specific disasters compared to the Midwest and Southeast regions. These four disaster types had the highest prevalence in our dataset which is why we focused on them.
+This panel shows the frequency of selected disaster types from 1953-2018 for each region. The disasters are shown in different colors. The West and Northeast regions had relatively few occurrences of these specific disasters compared to the Midwest and Southeast regions. These four disaster types had the highest prevalence in our dataset which is why we focused on them.
 
 
 ## Total precipitation in inches for each region
@@ -236,7 +236,7 @@ This plot shows the breakdown of the total precipitation amount in inches, by st
   layout(title = "Total Disasters by Region, from 1953-2018",
          xaxis = list(title = "Year",
                       zeroline = TRUE),
-         yaxis = list(title = "Total Number of Disastesr",
+         yaxis = list(title = "Total Number of Disasters",
                       zeroline = TRUE))
 ```
 
@@ -305,7 +305,7 @@ plot_ly( x = ~disaster, y = ~n_disaster, type = "bar",
 p
 ```
 
-This bar graph shows the total number of different disasters for each region in the US, from 1953-2018. The individual number of disasters for each state are shown along the bars. We observed that the Southeast had the most hurricanes, while the midwest had a greater frequency of floods. Overall, it seems that the Midwest and Southeast have the higher frequency of disasters compared to the West and Northeast, which matches the trends we see in our other visualizations. 
+This bar graph shows the total number of different disasters for each region in the US, from 1953-2018. The individual number of disasters for each state are shown along the bars. We observed that the Southeast had the most hurricanes, while the Midwest had a greater frequency of floods. Overall, it seems that the Midwest and Southeast have the higher frequency of disasters compared to the West and Northeast, which matches the trends we see in our other visualizations. 
 
  
 

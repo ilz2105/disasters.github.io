@@ -124,7 +124,7 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
   
   * **Maximum Temperature**: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
   
-  * **Total Precipitation**: The total precipation, in inches, by state across all 12 months per year was totaled. 
+  * **Total Precipitation**: The total precipitation, in inches, by state across all 12 months per year was totaled. 
 
 ## Final Dataset
 ```{r joined, warning = FALSE, message = FALSE}
@@ -144,7 +144,7 @@ There were a couple data challenges along the way. First, our climate data had f
 The [Natural Disasters & Climate Change](https://ashleytseng.shinyapps.io/shiny_dashboard/) Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1953-2018. Average temperature is used as a proxy for climate change in this instance. 
 
 
-The [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
+The [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in disasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the "Data Cleaning" section. 
 
 * Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.
 
@@ -169,13 +169,13 @@ We ran cross validation to confirm that a Poisson Model fit the data better than
 
 
 ### Main Findings
-Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there the expecte count of natural disasters increased by 1.034 times. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.
+Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disasters increased by 1.034 times. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.
 
 # Discussion
 
 ### Exploratory Analysis: 
 
-Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the Southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the West and Northeast. Looking at each region independently, overall, the freuency of disasters also increased. 
+Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the Southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the West and Northeast. Looking at each region independently, overall, the frequency of disasters also increased. 
 
 ### Statistical Analysis: 
 We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We found significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms. 
@@ -190,7 +190,7 @@ Some large limitations are important to consider:
 
 * **Missing Data**: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.   
 
-* **Other Variables**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.
+* **Other Variables**: Our team considered only a subset of possible climate indicator variables. Future researchers should consider how else to represent climate change.
 
 ### Climate Change and Natural Disasters
 We did confirm that natural disasters are increasing between 1953-2018; however, much more needs to be done to confirm that climate change indicators (temperature, precipitation, and more) are associated with this trend. 

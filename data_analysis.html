@@ -352,7 +352,7 @@ $(document).ready(function () {
 <li><p><strong>Count of Disasters:</strong> The number of disasters by year and region.</p></li>
 <li><p><strong>Year:</strong> Ranges from 1953 to 2018.</p></li>
 <li><p><strong>Region:</strong> The US regions categorized by Midwest (reference category), Northeast, Southwest, and West. These regions were defined by the <a href="https://www.worldatlas.com/articles/the-regions-of-the-united-states.html">World Atlas definitions</a>.</p></li>
-<li><p><strong>Average Temperture:</strong> The average temperature in degrees Fahrenheit by region.</p></li>
+<li><p><strong>Average Temperature:</strong> The average temperature in degrees Fahrenheit by region.</p></li>
 <li><p><strong>Precipitation:</strong> The total amount of rainfall in inches by region.</p></li>
 </ul>
 </div>
@@ -360,7 +360,7 @@ $(document).ready(function () {
 <h4>Cross Validation</h4>
 <p>After testing various models with just Poisson, we fit a final model that takes the form:</p>
 <p><span class="math display">\[ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation \]</span></p>
-<p>We tested several interaction terms, but none were signficant enough to include in the final model. Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best.</p>
+<p>We tested several interaction terms, but none were significant enough to include in the final model. Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best.</p>
 <p><img src="data_analysis_files/figure-html/cross_validation-1.png" width="672" /></p>
 <p>Reviewing the distributions of residual mean squared errors above, it is hard to distinguish between our two models. Instead, we can compare AICs and use the model with the lowest AIC.</p>
 <p><strong>Poisson Model</strong></p>
@@ -372,7 +372,7 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">25242.19</td>
+<td align="right">25241.77</td>
 </tr>
 </tbody>
 </table>
@@ -385,7 +385,7 @@ $(document).ready(function () {
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">2880.346</td>
+<td align="right">2880.341</td>
 </tr>
 </tbody>
 </table>
@@ -409,7 +409,7 @@ poisson_output %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-61.791</td>
+<td align="right">-61.792</td>
 <td align="right">0.000</td>
 <td align="right">0.000</td>
 </tr>
@@ -423,7 +423,7 @@ poisson_output %&gt;%
 <td align="left">regionnortheast</td>
 <td align="right">-1.392</td>
 <td align="right">0.000</td>
-<td align="right">0.248</td>
+<td align="right">0.249</td>
 </tr>
 <tr class="even">
 <td align="left">regionsoutheast</td>
@@ -455,10 +455,10 @@ poisson_output %&gt;%
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>
-<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disastrs increase by 1.034 times. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.</p>
-<p>As for geographic regions, we found that the Northeast, Southeast, and West regions have significantly less expected counts of natural disastrs compared to the Midwest controlling for other variables in hte model. For example, the Northeast has 0.248 times, or about 75% less, expected disasters compared to the Midwest.</p>
+<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disasters increases by 1.034 times. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018.</p>
+<p>As for geographic regions, we found that the Northeast, Southeast, and West regions have significantly less expected counts of natural disasters compared to the Midwest controlling for other variables in the model. For example, the Northeast has 0.248 times, or about 75% less, expected disasters compared to the Midwest.</p>
 <p>The results for our climate indicators were unexpected. The average temperature is negatively associated while the total precipitation is positively associated with count of natural disasters. As temperature increases by 1-degree F, the expected count of natural disasters decreases by about 1% or 0.992 times controlling for other variables in the model. As total precipitation increases by 1-inch, the expected count of natural disasters increases by 1.002 times.</p>
-<p>Reflecting on this, we can conclude that further analysis should be done on different types of disasters. For example, temperature may be positively associated with counts of fires or droughts. But these disasters may be negatively associated with precipiptation.</p>
+<p>Reflecting on this, we can conclude that further analysis should be done on different types of disasters. For example, temperature may be positively associated with counts of fires or droughts. But these disasters may be negatively associated with precipitation.</p>
 </div>
 <div id="limitations" class="section level3">
 <h3>Limitations</h3>
@@ -468,7 +468,7 @@ poisson_output %&gt;%
 <li><p><strong>Type of Natural Disaster</strong>: We grouped all natural disasters together. It is important for future researchers to consider how changing temperatures and precipitation could be associated differently with different types of disasters (drought vs blizzard).</p></li>
 <li><p><strong>FEMA Reporting</strong>: We used data from FEMA reported disaster declarations which included county level reporting. For this reason, one large blizzard could be reported by 10 counties and over counted in our data.</p></li>
 <li><p><strong>Missing Data</strong>: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.</p></li>
-<li><p><strong>Other Variablaes</strong>: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.</p></li>
+<li><p><strong>Other Variables</strong>: Our team considered only a subset of possible climate indicator variables. Future researchers should consider how else to represent climate change.</p></li>
 </ul>
 </div>
 

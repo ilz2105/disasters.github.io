@@ -499,7 +499,7 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <li><p><strong>Average Temperature</strong> The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Maximum Temperature</strong>: The maximum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
-<li><p><strong>Total Precipitation</strong>: The total precipation, in inches, by state across all 12 months per year was totaled.</p></li>
+<li><p><strong>Total Precipitation</strong>: The total precipitation, in inches, by state across all 12 months per year was totaled.</p></li>
 </ul>
 </div>
 <div id="final-dataset" class="section level2">
@@ -519,7 +519,7 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
 <p>The <a href="https://ashleytseng.shinyapps.io/shiny_dashboard/">Natural Disasters &amp; Climate Change</a> Tool is an interactive dashboard that allows users to examine patterns of natural disasters and average temperatures in a certain US state between the years 1953-2018. Average temperature is used as a proxy for climate change in this instance.</p>
-<p>The <a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a> allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in distasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the “Data Cleaning” section.</p>
+<p>The <a href="https://mrc2229.shinyapps.io/shiny_map/">Interactive Map</a> allows users to select different years (1953-2018) and variables, to demonstrate the changes in trends in disasters or climate indicators over time and to visualize differences across the country. Variable definitions can be seen above in the “Data Cleaning” section.</p>
 <ul>
 <li><p>Darker areas represent higher counts or temperatures in that state across all 12 months of the year that was summarized.</p></li>
 <li><p>Hovering over each state will display the statistic of the chosen variable for that state.</p></li>
@@ -541,14 +541,14 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 </div>
 <div id="main-findings" class="section level3">
 <h3>Main Findings</h3>
-<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there the expecte count of natural disasters increased by 1.034 times. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.</p>
+<p>Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disasters increased by 1.034 times. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.</p>
 </div>
 </div>
 <div id="discussion" class="section level1">
 <h1>Discussion</h1>
 <div id="exploratory-analysis-1" class="section level3">
 <h3>Exploratory Analysis:</h3>
-<p>Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the Southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the West and Northeast. Looking at each region independently, overall, the freuency of disasters also increased.</p>
+<p>Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the Southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the West and Northeast. Looking at each region independently, overall, the frequency of disasters also increased.</p>
 </div>
 <div id="statistical-analysis-1" class="section level3">
 <h3>Statistical Analysis:</h3>
@@ -559,7 +559,7 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <li><p><strong>Type of Natural Disaster</strong>: We grouped all natural disasters together. It is important for future researchers to consider how changing temperatures and precipitation could be associated differently with different types of disasters (drought vs blizzard).</p></li>
 <li><p><strong>FEMA Reporting</strong>: We used data from FEMA reported disaster declarations which included county level reporting. For this reason, one large blizzard could be reported by 10 counties and over counted in our data.</p></li>
 <li><p><strong>Missing Data</strong>: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.</p></li>
-<li><p><strong>Other Variables</strong>: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.</p></li>
+<li><p><strong>Other Variables</strong>: Our team considered only a subset of possible climate indicator variables. Future researchers should consider how else to represent climate change.</p></li>
 </ul>
 </div>
 <div id="climate-change-and-natural-disasters" class="section level3">

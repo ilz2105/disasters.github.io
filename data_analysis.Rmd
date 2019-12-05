@@ -160,7 +160,7 @@ First, let's consider our variables of interest.
  
 + **Region:** The US regions categorized by Midwest (reference category), Northeast, Southwest, and West. These regions were defined by the [World Atlas definitions](https://www.worldatlas.com/articles/the-regions-of-the-united-states.html).
  
-+ **Average Temperture:** The average temperature in degrees Fahrenheit by region.
++ **Average Temperature:** The average temperature in degrees Fahrenheit by region.
  
 + **Precipitation:** The total amount of rainfall in inches by region.
 
@@ -170,7 +170,7 @@ After testing various models with just Poisson, we fit a final model that takes 
 
 $$ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation $$
 
-We tested several interaction terms, but none were signficant enough to include in the final model. Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best. 
+We tested several interaction terms, but none were significant enough to include in the final model. Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best. 
 
 ```{r cross_validation, echo = FALSE, warning = FALSE, message = FALSE}
 library(MASS)
@@ -243,13 +243,13 @@ poisson_output %>%
 
 
 ### Main Findings
-Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disastrs increase by  `r poisson_output %>% filter(term == "year") %>% pull("exp(estimate)") %>% round(digits = 3)` times. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018. 
+Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disasters increases by  `r poisson_output %>% filter(term == "year") %>% pull("exp(estimate)") %>% round(digits = 3)` times. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018. 
 
-As for geographic regions, we found that the Northeast, Southeast, and West regions have significantly less expected counts of natural disastrs compared to the Midwest controlling for other variables in hte model. For example, the Northeast has 0.248 times, or about 75% less, expected disasters compared to the Midwest. 
+As for geographic regions, we found that the Northeast, Southeast, and West regions have significantly less expected counts of natural disasters compared to the Midwest controlling for other variables in the model. For example, the Northeast has 0.248 times, or about 75% less, expected disasters compared to the Midwest. 
 
 The results for our climate indicators were unexpected. The average temperature is negatively associated while the total precipitation is positively associated with count of natural disasters. As temperature increases by 1-degree F, the expected count of natural disasters decreases by about 1% or 0.992 times controlling for other variables in the model. As total precipitation increases by 1-inch, the expected count of natural disasters increases by 1.002 times. 
 
-Reflecting on this, we can conclude that further analysis should be done on different types of disasters. For example, temperature may be positively associated with counts of fires or droughts. But these disasters may be negatively associated with precipiptation. 
+Reflecting on this, we can conclude that further analysis should be done on different types of disasters. For example, temperature may be positively associated with counts of fires or droughts. But these disasters may be negatively associated with precipitation. 
 
 ### Limitations
 There are several large limitations to this analysis:   
@@ -262,5 +262,5 @@ There are several large limitations to this analysis:
 
 * **Missing Data**: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.   
 
-* **Other Variablaes**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change. 
+* **Other Variables**: Our team considered only a subset of possible climate indicator variables. Future researchers should consider how else to represent climate change. 
 
