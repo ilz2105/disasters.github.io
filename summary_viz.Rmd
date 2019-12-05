@@ -96,8 +96,10 @@ final_data =
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
   inner_join(tmax, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
   inner_join(tmin, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
-  full_join(disasters, by = c("year" = "year", "state_code" = "state")) %>%
-  mutate(n = replace_na(n, 0)) %>%
+  full_join(disasters, by = c("year" = "year", "state_code" = "state"))
+
+final_data = final_data %>% 
+  mutate(n_disaster_state = replace_na(n, 0)) %>%
   group_by(year, location) %>%
   mutate(
     n_state = sum(n)
