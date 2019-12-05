@@ -172,7 +172,27 @@ This scatterplot showed the average temperature (F) from 1953 to 2018, by region
 the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Florida, 59.25F to 62.26F in Arizona, 
 56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey. The different colored lines show the average trend over the years for average temperature, for each region.
 
-## Sever Storm(s), Drought, Fire, and Flood by Region, 1953-2018
+## Total Precipitation (inches) by Region
+
+```{r, echo = FALSE, warning= FALSE, message=FALSE}
+final_data %>% 
+  drop_na() %>% 
+  dplyr::select(region, year, total_precip) %>% 
+  distinct() %>% 
+  mutate(text_label = str_c( year, "\nTotal Precip(in.):", total_precip)) %>% 
+  plot_ly( x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
+    color = ~region, text = ~text_label, alpha = 0.5) %>% 
+  layout(title = "Total Precipitation by Region, from 1953-2018",
+         xaxis = list(title = "Year",
+                      zeroline = TRUE),
+         yaxis = list(title = "Total Precip (in.)",
+                      zeroline = TRUE)) 
+
+```
+
+This plot shows the breakdown of the total precipitation amount in inches, by state for each year, and was split up into regions with the total precipitation summed up for each region. The Southeast had the most inches in precipitation overall, while the West had the least total amount of precipitation. 
+
+## Severe Storm, Drought, Fire, and Flood by Region, 1953-2018
 
 ```{r, panel, echo = FALSE, warning= FALSE, message=FALSE}
 panel = 
@@ -199,26 +219,6 @@ ggplotly(panel) %>%
 
 This panel shows the frequency of selected disaster types from 1953-2018 for each region. The disasters are shown in different colors. The West and Northeast regions had relatively few occurrences of these specific disasters compared to the Midwest and Southeast regions. These four disaster types had the highest prevalence in our dataset which is why we focused on them.
 
-
-## Total precipitation in inches for each region
-
-```{r, echo = FALSE, warning= FALSE, message=FALSE}
-final_data %>% 
-  drop_na() %>% 
-  dplyr::select(region, year, total_precip) %>% 
-  distinct() %>% 
-  mutate(text_label = str_c( year, "\nTotal Precip(in.):", total_precip)) %>% 
-  plot_ly( x = ~year, y = ~total_precip, type = "scatter", mode = "markers",
-    color = ~region, text = ~text_label, alpha = 0.5) %>% 
-  layout(title = "Total Precipitation by Region, from 1953-2018",
-         xaxis = list(title = "Year",
-                      zeroline = TRUE),
-         yaxis = list(title = "Total Precip (in.)",
-                      zeroline = TRUE)) 
-
-```
-
-This plot shows the breakdown of the total precipitation amount in inches, by state for each year, and was split up into regions with the total precipitation summed up for each region. The Southeast had the most inches in precipitation overall, while the West had the least total amount of precipitation. 
 
 ## Total Number of Disasters by Region from 1953-2018, 
 
