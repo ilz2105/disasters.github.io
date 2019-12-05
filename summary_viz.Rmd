@@ -181,10 +181,10 @@ regional_disaster_count %>%
   dplyr::select(region, disaster, year, count_region)%>% 
   rename(total = count_region) %>% 
   drop_na() %>% 
-  filter(disaster == "Fire"| 
-           disaster =="Hurricane"| 
-           disaster =="Tornado"|
-           disaster =="Earthquake") %>% 
+  filter(disaster == "Severe Storm(s)"| 
+           disaster =="Drought"| 
+           disaster =="Fire"|
+           disaster =="Flood") %>% 
   ggplot(aes(x = year, y = total, color = disaster))+
   geom_line()+
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 90,  hjust = 1)) +
