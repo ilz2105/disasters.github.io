@@ -5,8 +5,8 @@ account: ashleytseng
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1555626
-bundleId: 2642132
+bundleId: 2643529
 url: https://ashleytseng.shinyapps.io/shiny_dashboard/
-when: 1575503239.14654
+when: 1575550502.75118
 asMultiple: FALSE
 asStatic: FALSE
