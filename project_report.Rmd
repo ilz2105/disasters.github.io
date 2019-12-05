@@ -170,7 +170,7 @@ We ran cross validation to confirm that a Poisson Model fit the data better than
 
 
 ### Main Findings
-Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there was a 1.034 increase of natural disasters by US region. Similarly, we found that as compared to the Midwestern region of the United States, the Northeastern, Southeastern, and Western regions had seen increases in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.
+Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, there the expecte count of natural disasters increased by 1.034 times. This supported our hypothesis that the count of natural disasters has increased from 1953 to 2018.
 
 # Discussion
 
@@ -179,7 +179,7 @@ Fitting the Poisson regression model, the results were significant at the 5% lev
 Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the west and northeast. Looking at each region independently, overall, the freuency of disasters also increased. 
 
 ### Statistical Analysis: 
-We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms. 
+We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We found significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms. 
 
 Some large limitations are important to consider: 
 
