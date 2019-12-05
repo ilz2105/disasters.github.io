@@ -137,7 +137,6 @@ final_data =
 ```
 Data on climate change indicators across four datasets were inner-joined by state and year. This created a dataset with average temperature, maximum temperature, minimum temperature, and total precipitation by state and year. Then, this dataset was full-joined to the disaster dataset which had rows for each disaster by year and state.
 
-
 ## Data Challenges
 There were a couple data challenges along the way. First, our climate data had full state names ("New York") while our disaster data had FIPS codes and state abbreviations ("NY"). The data was joined after converting the full state name to state codes in the climate data. Additionally, we did have a major issue with data availability. From 11/25/2019-12/1/2019, the NOAA data was unavailable due to scheduled maintenance. Because we pulled all of our climate data directly from the NOAA website, we were unable to work on this final project for the entire Thanksgiving break. While this created some last minute stress, it did not ultimately affect our work product.  
 
@@ -154,7 +153,7 @@ The [Interactive Map](https://mrc2229.shinyapps.io/shiny_map/) allows users to s
 
 * Blank states means there is no data available in that state for that year.
 
-[Summary Visualizations](summary_viz.html) were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters. Overall, the number of disasters increased from 1953 to 2018. 
+[Summary Visualizations](summary_viz.html) were generated to look at trends by region for disasters, average temperature, and total precipitation from 1953 to 2018. Specific regions had greater numbers of certain disasters and a greater frequency of all disasters. Overall, the number of disasters, average temperature, and total precipitation increased from 1953 to 2018. By hovering over the plots, we can see the number of disasters, average temperature, or precipitation amount for the year and region. 
 
 # Statistical Analysis
 
@@ -177,7 +176,7 @@ Fitting the Poisson regression model, the results were significant at the 5% lev
 
 ### Exploratory Analysis: 
 
-Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the southeast had much higher temperatures and precipitation. 
+Through our various visualizations, we found that both count of disasters and mean temperature increased from 1953-2018. It is also apparent that type of disaster and climate indicators vary significantly be region. Overall, the southeast had much higher temperatures and precipitation, and a greater frequency of disasters compared to the west and northeast. Looking at each region independently, overall, the freuency of disasters also increased. 
 
 ### Statistical Analysis: 
 We found that average temperature, region, total precipitation, and year were associated with the log of expected count of natural disasters. Overall, there was a positive association between count of natural disasters and year, which supports our hypothesis that the number of natural disasters is increasing. We significant differences between region and count of natural disasters, most likely due to the large number of severe storms in the Midwest. Additionally, there was a positive association between precipitation and count natural disasters, but a negative association between temperature and count of natural disasters. Reflecting on the different types of natural disasters, this is justified. For example, a decrease in temperature and increase in precipitation can be associated with an increase in count of severe storms. 
@@ -192,7 +191,7 @@ Some large limitations are important to consider:
 
 * **Missing Data**: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.   
 
-* **Other Variablaes**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.
+* **Other Variables**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.
 
 
 
