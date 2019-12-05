@@ -71,26 +71,14 @@ tmin = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tmin.csv", 
   dplyr::select(state_code, location, year, min_temp) %>% 
   distinct()
 
-disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>% 
-  janitor::clean_names() %>% 
-  mutate(disaster = factor(incident_type)) %>% 
+disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
+  janitor::clean_names() %>%
+  mutate(disaster = factor(incident_type)) %>%
   rename(
-     year = fy_declared) %>% 
-  filter(year >= 1953 & year <= 2018) %>% 
+     year = fy_declared) %>%
+  filter(year >= 1953 & year <= 2018) %>%
   count(state, year, disaster) %>%
-  group_by(year, state) %>% 
-  mutate(
-    n_state = sum(n)
-  ) %>% 
-  group_by(year) %>% 
-  mutate(
-    n_total = sum(n)
-  ) %>% 
-  group_by(year, disaster) %>% 
-  mutate(
-    n_type = sum(n)
-  ) %>% 
-  rename("n_disaster_state" = "n") 
+  ungroup()
 
 final_data =
   inner_join(ave_temp, precip, by = c("location" = "location", "year" = "year", "state_code" = "state_code")) %>%
@@ -99,7 +87,7 @@ final_data =
   full_join(disasters, by = c("year" = "year", "state_code" = "state"))
 
 final_data = final_data %>% 
-  mutate(n_disaster_state = replace_na(n, 0)) %>%
+  mutate(n = replace_na(n, 0)) %>%
   group_by(year, location) %>%
   mutate(
     n_state = sum(n)
@@ -153,7 +141,6 @@ regional_disaster_count = final_data %>%
   filter(region != "NA" & disaster != "NA") %>%
   distinct() %>%
   ungroup()
-
 ```
 
 
