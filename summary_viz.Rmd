@@ -172,7 +172,7 @@ This scatterplot showed the average temperature (F) from 1953 to 2018, by region
 the average temperature increased from 70.81F to 72.28F from 1953 to 2018 in Florida, 59.25F to 62.26F in Arizona, 
 56.63F to 55.23F in Missouri, and 53.54F to 54.14F in New Jersey.The different colored lines show the average trend over the years for average temperature, for each region.
 
-## Fire, Flood, Drought, & Severe Storm(s) by Region, 1953-2018
+## Sever Storm(s), Drought, Fire, and Flood by Region, 1953-2018
 
 ```{r, panel, echo = FALSE, warning= FALSE, message=FALSE}
 panel = 
@@ -197,7 +197,7 @@ ggplotly(panel) %>%
                       zeroline = TRUE))
 ```
 
-This panel shows the total number of  fires, floods, droughts, and severe storms from 1953-2018 for each region. The disasters are shown in different colors. The West and Northeast regions had relatively few occurences of these specific disasters compared to the Midwest and Southeast regions. These four disaster types had the highest prevalence in our dataset which is why we focused on them.
+This panel shows the frequency of selected disaster types from 1953-2018 for each region. The disasters are shown in different colors. The West and Northeast regions had relatively few occurences of these specific disasters compared to the Midwest and Southeast regions. These four disaster types had the highest prevalence in our dataset which is why we focused on them.
 
 
 ## Total precipitation in inches for each region

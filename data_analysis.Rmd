@@ -170,7 +170,7 @@ After testing various models with just Poisson, we fit a final model that takes 
 
 $$ log(\lambda Count \ of \ Disasters) = \beta_0 + \beta_1 Year + \beta_2 Region + \beta_3 Average \ temp + \beta_4 Precipitation $$
 
-Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best. 
+We tested several interaction terms, but none were signficant enough to include in the final model. Now we can use cross validation to test whether Poisson or Negative Binomial Regression fits our data best. 
 
 ```{r cross_validation, echo = FALSE, warning = FALSE, message = FALSE}
 library(MASS)
@@ -243,9 +243,13 @@ poisson_output %>%
 
 
 ### Main Findings
-Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the count of natural disastrs increase by  `r poisson_output %>% filter(term == "year") %>% pull("exp(estimate)") %>% round(digits = 3)`. Similarly, we found that as compared to the Midwest region of the United States, the Northeast, Southeast, and West regions saw an increase in the number of natural disasters during our specified time period. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018. 
+Fitting the Poisson regression model, the results were significant at the 5% level of significance. After adjusting for region in the US, average temperature, and precipitation, we found that for every increase in year, the expected count of natural disastrs increase by  `r poisson_output %>% filter(term == "year") %>% pull("exp(estimate)") %>% round(digits = 3)` times. This supported our hypothesis that the count of natural disasters increased from 1953 to 2018. 
 
-However, we also found that average temperature is negatively associated with count of natural disasters. We expected that the gradual increase in temperature per year would be associated with count of natural disasters. Reflecting on this, we can conclude that the varying types of natural disasters (earthquake, severe storms, etc) may not be associated with temperature. 
+As for geographic regions, we found that the Northeast, Southeast, and West regions have significantly less expected counts of natural disastrs compared to the Midwest controlling for other variables in hte model. For example, the Northeast has 0.248 times, or about 75% less, expected disasters compared to the Midwest. 
+
+The results for our climate indicators were unexpected. The average temperature is negatively associated while the total precipitation is positively associated with count of natural disasters. As temperature increases by 1-degree F, the expected count of natural disasters decreases by about 1% or 0.992 times controlling for other variables in the model. As total precipitation increases by 1-inch, the expected count of natural disasters increases by 1.002 times. 
+
+Reflecting on this, we can conclude that further analysis should be done on different types of disasters. For example, temperature may be positively associated with counts of fires or droughts. But these disasters may be negatively associated with precipiptation. 
 
 ### Limitations
 There are several large limitations to this analysis:   
