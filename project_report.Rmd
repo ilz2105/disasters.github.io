@@ -35,7 +35,7 @@ We first want to know if the total count of natural disasters are increasing eve
 # Data Source
 Our team used a publicly available dataset called the ["Disaster Declarations Summary"](https://www.fema.gov/media-library/assets/documents/28318) (Version 2) from the Federal Emergency Management Agency (FEMA). This dataset contains summary level data on disaster declarations from 1953 to March 2019 by state and includes all three types of disaster declarations: major disaster, emergency, and fire management assistance. 
 
-For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from [NOAA's Climate at a Glance](https://www.ncdc.noaa.gov/cag/national/mapping/) data.
+For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from [NOAA's Climate at a Glance](https://www.ncdc.noaa.gov/cag/statewide/mapping) data. Please note that we chose the appropriate "parameter" on this webpage and then selected the "Download All Months/Years" option under the map for all four climate indicators. 
 
 ## Data Cleaning
 ```{r disasters,  warning = FALSE, message = FALSE}
@@ -57,8 +57,7 @@ disasters = read_csv("./data/DisasterDeclarationsSummaries2.csv") %>%
     n_type = sum(n)) %>% 
   rename("n_disaster_state" = "n") 
 ```
-**Disaster Declarations Summary**: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. From there, we created
- several counts of disasters: by year, disaster type by year, per state by year, and disaster type by state by year. Some visualizations rely on count of disasters by region which was created as needed. 
+**Disaster Declarations Summary**: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names, we renamed several variables, filtered to the appropriate year range, and kept information on state, disaster year, and disaster type. From there, we created several counts of disasters: by year, disaster type by year, per state by year, and disaster type by state by year. Some visualizations rely on count of disasters by region which was created as needed. 
 ```{r climate, warning = FALSE, message = FALSE}
 ave_temp = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv", skip = 3) %>% 
   janitor::clean_names() %>% 
@@ -117,7 +116,7 @@ precip = read_csv("https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.csv",
   ungroup()
 ```
 
-**Climate Indicators**: These datasets were downloaded from NOAA's website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953 (*excluding Hawaii and Alaska*). After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:
+**Climate Indicators**: These datasets were downloaded from NOAA's website directly and read as .csv files. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953 (*excluding Hawaii and Alaska*). After pulling the data and cleaning variable names, we separated the year variable from their "yyyymm" formatted date variable. Next, data were grouped by state and year and summarized as follows:
   
   * **Average Temperature** The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized. 
   
@@ -193,7 +192,8 @@ Some large limitations are important to consider:
 
 * **Other Variables**: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.
 
-
+### Climate Change and Natural Disasters
+We did confirm that natural disasters are increasing between 1953-2018; however, much more needs to be done to confirm that climate change indicators (temperature, precipitation, and more) are associated with this trend. 
 
 
 Contributors: Holly Finertie | Matt Curran | Jana Lee | Ashley Tseng | Lulu Zhang

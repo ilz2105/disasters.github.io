@@ -418,7 +418,7 @@ div.tocify {
 <div id="data-source" class="section level1">
 <h1>Data Source</h1>
 <p>Our team used a publicly available dataset called the <a href="https://www.fema.gov/media-library/assets/documents/28318">“Disaster Declarations Summary”</a> (Version 2) from the Federal Emergency Management Agency (FEMA). This dataset contains summary level data on disaster declarations from 1953 to March 2019 by state and includes all three types of disaster declarations: major disaster, emergency, and fire management assistance.</p>
-<p>For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from <a href="https://www.ncdc.noaa.gov/cag/national/mapping/">NOAA’s Climate at a Glance</a> data.</p>
+<p>For the climate change indicators, we will use publicly available data from the National Oceanic and Atmospheric Administration (NOAA). We will pull data on average, maximum and minimum temperature, and total precipitation by month by state from 1895. These values came from <a href="https://www.ncdc.noaa.gov/cag/statewide/mapping">NOAA’s Climate at a Glance</a> data. Please note that we chose the appropriate “parameter” on this webpage and then selected the “Download All Months/Years” option under the map for all four climate indicators.</p>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
 <pre class="r"><code>disasters = read_csv(&quot;./data/DisasterDeclarationsSummaries2.csv&quot;) %&gt;% 
@@ -438,7 +438,7 @@ div.tocify {
   mutate(
     n_type = sum(n)) %&gt;% 
   rename(&quot;n_disaster_state&quot; = &quot;n&quot;) </code></pre>
-<p><strong>Disaster Declarations Summary</strong>: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names and converting appropriate variables to factors, we renamed several variables and kept information on state, disaster year, and disaster type. From there, we created several counts of disasters: by year, disaster type by year, per state by year, and disaster type by state by year. Some visualizations rely on count of disasters by region which was created as needed.</p>
+<p><strong>Disaster Declarations Summary</strong>: This dataset was downloaded as a .csv file and imported into R. After cleaning the variable names, we renamed several variables, filtered to the appropriate year range, and kept information on state, disaster year, and disaster type. From there, we created several counts of disasters: by year, disaster type by year, per state by year, and disaster type by state by year. Some visualizations rely on count of disasters by region which was created as needed.</p>
 <pre class="r"><code>ave_temp = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-tavg.csv&quot;, skip = 3) %&gt;% 
   janitor::clean_names() %&gt;% 
   separate(date, into = c(&quot;year&quot;, &quot;month&quot;), sep = 4) %&gt;%
@@ -494,7 +494,7 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
   dplyr::select(state_code, location, year, total_precip) %&gt;% 
   distinct() %&gt;% 
   ungroup()</code></pre>
-<p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953 (<em>excluding Hawaii and Alaska</em>). After pulling the data and cleaning variable names, the date fields were split into month and year. Next, data were grouped by state and year and summarized as described below:</p>
+<p><strong>Climate Indicators</strong>: These datasets were downloaded from NOAA’s website directly and read as .csv files. Data on average temperature, minimum temperature, maximum temperature, and total precipitation were recorded monthly by state since 1953 (<em>excluding Hawaii and Alaska</em>). After pulling the data and cleaning variable names, we separated the year variable from their “yyyymm” formatted date variable. Next, data were grouped by state and year and summarized as follows:</p>
 <ul>
 <li><p><strong>Average Temperature</strong> The average temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
 <li><p><strong>Minimum Temperature</strong>: The minimum temperature, in degrees Fahrenheit, by state across all 12 months per year was summarized.</p></li>
@@ -561,6 +561,10 @@ precip = read_csv(&quot;https://www.ncdc.noaa.gov/cag/statewide/mapping/110-pcp.
 <li><p><strong>Missing Data</strong>: NOAA did not have climate indicator variables for the states of Hawaii and Alaska.</p></li>
 <li><p><strong>Other Variables</strong>: Our team considered only a subset of possible climate indicator variables. Futher researchers should consider how else to represent climate change.</p></li>
 </ul>
+</div>
+<div id="climate-change-and-natural-disasters" class="section level3">
+<h3>Climate Change and Natural Disasters</h3>
+<p>We did confirm that natural disasters are increasing between 1953-2018; however, much more needs to be done to confirm that climate change indicators (temperature, precipitation, and more) are associated with this trend.</p>
 <p>Contributors: Holly Finertie | Matt Curran | Jana Lee | Ashley Tseng | Lulu Zhang</p>
 </div>
 </div>
