@@ -1,5 +1,5 @@
 ---
-title: "Why Nothing Matters: Climate Change & Natural Disasters in the United States"
+title: "Climate Change & Natural Disasters in the United States"
 output: 
   html_document:
     theme: flatly
